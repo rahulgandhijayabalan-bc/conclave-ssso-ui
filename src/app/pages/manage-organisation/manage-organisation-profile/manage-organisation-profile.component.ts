@@ -30,6 +30,7 @@ import { ViewportScroller } from '@angular/common';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { FormGroup } from '@angular/forms';
 import { CiiDto } from 'src/app/models/org';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-manage-organisation-profile',
@@ -46,8 +47,8 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
     siteData: SiteGridInfo[];
     registries: any[];
     additionalIdentifiers: any[];
-    contactTableHeaders = ['CONTACT_REASON', 'NAME', 'EMAIL', 'TELEPHONE_NUMBER'];
-    contactColumnsToDisplay = ['contactReason', 'name', 'email', 'phoneNumber'];
+    contactTableHeaders = ['CONTACT_REASON', 'NAME', 'EMAIL', 'TELEPHONE_NUMBER', 'FAX', 'WEB_URL'];
+    contactColumnsToDisplay = ['contactReason', 'name', 'email', 'phoneNumber', 'fax', 'webUrl'];
     siteTableHeaders = ['SITE_NAME', 'STREET_ADDRESS', 'POSTAL_CODE', 'COUNTRY_CODE'];
     siteColumnsToDisplay = ['siteName', 'streetAddress', 'postalCode', 'countryCode'];
     registriesTableDisplayedColumns: string[] = ['authority', 'id', 'type', 'actions'];
@@ -55,6 +56,7 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
     public idps: any;
     public orgIdps: any[] = [];
     changedIdpList: { id: number, enabled: boolean, connectionName: string, name: string }[] = [];
+    ccsContactUrl : string = environment.uri.ccsContactUrl;
 
     constructor(private contactService: contactService, private websiteService: WebsiteService,
         private organisationService: OrganisationService, private ciiService: ciiService,
@@ -82,6 +84,7 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
             this.organisationId = org.organisationId;
             this.organisationAddress = org.address;
             this.org = org;
+            
             this.idps = await this.configWrapperService.getIdentityProviders().toPromise().catch();
             this.orgIdps = await this.organisationGroupService.getOrganisationIdentityProviders(ciiOrgId).toPromise().catch();
 
@@ -251,5 +254,12 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
             }
         }
     }
+
+    public onContactAssignClick() {
+        let data = {
+          'assigningOrgId': this.ciiOrganisationId
+        };
+        this.router.navigateByUrl('contact-assign/select?data=' + JSON.stringify(data));
+      }
 
 }

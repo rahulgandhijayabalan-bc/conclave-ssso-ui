@@ -28,7 +28,7 @@
           </div>
         </div>
       </div>
-      <p><strong>what type of registry do you want to add?</strong></p>
+      <p><strong>What type of registry do you want to add?</strong></p>
       <div class="brickendon-group" *ngFor="let item of items">
         <div><input type="radio" [attr.id]="item.scheme" name="scheme" [value]="item.scheme" value="{{ item.scheme }}" [checked]="(schemeSubjectObs | async) === item.scheme" [(ngModel)]="scheme" (click)="onSelect(item)"><label (click)="onSelect(item)">{{ item.schemeName }}</label></div>
         <div [class.govuk-form-group--error]="submitted && (schemeSubjectObs | async) === item.scheme && txtValue == ''" *ngIf="(schemeSubjectObs | async) === item.scheme" style="height: 70px; border-left: 2px solid #8F8F8F; padding-left: 5px; margin-left: 1px;">

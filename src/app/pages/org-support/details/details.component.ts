@@ -58,10 +58,11 @@ export class OrgSupportDetailsComponent extends BaseComponent implements OnInit 
       organisationId: '',
       title: 0,
       userName: '',
+      mfaEnabled : false,
       detail: {
         id: 0,
-        canChangePassword: false,
-
+        canChangePassword: false
+        
       }
     }
   }

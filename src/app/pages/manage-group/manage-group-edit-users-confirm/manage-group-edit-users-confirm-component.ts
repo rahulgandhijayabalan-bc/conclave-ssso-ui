@@ -38,7 +38,7 @@ export class ManageGroupEditUsersConfirmComponent extends BaseComponent implemen
     constructor(protected uiStore: Store<UIState>, private router: Router, private activatedRoute: ActivatedRoute,
         protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private orgGroupService: WrapperOrganisationGroupService,
         private wrapperOrganisationService: WrapperOrganisationService) {
-        super(uiStore,viewportScroller,scrollHelper);
+        super(uiStore, viewportScroller, scrollHelper);
         let queryParams = this.activatedRoute.snapshot.queryParams;
         if (queryParams.data) {
             this.routeData = JSON.parse(queryParams.data);
@@ -82,13 +82,18 @@ export class ManageGroupEditUsersConfirmComponent extends BaseComponent implemen
                     }
                 },
                 (error) => {
-                    console.log(error);
-                    console.log(error.error);
+                    if (error.error == 'MFA_DISABLED_USERS_INCLUDED') {
+                        let data = {
+                            'isEdit': this.isEdit,
+                            'groupId': this.editingGroupId
+                        };
+                        this.router.navigateByUrl(`manage-groups/error?data=` + JSON.stringify(data));
+                    }
                 });
     }
 
     onGoToEditGroupClick() {
-        this.routeData.isEdit = true; 
+        this.routeData.isEdit = true;
         this.router.navigateByUrl("manage-groups/view?data=" + JSON.stringify(this.routeData));
     }
 

@@ -92,14 +92,7 @@ export class ciiService {
 
   addOrganisation(json: string | null): Observable<any> {
     const body = JSON.parse(json + '');
-    return ajax({
-      url: `${this.url}/cii/`,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: body
-    });
+    return this.httpClient.post(`${this.url}/cii/`, body);
   }
 
   updateOrganisation(json: string | null): Observable<any> {

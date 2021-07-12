@@ -19,7 +19,12 @@
         <a (click)="signoutUser()"> You are not authorized to login using this authentication provider. Please navigate to login page </a>
       </li>
     </ng-template>
-      <ng-template #elseBlock3>
+    <ng-template #elseBlock3>
+      <li *ngIf="errorCode=='PENDING_PASSWORD_CHANGE'; else elseBlock4">
+        <a (click)="signoutUser()"> You need to change the password. An email has already been sent with instructions. Please navigate to login page </a>
+      </li>
+    </ng-template>
+      <ng-template #elseBlock4>
         <li><a href="{{this.mainPageUrl}}">{{errorCode}}</a></li>
       </ng-template>
     </ul>

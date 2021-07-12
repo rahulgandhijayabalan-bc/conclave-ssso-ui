@@ -56,11 +56,11 @@ export class AuthService {
 
   public getCcsServices() {
     if (this.ccsServices.length == 0) {
-      return this.httpService.get(`${environment.uri.api.isApiGateWayEnabled ? 
+      return this.httpService.get(`${environment.uri.api.isApiGateWayEnabled ?
         environment.uri.api.wrapper.apiGatewayEnabled.configuration : environment.uri.api.wrapper.apiGatewayDisabled.configuration}/GetCcsServices`).pipe(
-        map(data => {
-          return data;
-        }));
+          map(data => {
+            return data;
+          }));
     }
     return Observable.of(this.ccsServices);
   }
@@ -90,8 +90,8 @@ export class AuthService {
   renewAccessToken(url: string = '') {
     this.getRefreshToken().toPromise().then((refreshToken: any) => {
       return this.renewToken(refreshToken || '').toPromise().then((tokenInfo: TokenInfo) => {
-        return this.saveRefreshToken(tokenInfo.refresh_token).toPromise().then(() => {
-          this.workerService.storeTokenInWorker(tokenInfo);
+        this.workerService.storeTokenInWorker(tokenInfo);
+        return this.createSession(tokenInfo.refresh_token).toPromise().then(() => {
           let decodedAccessToken = this.tokenService.getDecodedToken(tokenInfo.access_token);
           localStorage.setItem('at_exp', decodedAccessToken.exp);
           if (url.length > 0) {
@@ -101,7 +101,8 @@ export class AuthService {
       },
         (err) => {
           // This could due to invalid refresh token (refresh token rotation)  
-          if (err.error == "INVALID_CREDENTIALS") {
+          if (err.error == "INVALID_CREDENTIALS" || err.error.error_description == "PENDING_PASSWORD_CHANGE" 
+          || err.error.error == 'invalid_grant') {
             // sign out the user
             this.logOutAndRedirect();
           }
@@ -131,7 +132,7 @@ export class AuthService {
       headers: new HttpHeaders().append('Content-Type', 'application/json')
         .append("X-API-Key", environment.securityApiKey)
     }
-    const body = { FirstName: firstName, LastName: lastName, UserName: username, Email: email, Role: 'Admin', Groups: [] }
+    const body = { FirstName: firstName, LastName: lastName, UserName: username, Email: email, Role: 'Admin', Groups: [], MfaEnabled : true }
     return this.httpService.post(`${this.url}/security/register`, body, options).pipe(
       map(data => {
         return data;
@@ -154,7 +155,8 @@ export class AuthService {
   }
 
   resetPassword(userName: string): Observable<any> {
-    return this.httpService.post(`${this.url}/security/passwordresetrequest`, "\"" + userName + "\"");
+    var changepwd = { "userName": userName }
+    return this.httpService.post(`${this.url}/security/passwordresetrequest`, changepwd);
   }
 
   token(code: string): Observable<any> {
@@ -184,8 +186,8 @@ export class AuthService {
   }
 
 
-  saveRefreshToken(refreshToken: string) {
-    let coreDataUrl: string = `${environment.uri.api.postgres}/auth/save_refresh_token`;
+  createSession(refreshToken: string) {
+    let coreDataUrl: string = `${environment.uri.api.postgres}/auth/create_session`;
     const body = {
       'refreshToken': refreshToken
     }

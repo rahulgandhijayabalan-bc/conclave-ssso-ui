@@ -21,9 +21,7 @@ import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
             close: { 'transform': 'translateX(12.5rem)' },
             open: { left: '-12.5rem' }
         })
-    ],
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    ]
 })
 export class ManageOrganisationRegistrySearchComponent extends BaseComponent implements OnInit {
 
@@ -72,12 +70,9 @@ export class ManageOrganisationRegistrySearchComponent extends BaseComponent imp
     }
     this.scheme = item.scheme;
     this.submitted = false;
-    this.txtValue == '';
+    this.txtValue = '';
     localStorage.setItem('scheme', this.scheme);
     localStorage.setItem('scheme_name', JSON.stringify(item.schemeName));
-    setTimeout(() => {
-      this.ref.detectChanges();
-    }, 5000);
   }
 
   public isValid(): boolean {

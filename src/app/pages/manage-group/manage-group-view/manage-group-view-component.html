@@ -73,6 +73,21 @@
     </div>
 </div>
 
+<div class="govuk-form-group" id="user-mfa-form-group">
+    <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend">
+            Security Level
+        </legend>
+        <div class="govuk-form-group govuk-checkboxes__item" id="user-mfa-form-group">
+            <input [attr.disabled]=true [checked]="group.mfaEnabled" class="govuk-checkboxes__input" id="mfaEnabled"
+                formControlName="mfaEnabled" name="mfaEnabled" type="checkbox">
+            <label class="govuk-label govuk-checkboxes__label" for="mfachkBox">
+                Multi Factor Authentication
+            </label>
+        </div>
+    </fieldset>
+</div>
+
 <div class="top-margin">
     <div>
         <div class="govuk-grid-row">

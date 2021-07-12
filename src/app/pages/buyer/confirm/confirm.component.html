@@ -45,10 +45,11 @@
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend" style="font-size: 22px;">Default service roles for this organisation, select/unselect where appropriate</legend>
       <div class="govuk-checkboxes" *ngIf="orgEligableRoles$ | async as o">
-        <ng-container *ngFor="let role of roles">
+        <ng-container *ngFor="let role of roles">          
           <div class="govuk-checkboxes__item" *ngIf="role.subscriptionTypeEligibility === 0 && role.tradeEligibility !== 1 && role.orgTypeEligibility !== 0">
             <input type="checkbox" [value]="role.roleId" [checked]="role.enabled" (change)="onChange($event, role.enabled, role)" class="govuk-checkboxes__input" id="orgRoleControl_{{role.roleId}}" />
-            <label class="govuk-label govuk-checkboxes__label" for="orgRoleControl_{{role.roleId}}">{{role.roleName}}</label>
+            <label class="govuk-label govuk-checkboxes__label" *ngIf="role.serviceName == null" for="orgRoleControl_{{role.roleId}}">{{role.roleName}}</label>
+            <label class="govuk-label govuk-checkboxes__label" *ngIf="role.serviceName != null" for="orgRoleControl_{{role.roleId}}">{{role.roleName}} - {{role.serviceName}}</label>
           </div>
         </ng-container>
       </div>
@@ -57,7 +58,8 @@
         <ng-container *ngFor="let role of roles">
           <div class="govuk-checkboxes__item" *ngIf="role.subscriptionTypeEligibility === 1 && role.tradeEligibility !== 1 && role.orgTypeEligibility !== 0">
             <input type="checkbox" [value]="role.roleId" [checked]="role.enabled" (change)="onChange($event, role.enabled, role)" class="govuk-checkboxes__input" id="orgRoleControl_{{role.roleId}}" />
-            <label class="govuk-label govuk-checkboxes__label" for="orgRoleControl_{{role.roleId}}">{{role.roleName}}</label>
+            <label class="govuk-label govuk-checkboxes__label" *ngIf="role.serviceName == null" for="orgRoleControl_{{role.roleId}}">{{role.roleName}}</label>
+            <label class="govuk-label govuk-checkboxes__label" *ngIf="role.serviceName != null" for="orgRoleControl_{{role.roleId}}">{{role.roleName}} - {{role.serviceName}}</label>
           </div>
         </ng-container>
       </div>

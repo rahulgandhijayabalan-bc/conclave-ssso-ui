@@ -232,6 +232,13 @@ span.mlp-app-logo {
     display: block;
 }
 
+// Commented out after pre-prod change to telephone/fax length
+// Keep this if needed to override ngx-intl-tel-input style
+// override the width of ngx-intl-tel-input fields used in telephone and fax inputs
+// :host ::ng-deep .iti {
+//     width: 100%;
+// }
+
 // .logo {
 //     height: 32px;
 //     background: rgba(255, 255, 255, 0.2);

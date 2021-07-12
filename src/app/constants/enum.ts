@@ -34,3 +34,16 @@ export enum UserTitleEnum {
     Ms,
     Doctor
 }
+
+export enum AssignedContactType {
+    None,
+    User,
+    Site
+}
+
+export enum ContactAssignedStatus
+{
+  all,
+  original,
+  assigned
+}

@@ -123,6 +123,17 @@ import { OrgSupportErrorComponent } from './pages/org-support/error/error.compon
 import { ForgotPasswordSuccessComponent } from './pages/forgot-password-success/forgot-password-success';
 import { RollbarErrorHandler, rollbarFactory, RollbarService } from './logging/rollbar';
 import { AuthErrorComponent } from './pages/auth-error/auth-error.component';
+import { ContactAssignSelectionComponent } from './pages/contact/contact-assign-selection/contact-assign-selection-component';
+import { ContactAssignUserSearchComponent } from './pages/contact/contact-assign-user-search/contact-assign-user-search-component';
+import { ContactAssignSiteSearchComponent } from './pages/contact/contact-assign-site-search/contact-assign-site-searchcomponent';
+import { ContactAssignComponent } from './pages/contact/contact-assign/contact-assign-component';
+import { ContactAssignConfirmComponent } from './pages/contact/contact-assign-confirm/contact-assign-confirm-component';
+import { ContactAssignSuccessComponent } from './pages/contact/contact-assign-success/contact-assign-success-component';
+import { ContactUnassignConfirmComponent } from './pages/contact/contact-unassign-confirm/contact-unassign-confirm-component';
+import { ContactUnassignSuccessComponent } from './pages/contact/contact-unassign-success/contact-unassign-success-component';
+import { ContactAssignErrorComponent } from './pages/contact/contact-assign-error/contact-assign-error-component';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { HelpAndSupportComponent } from './pages/help-support/help-support-component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -219,7 +230,17 @@ export function createTranslateLoader(http: HttpClient) {
     BuyerErrorComponent,
     OrgSupportErrorComponent,
     ForgotPasswordSuccessComponent,
-    AuthErrorComponent
+    AuthErrorComponent,
+    ContactAssignSelectionComponent,
+    ContactAssignUserSearchComponent,
+    ContactAssignSiteSearchComponent,
+    ContactAssignComponent,
+    ContactAssignConfirmComponent,
+    ContactAssignSuccessComponent,
+    ContactUnassignConfirmComponent,
+    ContactUnassignSuccessComponent,
+    ContactAssignErrorComponent,
+    HelpAndSupportComponent
   ],
   imports: [
     // BrowserModule,
@@ -259,6 +280,7 @@ export function createTranslateLoader(http: HttpClient) {
     NzLayoutModule,
     ComponentsModule,
     MatTableModule,
+    NgxIntlTelInputModule
   ],
   exports: [TranslateModule],
   providers: [

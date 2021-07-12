@@ -35,10 +35,10 @@ export class ManageOrganisationSiteEditComponent extends BaseComponent implement
   submitted!: boolean;
   isEdit: boolean = false;
   siteId: number = 0;
-  public serverError : string = ''; 
+  public serverError: string = '';
   organisationId: string;
-  contactTableHeaders = ['CONTACT_REASON', 'NAME', 'EMAIL', 'TELEPHONE_NUMBER'];
-  contactColumnsToDisplay = ['contactReason', 'name', 'email', 'phoneNumber'];
+  contactTableHeaders = ['CONTACT_REASON', 'NAME', 'EMAIL', 'TELEPHONE_NUMBER', 'FAX', 'WEB_URL'];
+  contactColumnsToDisplay = ['contactReason', 'name', 'email', 'phoneNumber', 'fax', 'webUrl'];
   contactData: ContactGridInfo[];
 
   @ViewChildren('input') inputs!: QueryList<ElementRef>;
@@ -195,7 +195,14 @@ export class ManageOrganisationSiteEditComponent extends BaseComponent implement
       'contactId': 0,
       'siteId': this.siteId
     };
-    this.router.navigateByUrl('manage-org/profile/contact-edit?data=' + JSON.stringify(data));
+    this.router.navigateByUrl('manage-org/profile/site/contact-edit?data=' + JSON.stringify(data));
+  }
+
+  public onContactAssignClick() {
+    let data = {
+      'assigningSiteId': this.siteId
+    };
+    this.router.navigateByUrl('contact-assign/select?data=' + JSON.stringify(data));
   }
 
   onContactEditClick(contactInfo: ContactGridInfo) {
@@ -204,6 +211,6 @@ export class ManageOrganisationSiteEditComponent extends BaseComponent implement
       'contactId': contactInfo.contactId,
       'siteId': this.siteId
     };
-    this.router.navigateByUrl('manage-org/profile/contact-edit?data=' + JSON.stringify(data));
+    this.router.navigateByUrl('manage-org/profile/site/contact-edit?data=' + JSON.stringify(data));
   }
 }

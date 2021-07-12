@@ -92,14 +92,14 @@
                     </li> -->
                     <li class="nav-list__item"
                         *ngIf="!((this.authService.userAutnenticated$ | async) || this.isAuthenticated)">
-                        <a class="nav-list__link  " routerLink="/home">Sign in</a>
+                        <a class="nav-list__link  " (click)="signoutAndRedirect()">Sign in</a>
                     </li>
                     <li class="nav-list__item"
                         *ngIf="(this.authService.userAutnenticated$ | async) || this.isAuthenticated">
-                        <a class="nav-list__link  " (click)="signout()">Sign out</a>
+                        <a class="nav-list__link  " (click)="signoutAndRedirect()">Sign out</a>
                     </li>
                     <li class="nav-list__item">
-                        <a class="nav-list__link   ">Help and support</a>
+                        <a class="nav-list__link   " routerLink="/help-support">Help and support</a>
                     </li>
                 </ul>
             </nav>
