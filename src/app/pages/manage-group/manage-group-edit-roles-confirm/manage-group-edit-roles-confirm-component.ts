@@ -78,8 +78,13 @@ export class ManageGroupEditRolesConfirmComponent extends BaseComponent implemen
                     this.router.navigateByUrl(`manage-groups/operation-success/${this.isEdit ? OperationEnum.GroupRoleUpdate : OperationEnum.GroupAdd}?data=` + JSON.stringify(data));
                 },
                 (error) => {
-                    console.log(error);
-                    console.log(error.error);
+                    if (error.error == 'MFA_DISABLED_USERS_INCLUDED') {
+                        let data = {
+                            'isEdit': this.isEdit,
+                            'groupId': this.editingGroupId
+                        };
+                        this.router.navigateByUrl(`manage-groups/error?data=` + JSON.stringify(data));
+                    }
                 });
     }
 

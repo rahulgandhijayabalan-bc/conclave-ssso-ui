@@ -63,11 +63,6 @@ export class OrgSupportSearchComponent extends BaseComponent implements OnInit {
     this.data = results.filter((r: any) => r.organisationId != this.organisationId);
   }
 
-  public onSelect(item: any) {
-    this.selectedRow = item;
-    this.selectedRowId = item.userName;
-  }
-
   public onContinueClick() {
     this.router.navigateByUrl(`org-support/details/${this.selectedRowId}`);
   }

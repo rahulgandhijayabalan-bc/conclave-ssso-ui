@@ -44,6 +44,7 @@ export class OrgSupportDetailsComponent extends BaseComponent implements OnInit 
   public assign: boolean = true;
   public changeRoleEnabled: boolean = false;
   public resetPasswordEnabled: boolean = false;
+  public resetMfaEnabled: boolean = false;
   public orgGroups!: Group[];
   public roles$!: Observable<any>;
   public roles!: [];
@@ -51,16 +52,17 @@ export class OrgSupportDetailsComponent extends BaseComponent implements OnInit 
   @ViewChild('resetPassword') resetPassword!: ElementRef;
 
   constructor(private ref: ChangeDetectorRef, private formBuilder: FormBuilder, private translateService: TranslateService, private authService: AuthService, private ciiService: ciiService, private userService: UserService, private organisationService: OrganisationService, private organisationGroupService: WrapperOrganisationGroupService, private contactService: contactService, private wrapperOrgService: WrapperOrganisationService, private wrapperUserService: WrapperUserService, private router: Router, private route: ActivatedRoute, protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
-    super(uiStore,viewportScroller,scrollHelper);
+    super(uiStore, viewportScroller, scrollHelper);
     this.user = {
       firstName: '',
       lastName: '',
       organisationId: '',
       title: 0,
       userName: '',
+      mfaEnabled: false,
       detail: {
         id: 0,
-        canChangePassword: false,
+        canChangePassword: false
 
       }
     }
@@ -80,7 +82,7 @@ export class OrgSupportDetailsComponent extends BaseComponent implements OnInit 
     });
   }
 
-  public onSelect(event:any, assigned: boolean) {
+  public onSelect(event: any, assigned: boolean) {
     // this.assign = assigned;
     if (event.target.nodeName === 'LABEL') {
       event.target.previousSibling.checked = !event.target.previousSibling.checked;
@@ -88,7 +90,7 @@ export class OrgSupportDetailsComponent extends BaseComponent implements OnInit 
     }
   }
 
-  public onResetSelect(event:any) {
+  public onResetSelect(event: any) {
     // this.assign = assigned;
     if (event.target.nodeName === 'LABEL') {
       event.target.previousSibling.checked = !event.target.previousSibling.checked;
@@ -96,14 +98,17 @@ export class OrgSupportDetailsComponent extends BaseComponent implements OnInit 
     }
   }
 
+  public onMfaResetSelect(event: any) {
+    this.resetMfaEnabled = event.target.checked;
+  }
+
   public onContinueClick() {
-    if (this.changeRoleEnabled === true && this.resetPasswordEnabled === true) {
-      this.router.navigateByUrl(`org-support/confirm/${this.user.userName}`);
-    } else if (this.changeRoleEnabled === true) {
+
+    if (this.changeRoleEnabled && !this.resetPasswordEnabled && !this.resetMfaEnabled) {
       this.setOrgRoles();
-      // console.log(this.user);
-    } else if (this.resetPasswordEnabled === true) {
-      this.router.navigateByUrl(`org-support/confirm-reset-password/${this.user.userName}`);
+    }
+    else {
+      this.router.navigateByUrl(`org-support/confirm/${this.user.userName}?rpwd=` + this.resetPasswordEnabled + `&rmfa=` + this.resetMfaEnabled + `&chrole=` + this.changeRoleEnabled);
     }
   }
 
@@ -113,16 +118,16 @@ export class OrgSupportDetailsComponent extends BaseComponent implements OnInit 
 
   getOrgGroups() {
     this.organisationGroupService.getOrganisationGroups(this.user.organisationId).subscribe({
-        next: (orgGroups: GroupList) => {
-            this.orgGroups = orgGroups.groupList;
-            this.orgGroups.map(group => {
-                let isGroupOfUser: boolean = false;
-                isGroupOfUser = this.user.detail.userGroups ? this.user.detail.userGroups.some(ug => ug.groupId == group.groupId): false;
-            });
-        },
-        error: (err: any) => {
-            console.log(err)
-        }
+      next: (orgGroups: GroupList) => {
+        this.orgGroups = orgGroups.groupList;
+        this.orgGroups.map(group => {
+          let isGroupOfUser: boolean = false;
+          isGroupOfUser = this.user.detail.userGroups ? this.user.detail.userGroups.some(ug => ug.groupId == group.groupId) : false;
+        });
+      },
+      error: (err: any) => {
+        console.log(err)
+      }
     });
   }
 
@@ -135,65 +140,32 @@ export class OrgSupportDetailsComponent extends BaseComponent implements OnInit 
           if (this.isAssigned()) { // Remove
             this.wrapperUserService.removeAdminRoles(this.user.userName).subscribe({
               next: (roleRemoveResponse: boolean) => {
-                if (roleRemoveResponse) {
-                  this.router.navigateByUrl(`org-support/success-changed-role/${this.user.userName}`);
-                }
-                else {
-                  console.log("TODO: navigate to error page");
-                  this.router.navigateByUrl(`org-support/success-changed-role/${this.user.userName}`);
-                }
+                this.router.navigateByUrl(`org-support/success/${this.user.userName}?rpwd=`+ this.resetPasswordEnabled + `&rmfa=` + this.resetMfaEnabled + `&chrole=` + this.changeRoleEnabled);
               },
               error: (err: any) => {
                 console.log(err);
-                console.log("TODO: tell user");
+                this.router.navigateByUrl(`org-support/error`);
               }
             });
           } else { // Add
             this.wrapperUserService.addAdminRole(this.user.userName).subscribe({
               next: (addAdminRoleResponse: boolean) => {
                 if (addAdminRoleResponse) {
-                  this.router.navigateByUrl(`org-support/success-changed-role/${this.user.userName}`);
+                  this.router.navigateByUrl(`org-support/success/${this.user.userName}?rpwd=`+ this.resetPasswordEnabled + `&rmfa=` + this.resetMfaEnabled + `&chrole=` + this.changeRoleEnabled);
                 }
                 else {
                   console.log("TODO: navigate to error page");
-                  this.router.navigateByUrl(`org-support/success-changed-role/${this.user.userName}`);
+                  this.router.navigateByUrl(`org-support/success/${this.user.userName}?rpwd=`+ this.resetPasswordEnabled + `&rmfa=` + this.resetMfaEnabled + `&chrole=` + this.changeRoleEnabled);
                 }
               },
               error: (err: any) => {
                 console.log(err);
-                console.log("TODO: tell user");
+                this.router.navigateByUrl(`org-support/error`);
               }
             });
           }
-          
-          // if (this.isAssigned()) {
-          //   this.user.roleIds.forEach((item: any, index: any) => {
-          //     if (item === role['roleId']) this.user.roleIds.splice(index,1);
-          //   });
-          //   this.user.roleNames.forEach((item: any, index: any) => {
-          //     if (item === 'ORG_ADMINISTRATOR') this.user.roleNames.splice(index,1);
-          //   });
-          // } else {
-          //   this.user.roleIds.push(role['roleId']);
-          //   this.user.roleNames.push('ORG_ADMINISTRATOR');
-          // }
-          // this.wrapperUserService.updateUserRoles(localStorage.getItem('user_name')+'', this.user).subscribe({
-          //   next: (userEditResponseInfo: UserEditResponseInfo) => {
-          //     if (userEditResponseInfo.userId == this.user.userName) {
-          //       this.router.navigateByUrl(`org-support/success-changed-role/${this.user.userName}`);
-          //     }
-          //     else {
-          //       console.log("TODO: navigate to error page");
-          //       this.router.navigateByUrl(`org-support/success-changed-role/${this.user.userName}`);
-          //     }
-          //   },
-          //   error: (err: any) => {
-          //     console.log(err);
-          //     console.log("TODO: tell user");
-          //   }
-          // });
-        }  else {
-          this.router.navigateByUrl(`org-support/success-changed-role/${this.user.userName}`);
+        } else {
+          this.router.navigateByUrl(`org-support/success/${this.user.userName}?rpwd=`+ this.resetPasswordEnabled + `&rmfa=` + this.resetMfaEnabled + `&chrole=` + this.changeRoleEnabled);
         }
       }
     });

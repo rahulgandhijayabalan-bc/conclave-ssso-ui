@@ -98,17 +98,6 @@ export class BuyerSearchComponent extends BaseComponent implements OnInit {
     // });
   }
 
-  public onSelect(event: any, item: any) {
-    this.selectedOrg = item;
-    this.selectedOrgId = item.ciiOrganisationId;
-    if (event.target.nodeName === 'LABEL') {
-      event.target.previousSibling.checked = true;
-    }
-    setTimeout(() => {
-      this.cf.detectChanges();
-    }, 100);
-  }
-
   public onContinueClick() {
     this.router.navigateByUrl(`buyer/details/${this.selectedOrgId}`);
   }

@@ -13,6 +13,9 @@ import { Group, GroupList } from 'src/app/models/organisationGroup';
 import { WrapperOrganisationGroupService } from 'src/app/services/wrapper/wrapper-org--group-service';
 import { ViewportScroller } from '@angular/common';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
+import { FakeMissingTranslationHandler } from '@ngx-translate/core';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { MFAService } from 'src/app/services/auth/mfa.service';
 
 @Component({
   selector: 'app-org-support-confirm',
@@ -34,27 +37,60 @@ export class OrgSupportConfirmComponent extends BaseComponent implements OnInit 
   public orgGroups!: Group[];
   public roles$!: Observable<any>;
   public roles!: [];
+  changePassword: boolean = false;
+  resetMfa: boolean = false;
+  changeRole: boolean = false;
+  displayMessage: string = '';
 
-  constructor(private organisationGroupService: WrapperOrganisationGroupService, private wrapperUserService: WrapperUserService,
+  constructor(private organisationGroupService: WrapperOrganisationGroupService,
+    private wrapperUserService: WrapperUserService,
+    private mfaService: MFAService,
     private router: Router, private route: ActivatedRoute, protected uiStore: Store<UIState>,
     protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
-    super(uiStore,viewportScroller,scrollHelper);
+    super(uiStore, viewportScroller, scrollHelper);
     this.user = {
       firstName: '',
       lastName: '',
       organisationId: '',
       title: 0,
       userName: '',
+      mfaEnabled: false,
       detail: {
         id: 0,
-        canChangePassword: false,
-
+        canChangePassword: false
       }
     }
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
+      this.route.queryParams.subscribe(para => {
+
+        if (para.rpwd != undefined) {
+          this.changePassword = JSON.parse(para.rpwd);
+        }
+
+        if (para.rmfa != undefined) {
+          this.resetMfa = JSON.parse(para.rmfa);
+        }
+
+        if (para.chrole != undefined) {
+          this.changeRole = JSON.parse(para.chrole);
+        }
+      });
+
+      this.displayMessage = 'Confirm you want to ';
+
+      if (this.changePassword) {
+        this.displayMessage = this.displayMessage + ' change the password'
+      }
+
+      if (this.resetMfa) {
+        this.displayMessage = this.displayMessage + (this.changePassword ? ', reset MFA' : 'reset MFA');
+      }
+
+      this.displayMessage = this.displayMessage + ' for ' + params.userName;
+
       if (params.userName) {
         this.user$ = this.wrapperUserService.getUser(params.userName).pipe(share());
         this.user$.subscribe({
@@ -67,16 +103,24 @@ export class OrgSupportConfirmComponent extends BaseComponent implements OnInit 
     });
   }
 
-  public onSubmitClick() {
-    this.wrapperUserService.resetUserPassword(this.user.userName, "Org-user-support").subscribe({
-      next: (response) => {
-        this.setOrgRoles();
-      },
-      error: (err: any) => {
-        console.log(err);
-        this.router.navigateByUrl(`org-support/error`);
+  public async onSubmitClick() {
+    try {
+      if (this.changePassword) {
+        await this.wrapperUserService.resetUserPassword(this.user.userName, "Org-user-support").toPromise();
       }
-    });
+
+      if (this.resetMfa) {
+        await this.mfaService.sendResetMFANotification(this.user.userName).toPromise();
+      }
+
+      if (this.changeRole) {
+        this.setOrgRoles();
+      }
+      this.router.navigateByUrl(`org-support/success/${this.user.userName}?rpwd=` + this.changePassword + `&rmfa=` + this.resetMfa + `&chrole=` + this.changeRole);
+    }
+    catch (e) {
+      this.router.navigateByUrl(`org-support/error`);
+    }
   }
 
   setOrgRoles() {
@@ -89,11 +133,7 @@ export class OrgSupportConfirmComponent extends BaseComponent implements OnInit 
           if (this.isAssigned()) { // Remove
             this.wrapperUserService.removeAdminRoles(this.user.userName).subscribe({
               next: (roleRemoveResponse: boolean) => {
-                if (roleRemoveResponse) {
-                  this.router.navigateByUrl(`org-support/success/${this.user.userName}`);
-                }
-                else {
-                  console.log("TODO: navigate to error page");
+                if (!roleRemoveResponse) {
                   this.router.navigateByUrl(`org-support/success/${this.user.userName}`);
                 }
               },

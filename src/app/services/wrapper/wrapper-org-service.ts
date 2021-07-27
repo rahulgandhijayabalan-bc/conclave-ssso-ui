@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 
 import { UserListResponse } from 'src/app/models/user';
 import { environment } from 'src/environments/environment';
-import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,12 +19,12 @@ export class WrapperOrganisationService {
 
   }
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(private http: HttpClient) {
   }
 
-  getUsers(organisationId: string, searchString: string, currentPage: number, pageSize: number): Observable<any> {
+  getUsers(organisationId: string, searchString: string, currentPage: number, pageSize: number, includeSelf: boolean = false): Observable<any> {
     pageSize = pageSize <= 0 ? 10 : pageSize;
-    const url = `${this.url}/${organisationId}/user?currentPage=${currentPage}&pageSize=${pageSize}&searchString=${searchString}`;
+    const url = `${this.url}/${organisationId}/user?currentPage=${currentPage}&pageSize=${pageSize}&searchString=${searchString}&includeSelf=${includeSelf}`;
     return this.http.get<UserListResponse>(url, this.options).pipe(
       map((data: UserListResponse) => {
         return data;

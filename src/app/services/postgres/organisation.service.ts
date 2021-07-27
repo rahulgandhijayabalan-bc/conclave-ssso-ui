@@ -71,18 +71,6 @@ export class OrganisationService {
     );
   }
 
-  put(organisation: any): void {
-    const options = {
-      headers: new HttpHeaders().append('Content-Type', 'application/json')
-    }
-    const body = { legalName: organisation.identifier.legalName, ciiOrganisationId: organisation.ccsOrgId + '', contactPoint: organisation.contactPoint, address: organisation.address, organisationUri: organisation.identifier.uri, rightToBuy: organisation.rightToBuy, supplierBuyerType: organisation.supplierBuyerType, businessType: organisation.buyerType }
-    this.http.put(`${this.url}`, body, options).pipe(
-      map(data => {
-        console.log(data);
-      })
-    );
-  }
-
   rollback(model: any): Observable<any> {
     const options = {
       headers: new HttpHeaders().append('Content-Type', 'application/json')

@@ -20,6 +20,7 @@ export class GovUKTableComponent extends BaseComponent implements OnInit {
   @Input() isHyperLinkVisible?: boolean;
   @Input() hyperLinkText?: string;
   @Input() isCheckBoxVisible?: boolean;
+  @Input() isRadioVisible?: boolean;
   @Input() useServerPagination?: boolean;
   @Input() serverPageCount?: number;
   @Input() serverPageCurrentPage?: number;
@@ -27,6 +28,7 @@ export class GovUKTableComponent extends BaseComponent implements OnInit {
 
   @Output() hyperLinkClickEvent = new EventEmitter<any>();
   @Output() checkBoxClickEvent = new EventEmitter<any>();
+  @Output() radioClickEvent = new EventEmitter<any>();
   @Output() changeCurrentPageEvent = new EventEmitter<number>();
 
   pageCount?: number;
@@ -66,6 +68,10 @@ export class GovUKTableComponent extends BaseComponent implements OnInit {
   onCheckChange(event: any, dataRow: any) {
     dataRow.isChecked = event.target.checked;
     this.checkBoxClickEvent.emit(dataRow);
+  }
+
+  onRadioChange(event: any, dataRow: any) {
+    this.radioClickEvent.emit(dataRow);
   }
 
   onSetPageClick(pageNumber: number) {

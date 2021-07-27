@@ -23,7 +23,7 @@
                 <label class="govuk-label" for="search"> {{ 'SEARCH_FOR_GROUP' | translate }} </label>
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
-                        <input (change)="searchTextChanged($event)" [value]="searchText" class="govuk-input"
+                        <input (change)="searchTextChanged($event)" (keyup.enter)="onSearchClick()" [value]="searchText" class="govuk-input"
                             id="search" name="search" type="text">
                     </div>
                     <div class="govuk-grid-column-one-third">

@@ -40,6 +40,7 @@ export class ManageGroupViewComponent extends BaseComponent implements OnInit {
         super(uiStore,viewportScroller,scrollHelper);
         this.group = {
             groupId: 0,
+            mfaEnabled:false,
             groupName: '',
             roles: [],
             users: []

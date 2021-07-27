@@ -57,7 +57,7 @@ export class AuthSuccessComponent extends BaseComponent implements OnInit {
                     localStorage.setItem('at_exp', accessToken.exp);
                     localStorage.setItem('session_state', tokenInfo.session_state);
                     this.authService.publishAuthStatus(true);
-                    this.authService.saveRefreshToken(tokenInfo.refresh_token).toPromise().then(() => {
+                    this.authService.createSession(tokenInfo.refresh_token).toPromise().then(() => {
                         this.authService.registerTokenRenewal();
                         this.router.navigateByUrl('home');                        
                     });

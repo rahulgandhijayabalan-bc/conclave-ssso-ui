@@ -82,7 +82,7 @@ export class ManageOrgRegAddUserComponent extends BaseComponent implements OnIni
             }
             const org = JSON.parse(organisation ? organisation : '');
             if (org) {
-              org.ccsOrgId = result.response.ccsOrgId;
+              org.ccsOrgId = result.ccsOrgId;
               let regType = localStorage.getItem("manage-org_reg_type")+'';
               if (regType == 'supplier') {
                 org.supplierBuyerType = 0;

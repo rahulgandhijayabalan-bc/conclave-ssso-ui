@@ -13,15 +13,42 @@
         {{ i?.address?.postalCode }}<br *ngIf="i?.address?.postalCode" />
         {{ i?.address?.countryName }}
       </p>
-      <p><strong style="font-weight: 500;">{{ schemeName }} registration number</strong><br />{{ i?.identifier?.id }}</p>
-      <h3><strong>Is this your organisation?</strong></h3>
-      <div class="brickendon-group">
-        <div><input type="radio" name="orgGroup" value="manage-org/register/user" checked="checked" [(ngModel)]="orgGroup"><label>Yes, and the details are correct</label></div>
-        <div><input type="radio" name="orgGroup" value="manage-org/register/error/wrong-details" [(ngModel)]="orgGroup"><label>Yes, but the address is wrong</label></div>
-        <div><input type="radio" name="orgGroup" value="manage-org/register/error/not-my-details" [(ngModel)]="orgGroup"><label>No, this isn't my organisation</label></div>
+      <p><strong style="font-weight: 500;">{{ schemeName }} registration number</strong><br />{{ i?.identifier?.id }}
+      </p>
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            Is this your organisation?
+          </legend>
+          <div class="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" type="radio" name="orgGroup" checked="checked"
+                value="manage-org/register/user" [(ngModel)]="orgGroup">
+              <label class="govuk-label govuk-radios__label">
+                Yes, and the details are correct
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" type="radio" name="orgGroup"
+                value="manage-org/register/error/wrong-details" [(ngModel)]="orgGroup">
+              <label class="govuk-label govuk-radios__label">
+                Yes, but the address is wrong
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" type="radio" name="orgGroup"
+                value="manage-org/register/error/not-my-details" [(ngModel)]="orgGroup">
+              <label class="govuk-label govuk-radios__label">
+                No, this isn't my organisation
+              </label>
+            </div>
+          </div>
+
+        </fieldset>
       </div>
-      <button class="govuk-!-font-size-18 govuk-!-font-weight-bold govuk-button" data-module="govuk-button" (click)="onSubmit()">Continue</button>
+
+      <button class="govuk-!-font-size-18 govuk-!-font-weight-bold govuk-button" data-module="govuk-button"
+        (click)="onSubmit()">Continue</button>
     </div>
   </div>
-  <!--<app-footer></app-footer>-->
 </div>

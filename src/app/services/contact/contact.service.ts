@@ -54,16 +54,4 @@ export class contactService {
           })
         );
     }
-
-    public updateContact(contactId: number, contact: ContactDetails) {
-        return this.http.put<number>(`${this.contactUrl}/${contactId.toString()}`, contact, {
-            headers: { Authorization: `Bearer ${"data.token"}` }
-        });
-    }
-
-    public deleteContact(contactId: number) {
-        return this.http.delete(`${this.contactUrl}/${contactId.toString()}`, {
-            headers: { Authorization: `Bearer ${"data.token"}` }
-        });
-    }
 }

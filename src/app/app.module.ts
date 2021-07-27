@@ -99,8 +99,6 @@ import { OrgSupportSearchComponent } from './pages/org-support/search/search.com
 import { OrgSupportDetailsComponent } from './pages/org-support/details/details.component';
 import { OrgSupportConfirmComponent } from './pages/org-support/confirm/confirm.component';
 import { OrgSupportSuccessComponent } from './pages/org-support/success/success.component';
-import { OrgSupportConfirmResetPasswordComponent } from './pages/org-support/confirm-reset-password/confirm.component';
-import { OrgSupportSuccessResetPasswordComponent } from './pages/org-support/success-reset-password/success.component';
 import { OrgSupportSuccessChangedRoleComponent } from './pages/org-support/success-changed-role/success.component';
 import { JwPaginationComponent } from 'src/app/components/pagination/pagination';
 import { ManageGroupListComponent } from './pages/manage-group/manage-group-list/manage-group-list-component';
@@ -123,6 +121,20 @@ import { OrgSupportErrorComponent } from './pages/org-support/error/error.compon
 import { ForgotPasswordSuccessComponent } from './pages/forgot-password-success/forgot-password-success';
 import { RollbarErrorHandler, rollbarFactory, RollbarService } from './logging/rollbar';
 import { AuthErrorComponent } from './pages/auth-error/auth-error.component';
+import { ContactAssignSelectionComponent } from './pages/contact/contact-assign-selection/contact-assign-selection-component';
+import { ContactAssignUserSearchComponent } from './pages/contact/contact-assign-user-search/contact-assign-user-search-component';
+import { ContactAssignSiteSearchComponent } from './pages/contact/contact-assign-site-search/contact-assign-site-searchcomponent';
+import { ContactAssignComponent } from './pages/contact/contact-assign/contact-assign-component';
+import { ContactAssignConfirmComponent } from './pages/contact/contact-assign-confirm/contact-assign-confirm-component';
+import { ContactAssignSuccessComponent } from './pages/contact/contact-assign-success/contact-assign-success-component';
+import { ContactUnassignConfirmComponent } from './pages/contact/contact-unassign-confirm/contact-unassign-confirm-component';
+import { ContactUnassignSuccessComponent } from './pages/contact/contact-unassign-success/contact-unassign-success-component';
+import { ContactAssignErrorComponent } from './pages/contact/contact-assign-error/contact-assign-error-component';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { HelpAndSupportComponent } from './pages/help-support/help-support-component';
+import { MFAResetComponent } from './pages/mfa-reset/mfa-reset-component';
+import { MFAService } from './services/auth/mfa.service';
+import { SendMFAResetNotificationComponent } from './pages/mfa-reset/send-notification/send-mfa-reset-notification';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -200,8 +212,6 @@ export function createTranslateLoader(http: HttpClient) {
     OrgSupportDetailsComponent,
     OrgSupportConfirmComponent,
     OrgSupportSuccessComponent,
-    OrgSupportConfirmResetPasswordComponent,
-    OrgSupportSuccessResetPasswordComponent,
     OrgSupportSuccessChangedRoleComponent,
     JwPaginationComponent,
     ManageGroupListComponent,
@@ -219,7 +229,19 @@ export function createTranslateLoader(http: HttpClient) {
     BuyerErrorComponent,
     OrgSupportErrorComponent,
     ForgotPasswordSuccessComponent,
-    AuthErrorComponent
+    AuthErrorComponent,
+    ContactAssignSelectionComponent,
+    ContactAssignUserSearchComponent,
+    ContactAssignSiteSearchComponent,
+    ContactAssignComponent,
+    ContactAssignConfirmComponent,
+    ContactAssignSuccessComponent,
+    ContactUnassignConfirmComponent,
+    ContactUnassignSuccessComponent,
+    ContactAssignErrorComponent,
+    HelpAndSupportComponent,
+    MFAResetComponent,
+    SendMFAResetNotificationComponent
   ],
   imports: [
     // BrowserModule,
@@ -259,10 +281,12 @@ export function createTranslateLoader(http: HttpClient) {
     NzLayoutModule,
     ComponentsModule,
     MatTableModule,
+    NgxIntlTelInputModule
   ],
   exports: [TranslateModule],
   providers: [
     AuthService,
+    MFAService,
     TokenService,
     // LoadingIndicatorService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpJwtAuthInterceptor, multi: true },

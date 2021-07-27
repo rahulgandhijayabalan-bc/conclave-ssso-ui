@@ -66,7 +66,7 @@ export class WrapperUserService {
   }
 
   resetUserPassword(userName: string, component: string): Observable<any> {
-    const url = `${this.url}/change-password?userId=${userName}&component=${component}`;
+    const url = `${this.url}/reset-password?userId=${userName}&component=${component}`;
     return this.http.put(url, null).pipe(
       map(() => {
         return true;

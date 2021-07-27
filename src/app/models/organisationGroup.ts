@@ -1,5 +1,6 @@
 export interface Group {
     groupId: number;
+    mfaEnabled:boolean;
     groupName: string;
     createdDate?: string;
 }
@@ -35,6 +36,7 @@ export interface Role {
     subscriptionTypeEligibility?: number;
     tradeEligibility?: number;
     enabled?: boolean;
+    serviceName?:string;
 }
 
 export interface CheckBoxRoleListGridSource extends Role{

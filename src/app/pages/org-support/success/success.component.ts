@@ -37,16 +37,57 @@ import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 export class OrgSupportSuccessComponent extends BaseComponent implements OnInit {
 
   public user$!: Observable<any>;
+  displayMessage: string = '';
 
-  constructor(private formBuilder: FormBuilder, private translateService: TranslateService, private authService: AuthService, private ciiService: ciiService, private userService: UserService, private organisationService: OrganisationService, private contactService: contactService, private wrapperOrgService: WrapperOrganisationService, private wrapperUserService: WrapperUserService, private router: Router, private route: ActivatedRoute, protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
-    super(uiStore,viewportScroller,scrollHelper);
+  constructor(private route: ActivatedRoute, protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+    super(uiStore, viewportScroller, scrollHelper);
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      if (params.id) {
-        this.user$ = this.wrapperUserService.getUser(params.id).pipe(share());
-      }
+      let changePassword = false;
+      let resetMfa = false;
+      let changeRole = false;
+
+      this.route.queryParams.subscribe(para => {
+
+        if (para.rpwd != undefined) {
+          changePassword = JSON.parse(para.rpwd);
+        }
+
+        if (para.rmfa != undefined) {
+          resetMfa = JSON.parse(para.rmfa);
+        }
+
+        if (para.chrole != undefined) {
+          changeRole = JSON.parse(para.chrole);
+        }
+
+        this.displayMessage = '';
+
+        if (changeRole) {
+          if (changePassword || resetMfa) {
+            this.displayMessage = 'You have successfully changed the organisation administrator role.'
+          }
+          else {
+            this.displayMessage = 'You have successfully changed the organisation administrator role for ' + params.id;
+            return;
+          }
+        }
+
+        if (changePassword) {
+          this.displayMessage = this.displayMessage + (resetMfa ? ' Password reset email and' : ' Password reset email');
+        }
+
+        if (resetMfa) {
+          this.displayMessage = this.displayMessage + (changePassword ? ' MFA reset email have been sent to' : ' MFA reset email has been sent to');
+        }
+        else {
+          this.displayMessage = this.displayMessage + ' has been sent to'
+        }
+
+        this.displayMessage = this.displayMessage + ' ' + params.id;
+      });
     });
   }
 }

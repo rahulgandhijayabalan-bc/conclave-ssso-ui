@@ -92,36 +92,13 @@ export class ciiService {
 
   addOrganisation(json: string | null): Observable<any> {
     const body = JSON.parse(json + '');
-    return ajax({
-      url: `${this.url}/cii/`,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: body
-    });
+    return this.httpClient.post(`${this.url}/cii/`, body);
   }
 
   updateOrganisation(json: string | null): Observable<any> {
     const body = JSON.parse(json + '');
     const url = `${this.url}/cii/`;
     return this.httpClient.put(url, body);
-  }
-
-  delete(json: string | null): Observable<any> {
-    const body = JSON.parse(json + '');
-    const url = `${this.url}/cii/`;
-    return this.httpClient.delete(url, body);
-  }
-
-  deleteById(id: string): Observable<any> {
-    const url = `${this.url}/cii/?id=` + id;
-    return this.httpClient.delete(url);
-  }
-
-  deleteOrganisation(id: string): Observable<any> {
-    const url = `${this.url}/cii/DeleteOrg?id=` + id;
-    return this.httpClient.delete(url);
   }
 
   deleteScheme(orgId: string, scheme: string, id: string): Observable<any> {

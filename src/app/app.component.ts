@@ -68,6 +68,7 @@ export class AppComponent implements OnInit {
       // This handles page refresh to reload access tokens. Ignore authSuccess page 
       var currentGlobalRoute = localStorage['currentGlobalRoute'];
       if (!tokenExists && !currentGlobalRoute.includes('authsuccess')) {
+        this.authService.registerTokenRenewal();
         // Url after trimming the leading slash
         let url = currentGlobalRoute.startsWith('/') ? currentGlobalRoute.replace(/^\/+/, '') : currentGlobalRoute;
         this.globalRouteService.globalRoute = url;
@@ -105,10 +106,7 @@ export class AppComponent implements OnInit {
     this.uiStore.dispatch({ type: '[UI] Side Nav Toggle' });
   }
 
-  public logOut(): void {
-    this.authService.logOutAndRedirect();
-  }
-  public signout() {
+  public signoutAndRedirect() {
     this.authService.logOutAndRedirect();
   }
 
