@@ -8,10 +8,22 @@
   <tbody class="govuk-table__body">
     <tr class="govuk-table__row" *ngFor="let dataRow of tableVisibleData">
       <td class="govuk-table__cell" *ngFor="let dataKey of dataKeys">{{dataRow[dataKey]}}</td>
-      <td class="govuk-table__cell" *ngIf="isHyperLinkVisible == true"><a (click)="onHyperLinkClick(dataRow)"> {{
+      <td class="govuk-table__cell" *ngIf="isHyperLinkVisible == true"><a href="javascript:;"
+          (click)="onHyperLinkClick(dataRow)"> {{
           hyperLinkText || '' | translate }}</a></td>
       <td class="govuk-table__cell" *ngIf="isCheckBoxVisible == true">
-        <input type="checkbox" (change)="onCheckChange($event, dataRow)" [checked]="dataRow['isChecked']==true">
+        <input type="checkbox" class="table-radio-checkbox" (change)="onCheckChange($event, dataRow)"
+          [checked]="dataRow['isChecked']==true">
+      </td>
+      <td class="govuk-table__cell" *ngIf="isRadioVisible == true">
+        <div class="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" type="radio" name="table-radio-group"
+              (change)="onRadioChange($event, dataRow)">
+            <label class="govuk-label govuk-radios__label">
+            </label>
+          </div>
+        </div>
       </td>
     </tr>
   </tbody>

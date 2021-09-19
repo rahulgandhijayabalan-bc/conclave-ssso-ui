@@ -56,7 +56,7 @@ export class ForgotPasswordComponent extends BaseComponent implements OnInit {
         this.validate(form);
         if (this.formValid(form)) {
             this.authService.resetPassword(form.get('userName')?.value).toPromise().then(() => {
-                this.router.navigateByUrl('forgot-password-success?un=' + form.get('userName')?.value);
+                this.router.navigateByUrl(`forgot-password-success?un= + ${encodeURIComponent(form.get('userName')?.value)}`);
             }, (err) => {
                 this.errorCode = err.error;
             });

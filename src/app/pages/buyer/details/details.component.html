@@ -16,7 +16,7 @@
   <h1 class="govuk-heading-xl page-title">Confirm your organisation selection</h1>
   <div *ngIf="org">
     <p style="margin-top:40px;">
-      <span style="font-weight: 700;">{{ org?.legalName }}</span><br />
+      <span style="font-weight: 700;">{{ org?.identifier?.legalName }}</span><br />
       {{ org?.address?.streetAddress }}<br *ngIf="org?.address?.streetAddress" />
       {{ org?.address?.locality }}<br *ngIf="org?.address?.locality" />
       {{ org?.address?.region }}<br *ngIf="org?.address?.region" />

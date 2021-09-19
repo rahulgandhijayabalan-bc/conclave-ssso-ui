@@ -10,29 +10,30 @@
     </ol>
   </div>
   <h1 class="govuk-heading-xl page-title">Manage your organisation</h1>
-  <!-- <div *ngIf="organisation$ | async as i">
-        <p style="margin-top:40px;">
-            <span style="font-weight: 500;">{{ i?.legalName }}</span><br />
-            {{ i?.address?.streetAddress }}<br *ngIf="i?.address?.streetAddress" />
-            {{ i?.address?.locality }}<br *ngIf="i?.address?.locality" />
-            {{ i?.address?.region }}<br *ngIf="i?.address?.region" />
-            {{ i?.address?.postalCode }}<br *ngIf="i?.address?.postalCode" />
-            {{ i?.address?.countryCode }}<br *ngIf="i?.address?.countryCode" />
-        </p>
-    </div> -->
+  
   <div>
     <p style="margin-top:40px;">
-      <span style="font-weight: 600;font-size: 24px;">{{ org?.legalName }}</span><br />
-      {{ organisationAddress?.streetAddress }}<br *ngIf="organisationAddress?.streetAddress" />
-      {{ organisationAddress?.locality }}<br *ngIf="organisationAddress?.locality" />
-      {{ organisationAddress?.region }}<br *ngIf="organisationAddress?.region" />
-      {{ organisationAddress?.postalCode }}<br *ngIf="organisationAddress?.postalCode" />
-      {{ organisationAddress?.countryCode }}<br *ngIf="organisationAddress?.countryCode" />
+      <span style="font-weight: 600;font-size: 24px;">{{ org.identifier?.legalName }}</span><br />
+      {{ org.address?.streetAddress }}<br *ngIf="org.address?.streetAddress" />
+      {{ org.address?.locality }}<br *ngIf="org.address?.locality" />
+      {{ org.address?.region }}<br *ngIf="org.address?.region" />
+      {{ org.address?.postalCode }}<br *ngIf="org.address?.postalCode" />
+      {{ org.address?.countryCode }}<br *ngIf="org.address?.countryCode" />
     </p>
   </div>
-  <div class="govuk-form-group" style="margin-top:40px;" *ngIf="idps">
+  <h2> {{ 'BUYER_SUPPLIER_TYPE' | translate }}</h2>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div>
+        <p *ngIf="org.detail?.supplierBuyerType == 0">{{ 'SUPPLIER_TYPE' | translate }}</p>
+        <p *ngIf="org.detail?.supplierBuyerType == 1">{{ 'BUYER_TYPE' | translate }}</p>
+        <p *ngIf="org.detail?.supplierBuyerType == 2">{{ 'BUYER_AND_SUPPLIER_TYPE' | translate }}</p>
+      </div>
+    </div>
+  </div>
+  <h2>Sign In Providers</h2>
+  <div class="govuk-form-group" *ngIf="idps">
     <fieldset class="govuk-fieldset">
-      <legend class="govuk-fieldset__legend" style="font-size: 24px;font-weight: 600;">Sign In Providers</legend>
       <div class="govuk-checkboxes">
         <div class="govuk-checkboxes__item" *ngFor="let idp of idps">
           <div *ngIf="idp.connectionName !== 'none'">
@@ -59,6 +60,8 @@
   <div class="govuk-form-group govuk-button-group">
     <button class="govuk-button govuk-button--secondary" data-module="govuk-button" (click)="onContactAddClick()"
       style="width: 220px;">{{ 'ADD_ANOTHER_CONTACT_BTN' | translate }}</button>
+      <button class="govuk-button govuk-button--secondary" data-module="govuk-button" (click)="onContactAssignClick()">
+        {{ 'FIND_AND_ASSIGN_CONTACT_BTN' | translate }}</button>
   </div>
   <h2>{{ 'SITE_DETAILS' | translate }}</h2>
   <div class="govuk-grid-row">
@@ -110,7 +113,7 @@
       style="width: 200px;">Add new registry</button>
   </div>
   <p style="margin-top:40px;"><strong>If you have previously tried to signup or register (CII registry) and have made a
-      mistake, Please</strong> <a href="/"> Contact CCS</a></p>
+      mistake, Please</strong> <a href="{{ccsContactUrl}}" target="_blank"> Contact CCS</a></p>
   <div class="govuk-button-group">
     <button class="govuk-!-font-size-18 govuk-!-font-weight-bold govuk-button" data-module="govuk-button"
       (click)="onSaveChanges()">Save changes</button>

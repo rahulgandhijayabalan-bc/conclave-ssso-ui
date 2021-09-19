@@ -6,17 +6,13 @@ import { Location, ViewportScroller } from '@angular/common';
 import { slideAnimation } from 'src/app/animations/slide.animation';
 
 import { BaseComponent } from 'src/app/components/base/base.component';
-import { ContactDetails, ContactType } from 'src/app/models/contactDetail';
-import { contactService } from 'src/app/services/contact/contact.service';
 import { UIState } from 'src/app/store/ui.states';
 import { OperationEnum } from 'src/app/constants/enum';
-import { WrapperOrganisationService } from 'src/app/services/wrapper/wrapper-org-service';
-import { TokenService } from 'src/app/services/auth/token.service';
 import { WrapperOrganisationSiteService } from 'src/app/services/wrapper/wrapper-org-site-service';
 import { OrganisationSiteInfo, OrganisationSiteResponse } from 'src/app/models/site';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { WrapperSiteContactService } from 'src/app/services/wrapper/wrapper-site-contact-service';
-import { ContactGridInfo, ContactPoint, SiteContactInfoList } from 'src/app/models/contactInfo';
+import { ContactGridInfo, SiteContactInfoList } from 'src/app/models/contactInfo';
 import { ContactHelper } from 'src/app/services/helper/contact-helper.service';
 
 @Component({
@@ -35,10 +31,10 @@ export class ManageOrganisationSiteEditComponent extends BaseComponent implement
   submitted!: boolean;
   isEdit: boolean = false;
   siteId: number = 0;
-  public serverError : string = ''; 
+  public serverError: string = '';
   organisationId: string;
-  contactTableHeaders = ['CONTACT_REASON', 'NAME', 'EMAIL', 'TELEPHONE_NUMBER'];
-  contactColumnsToDisplay = ['contactReason', 'name', 'email', 'phoneNumber'];
+  contactTableHeaders = ['CONTACT_REASON', 'NAME', 'EMAIL', 'TELEPHONE_NUMBER', 'FAX', 'WEB_URL'];
+  contactColumnsToDisplay = ['contactReason', 'name', 'email', 'phoneNumber', 'fax', 'webUrl'];
   contactData: ContactGridInfo[];
 
   @ViewChildren('input') inputs!: QueryList<ElementRef>;
@@ -195,7 +191,14 @@ export class ManageOrganisationSiteEditComponent extends BaseComponent implement
       'contactId': 0,
       'siteId': this.siteId
     };
-    this.router.navigateByUrl('manage-org/profile/contact-edit?data=' + JSON.stringify(data));
+    this.router.navigateByUrl('manage-org/profile/site/contact-edit?data=' + JSON.stringify(data));
+  }
+
+  public onContactAssignClick() {
+    let data = {
+      'assigningSiteId': this.siteId
+    };
+    this.router.navigateByUrl('contact-assign/select?data=' + JSON.stringify(data));
   }
 
   onContactEditClick(contactInfo: ContactGridInfo) {
@@ -204,6 +207,6 @@ export class ManageOrganisationSiteEditComponent extends BaseComponent implement
       'contactId': contactInfo.contactId,
       'siteId': this.siteId
     };
-    this.router.navigateByUrl('manage-org/profile/contact-edit?data=' + JSON.stringify(data));
+    this.router.navigateByUrl('manage-org/profile/site/contact-edit?data=' + JSON.stringify(data));
   }
 }
