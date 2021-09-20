@@ -45,7 +45,8 @@
     "rxjs-compat": "^6.6.3",
     "save-dev": "0.0.1-security",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+    "classlist.js": "^1.1.20150312"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.1100.5",

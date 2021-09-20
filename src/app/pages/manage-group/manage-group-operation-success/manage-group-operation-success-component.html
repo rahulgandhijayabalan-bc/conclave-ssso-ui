@@ -12,7 +12,7 @@
                             }}</a>
                     </li>
                     <li *ngIf="isEdit==true" class="govuk-breadcrumbs__list-item">
-                        <a class="govuk-breadcrumbs__link" (click)="onNavigateToGroupClick()">
+                        <a href="javascript:;" class="govuk-breadcrumbs__link" (click)="onNavigateToGroupClick()">
                             {{ 'EDIT_GROUP' | translate }}</a>
                     </li>
                     <li class="govuk-breadcrumbs__list-item">
@@ -30,7 +30,7 @@
                 <h1 *ngIf="operation=== operationEnum.GroupUserUpdate" class="govuk-heading-xl">{{ 'GROUP_USER_UPDATE_SUCCESS' | translate }}</h1>
                 <h1 *ngIf="operation=== operationEnum.GroupRoleUpdate" class="govuk-heading-xl">{{ 'GROUP_ROLE_UPDATE_SUCCESS' | translate }}</h1>
                 <h1 *ngIf="operation=== operationEnum.GroupDelete" class="govuk-heading-xl">{{ 'GROUP_DELETE_SUCCESS' | translate }}</h1>
-                <a *ngIf="operation!= operationEnum.GroupDelete" class="navigation-text" (click)="onNavigateToGroupClick()">
+                <a href="javascript:;" *ngIf="operation!= operationEnum.GroupDelete" class="navigation-text" (click)="onNavigateToGroupClick()">
                     {{ 'RETURN_TO_GROUP' | translate }}</a>
                 <a *ngIf="operation=== operationEnum.GroupDelete" class="navigation-text" routerLink="/manage-groups">
                     {{ 'RETURN_TO_MANAGE_GROUPS' | translate }}</a>

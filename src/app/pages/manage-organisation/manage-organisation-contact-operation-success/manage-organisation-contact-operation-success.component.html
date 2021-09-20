@@ -12,7 +12,8 @@
                             {{ 'MANAGE_YOUR_ORGANISATION' | translate }}</a>
                     </li>
                     <li *ngIf="siteId != 0" class="govuk-breadcrumbs__list-item">
-                        <a class="govuk-breadcrumbs__link" (click)="onNavigateToSiteClick()">{{ 'EDIT_SITE' |
+                        <a href="javascript:;" class="govuk-breadcrumbs__link" (click)="onNavigateToSiteClick()">{{
+                            'EDIT_SITE' |
                             translate
                             }}</a>
                     </li>
@@ -49,9 +50,10 @@
             <h1 class="govuk-heading-xl" *ngIf="operation === operationEnum.DeleteSiteContact">
                 {{ 'DELETE_SITE_CONTACT_SUCCESS' | translate }}
             </h1>
-            <a *ngIf="siteId == 0" class="navigation-text" (click)="onNavigateToProfileClick()"> {{
+            <a href="javascript:;" *ngIf="siteId == 0" class="navigation-text" (click)="onNavigateToProfileClick()"> {{
                 'RETURN_MANAGE_YOUR_ORGANISATION' | translate }} </a>
-            <a *ngIf="siteId != 0" class="navigation-text" (click)="onNavigateToSiteClick()"> {{ 'RETURN_EDIT_SITE' |
+            <a href="javascript:;" *ngIf="siteId != 0" class="navigation-text" (click)="onNavigateToSiteClick()"> {{
+                'RETURN_EDIT_SITE' |
                 translate }} </a>
             <br>
         </div>

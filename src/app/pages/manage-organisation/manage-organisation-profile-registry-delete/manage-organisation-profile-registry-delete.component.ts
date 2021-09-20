@@ -45,46 +45,6 @@ export class ManageOrganisationRegistryDeleteComponent extends BaseComponent imp
       this.routeParams = params;
       if (params.id && params.scheme) {
         this.item$ = this.ciiService.getIdentifiers(this.tokenService.getCiiOrgId(), params.scheme, params.id).pipe(share());
-        // this.item$.subscribe({
-        //   next: result => {
-        //     if (result.error) {
-        //       if (result.message == 'Error 400') {
-        //         this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/notfound`);
-        //       } else if (result.message == 'Error 401') {
-        //         this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/generic`);
-        //       } else if (result.message == 'Error 403') {
-        //         this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/generic`);
-        //       } else if (result.message == 'Error 404') {
-        //         this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/notfound`);
-        //       } else if (result.message == 'Error 405') {
-        //         this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/`);
-        //       } else {
-        //         this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/generic`);
-        //       }
-        //     } else {
-        //       // this.selectedIdentifiers = result.additionalIdentifiers;
-        //       // localStorage.setItem('cii_organisation', JSON.stringify(result));
-        //     }
-        //   }, error: err => {
-        //     if (err.status) {
-        //       if (err.status == '400') {
-        //         this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/notfound`);
-        //       } else if (err.status == '401') {
-        //         this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/generic`);
-        //       } else if (err.status == '403') {
-        //         this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/generic`);
-        //       } else if (err.status == '404') {
-        //         this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/notfound`);
-        //       } else if (err.status == '405') {
-        //         this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/`);
-        //       } else {
-        //         this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/generic`);
-        //       }
-        //     } else {
-        //       this.router.navigateByUrl(`manage-org/register/error`);
-        //     }
-        //   }
-        // });
       }
     });
   }

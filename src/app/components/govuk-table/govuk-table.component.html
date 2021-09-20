@@ -1,23 +1,44 @@
-<table class="govuk-table">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th *ngFor="let header of headerTextKeys" scope="col" class="govuk-table__header">{{ header | translate }}</th>
-      <th *ngIf="isHyperLinkVisible == true" scope="col" class="govuk-table__header"></th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    <tr class="govuk-table__row" *ngFor="let dataRow of tableVisibleData">
-      <td class="govuk-table__cell" *ngFor="let dataKey of dataKeys">{{dataRow[dataKey]}}</td>
-      <td class="govuk-table__cell" *ngIf="isHyperLinkVisible == true"><a (click)="onHyperLinkClick(dataRow)"> {{
-          hyperLinkText || '' | translate }}</a></td>
-      <td class="govuk-table__cell" *ngIf="isCheckBoxVisible == true">
-        <input type="checkbox" (change)="onCheckChange($event, dataRow)" [checked]="dataRow['isChecked']==true">
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<div *ngIf="(useServerPagination==true || useClientPagination==true) && pageCount && pageCount > 1"
+<div class="table-scroll">
+  <table class="govuk-table" *ngIf="tableVisibleData.length != 0;else no_results">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th *ngFor="let header of headerTextKeys" scope="col" class="govuk-table__header">{{ header | translate }}</th>
+        <th *ngIf="isHyperLinkVisible == true" scope="col" class="govuk-table__header">Test</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      <tr (click)="onRowClick(dataRow)" class="govuk-table__row"
+        [class.clickable]="isCheckBoxVisible || isHyperLinkVisible" *ngFor="let dataRow of tableVisibleData">
+        <td class="govuk-table__cell" *ngFor="let dataKey of dataKeys">{{dataRow[dataKey]}}</td>
+        <td class="govuk-table__cell" *ngIf="isHyperLinkVisible == true"><a href="javascript:;"> {{
+            hyperLinkText || '' | translate }}</a></td>
+        <td class="govuk-table__cell" *ngIf="isCheckBoxVisible == true">
+          <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+            <div class="govuk-checkboxes__item">
+              <input class="govuk-checkboxes__input" type="checkbox" [checked]="dataRow['isChecked']==true">
+              <label class="govuk-label govuk-checkboxes__label" for="waste">
+              </label>
+            </div>
+          </div>
+        </td>
+        <td class="govuk-table__cell" *ngIf="isRadioVisible == true">
+          <div class="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" type="radio" name="table-radio-group">
+              <label class="govuk-label govuk-radios__label">
+              </label>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ng-template #no_results>
+  <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
+</ng-template>
+<div
+  *ngIf="(useServerPagination==true || useClientPagination==true) && pageCount && pageCount > 1 && tableVisibleData.length != 0"
   class="pagination-area" aria-label="Pagination">
   <ul>
     <li>

@@ -6,10 +6,7 @@ import { Location, ViewportScroller } from '@angular/common';
 import { slideAnimation } from 'src/app/animations/slide.animation';
 
 import { BaseComponent } from 'src/app/components/base/base.component';
-import { ContactDetails, ContactType } from 'src/app/models/contactDetail';
-import { contactService } from 'src/app/services/contact/contact.service';
 import { UIState } from 'src/app/store/ui.states';
-import { OperationEnum } from 'src/app/constants/enum';
 import { ciiService } from 'src/app/services/cii/cii.service';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 
