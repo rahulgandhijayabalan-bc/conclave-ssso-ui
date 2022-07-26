@@ -1,19 +1,19 @@
 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1"
   data-module="govuk-error-summary">
   <h2 class="govuk-error-summary__title" id="error-summary-title">
-    There is a problem
+    {{ 'ERROR_SUMMARY' | translate }}
   </h2>
   <div class="govuk-error-summary__body">
     <ul class="govuk-list govuk-error-summary__list">
       <li *ngIf="errorCode=='ERROR_CANNOT_REMOVE_ADMIN_ROLE_OR_GROUP_OF_LAST_ADMIN'; else elseBlock">
-        Cannot unassign admin role of the last administrator of the organisation.
+        {{ 'ORG_USER_SUPPORT.CAN_NOT_UNASSIGN' | translate }}
       </li>
       <ng-template #elseBlock>
-        <li>An unexpected error has occurred. Please try again in a few minutes.</li>
+        <li>{{ 'ORG_USER_SUPPORT.UN_EX_ERROR' | translate }} </li>
       </ng-template>
     </ul>
   </div>
 </div>
 
-<p class="contact-ccs"><a href="{{contactUrl}}" target="_blank">Contact CCS</a></p>
-<p><a routerLink="/org-support/search">Back</a></p>
+<p class="contact-ccs"><a href="{{contactUrl}}" target="_blank">{{ 'ORG_USER_SUPPORT.CONTACT_CCS' | translate }}</a></p>
+<p><a routerLink="/org-support/search">{{ 'ORG_USER_SUPPORT.BACK' | translate }}</a></p>

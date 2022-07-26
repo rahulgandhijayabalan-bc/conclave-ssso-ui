@@ -4,61 +4,49 @@
     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1"
       data-module="govuk-error-summary">
       <h2 class="govuk-error-summary__title" id="error-summary-title">
-        There is a problem
+        {{ 'ERROR_SUMMARY' | translate }}
       </h2>
       <div class="govuk-error-summary__body">
         <ul class="govuk-list govuk-error-summary__list">
           <li *ngIf="errorCode=='CHANGE_PASSWORD'; else elseBlock">
-            <a href="{{this.mainPageUrl}}/forgot-password">Please click here to reset your password.</a>
+            <a href="{{this.mainPageUrl}}/forgot-password">{{ 'ERRORS.RESET_PASS' | translate }}</a>
           </li>
           <ng-template #elseBlock>
             <li *ngIf="errorCode=='USER_NOT_FOUND'; else elseBlock2">
-              <a href="javascript:;" (click)="signoutUser()"> You don't have a valid conclave account. Please navigate
-                to
-                login page. </a>
+              <a href="javascript:;" (click)="signoutUser()"> {{ 'ERRORS.DONT_HAVE_ACC' | translate }} </a>
             </li>
           </ng-template>
           <ng-template #elseBlock2>
             <li *ngIf="errorCode=='INVALID_CONNECTION'; else elseBlock3">
-              <a href="javascript:;" (click)="signoutUser()"> You are not authorized to login using this authentication
-                provider. Please
-                navigate to login page. </a>
+              <a href="javascript:;" (click)="signoutUser()"> {{ 'ERRORS.NOT_AUTH' | translate }} </a>
             </li>
           </ng-template>
           <ng-template #elseBlock3>
             <li *ngIf="errorCode=='PENDING_PASSWORD_CHANGE'; else elseBlock4">
-              <a href="javascript:;" (click)="signoutUser()"> You need to change the password. An email has already been
-                sent with instructions.
-                Please navigate to login page. </a>
+              <a href="javascript:;" (click)="signoutUser()">{{ 'ERRORS.SET_PASS' | translate }} </a>
             </li>
           </ng-template>
           <ng-template #elseBlock4>
             <li *ngIf="errorCode=='PENDING_MFA_VERIFICATION'; else elseBlock5">
-              <a href="javascript:;" (click)="signoutUser()"> You need to verify the additional security reset request.
-                An
-                email has already been sent with instructions.
-                Please navigate to login page. </a>
+              <a href="javascript:;" (click)="signoutUser()"> {{ 'ERRORS.SET_ADD_SEC' | translate }} </a>
             </li>
           </ng-template>
           <ng-template #elseBlock5>
             <li *ngIf="errorCode=='ERROR_INVALID_INPUT_CHARACTER'; else elseBlock6">
-              <a href="javascript:;" (click)="goToDashboard()"> You have tried to enter a prohibited character in one of
-                the
-                input fields.
-                Please go to the home page. </a>
+              <a href="javascript:;" (click)="goToDashboard()"> {{ 'ERRORS.PRO_CHAR' | translate }} </a>
             </li>
           </ng-template>
           <ng-template #elseBlock6>
             <li *ngIf="errorCode==expiredLinkErrorCodeValue; else elseBlock7">
-              <a href="javascript:;" onClick="return false;" (click)="setFocus(0)"> {{'ACCESS_LINK_EXPIRED' | translate}} </a>
+              <a href="javascript:;" onClick="return false;" (click)="setFocus(0)"> {{'ERRORS.ACCESS_LINK_EXPIRED' | translate}} </a>
             </li>
             <li *ngIf="submitted && resendForm.controls.userName.errors?.required">
               <a href="javascript:;" onClick="return false;" (click)="setFocus(0)"> {{
-                'ERROR_EMAIL_REQUIRED' | translate }}</a>
+                'ERRORS.ERROR_EMAIL_REQUIRED' | translate }}</a>
             </li>
             <li *ngIf="submitted && !resendForm.controls.userName.errors?.required && resendForm.controls.userName.invalid">
               <a href="javascript:;" onClick="return false;" (click)="setFocus(0)"> {{
-                'ERROR_USERNAME_INCORRECT_FORMAT' | translate }} </a>
+                'ERRORS.ERROR_USERNAME_INCORRECT_FORMAT' | translate }} </a>
             </li>
           </ng-template>
           <ng-template #elseBlock7>
@@ -72,14 +60,14 @@
       <div class="govuk-form-group"
         [class.govuk-form-group--error]="submitted && (resendForm.controls.userName.hasError('required') || resendForm.controls.userName.invalid)">
         <label class="govuk-label" for="userName">{{
-          'ENTER_EMAIL_ADDRESS_FOR_RESEND_LINK' | translate }}</label>
+          'ERRORS.ENTER_EMAIL_ADDRESS_FOR_RESEND_LINK' | translate }}</label>
         <span class="govuk-error-message" *ngIf="submitted && resendForm.controls.userName.errors?.required">
           <span class="govuk-visually-hidden">Error:</span>{{
-          'ERROR_EMAIL_REQUIRED' | translate }}
+          'ERRORS.ERROR_EMAIL_REQUIRED' | translate }}
         </span>
         <span class="govuk-error-message" *ngIf="submitted && !resendForm.controls.userName.errors?.required && resendForm.controls.userName.invalid">
           <span class="govuk-visually-hidden">Error:</span>{{
-          'ERROR_USERNAME_INCORRECT_FORMAT' | translate }}
+          'ERRORS.ERROR_USERNAME_INCORRECT_FORMAT' | translate }}
         </span>
         <input #input class="govuk-input" id="userName" formControlName="userName"  name="userName"
           size="20" type="email" value="" autocomplete="email" spellcheck="false"  (input)="validateEmailLength($event)"
@@ -87,7 +75,7 @@
       </div>
       <div class="govuk-form-group govuk-button-group">
         <button type="submit" class="govuk-button" data-module="govuk-button" (click)="onSubmit(resendForm)">{{
-          'RESEND_BTN' | translate }}</button>
+          'ERRORS.RESEND_BTN' | translate }}</button>
       </div>
     </form>
   </div>

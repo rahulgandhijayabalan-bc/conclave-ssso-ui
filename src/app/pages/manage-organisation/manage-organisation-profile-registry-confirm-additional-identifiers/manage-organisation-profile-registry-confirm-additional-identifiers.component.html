@@ -3,26 +3,26 @@
   <div class="govuk-breadcrumbs">
       <ol class="govuk-breadcrumbs__list">
           <li class="govuk-breadcrumbs__list-item">
-              <a class="govuk-breadcrumbs__link" routerLink="/home">Administrator dashboard</a>
+              <a class="govuk-breadcrumbs__link" routerLink="/home">{{ 'MANAGE_MY_ORG.ADMINISTRATOR_DASHBOARD' | translate }}</a>
           </li>
           <li class="govuk-breadcrumbs__list-item">
-              <a class="govuk-breadcrumbs__link" routerLink="/manage-org/profile">Manage your organisation</a>
+              <a class="govuk-breadcrumbs__link" routerLink="/manage-org/profile">{{ 'MANAGE_MY_ORG.MANAGE_YOUR_ORGANISATION' | translate }}</a>
           </li>
           <li class="govuk-breadcrumbs__list-item">
-            <a class="govuk-breadcrumbs__link">Add new registry</a>
+            <a class="govuk-breadcrumbs__link">{{ 'MANAGE_MY_ORG.ADD_NEW_REG' | translate }}</a>
           </li>
       </ol>
   </div>
-  <h1 class="govuk-heading-xl page-title">We found matching records for your organisation also from the additional registries below</h1>
+  <h1 class="govuk-heading-xl page-title">{{ 'MANAGE_MY_ORG.ADD_REGISTRIES' | translate }}</h1>
   <div>
     <div>
-      <h2 class="govuk-heading-s" *ngIf="i?.additionalIdentifiers.length > 0">We recommend you include all of these in your organisation profile. But if you wish not to then unselect the ones that need to be excluded.</h2>
+      <h2 class="govuk-heading-s" *ngIf="i?.additionalIdentifiers.length > 0">{{ 'MANAGE_MY_ORG.WE_RECOMMEND' | translate }}</h2>
       <p *ngFor="let ai of i?.additionalIdentifiers">
         <strong style="font-weight: 500;">{{ getSchemaName(ai?.scheme) }}</strong><br />
         <input type="checkbox" checked="checked" style="top: 1px; margin-right: 4px; position: relative; left: 1px;" (change)="onChange($event, ai)">{{ ai?.id }} - {{ ai?.legalName }}
       </p>
-      <button type="button" class="govuk-button" (click)="onSubmit()">Continue</button>
-      <button type="button" class="govuk-button govuk-button--secondary" (click)="goBack()" style="margin-left:10px;">Cancel</button>
+      <button type="button" class="govuk-button" (click)="onSubmit()">{{ 'MANAGE_MY_ORG.CONTINUE_BTN' | translate }}</button>
+      <button type="button" class="govuk-button govuk-button--secondary" (click)="goBack()" style="margin-left:10px;">{{ 'MANAGE_MY_ORG.CANCEL_BTN' | translate }}</button>
     </div>
   </div>
 </div>

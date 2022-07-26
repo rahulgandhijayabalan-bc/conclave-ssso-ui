@@ -4,32 +4,32 @@
       <div class="govuk-breadcrumbs">
         <ol class="govuk-breadcrumbs__list">
           <li class="govuk-breadcrumbs__list-item">
-            <a class="govuk-breadcrumbs__link" routerLink="/home">{{ 'ADMINISTRATOR_DASHBOARD' |
+            <a class="govuk-breadcrumbs__link" routerLink="/home">{{ 'MANAGE_MY_ORG.ADMINISTRATOR_DASHBOARD' |
               translate}}</a>
           </li>
           <li class="govuk-breadcrumbs__list-item">
             <a class="govuk-breadcrumbs__link" routerLink="/manage-org/profile">
-              {{ 'MANAGE_YOUR_ORGANISATION' |translate }}</a>
+              {{ 'MANAGE_MY_ORG.MANAGE_YOUR_ORGANISATION' |translate }}</a>
           </li>
           <li class="govuk-breadcrumbs__list-item">
             <a class="govuk-breadcrumbs__link" (click)="onCancelClick()">
-              {{ 'EDIT_SITE' | translate }}</a>
+              {{ 'MANAGE_MY_ORG.EDIT_SITE' | translate }}</a>
           </li>
           <li class="govuk-breadcrumbs__list-item">
-            <span class="govuk-breadcrumbs__link"> {{ 'DELETE_SITE' | translate }}</span>
+            <span class="govuk-breadcrumbs__link"> {{ 'MANAGE_MY_ORG.DELETE_SITE' | translate }}</span>
           </li>
         </ol>
       </div>
-      <h1 class="govuk-heading-xl"> {{ 'CONFIRM_SITE_DELETE' | translate }}</h1>
-      <p class="govuk-body">{{ 'THIS_CANNOT_BE_UNDONE' | translate }}</p>
+      <h1 class="govuk-heading-xl"> {{ 'MANAGE_MY_ORG.CONFIRM_SITE_DELETE' | translate }}</h1>
+      <p class="govuk-body">{{ 'MANAGE_MY_ORG.THIS_CANNOT_BE_UNDONE' | translate }}</p>
       <div class="govuk-button-group continue-cancel-button-group">
         <button type="submit" (click)="onDeleteConfirmClick()" class="govuk-button govuk-button--warning"
           data-module="govuk-button">
-          {{ 'CONFIRM_DELETE_BTN' | translate }}
+          {{ 'MANAGE_MY_ORG.CONFIRM_DELETE_BTN' | translate }}
         </button>
         <button type="button" (click)="onCancelClick()" class="govuk-button govuk-button--secondary"
           data-module="govuk-button">
-          {{ 'CANCEL_BTN' | translate }}
+          {{ 'MANAGE_MY_ORG.CANCEL_BTN' | translate }}
         </button>
       </div>
 
