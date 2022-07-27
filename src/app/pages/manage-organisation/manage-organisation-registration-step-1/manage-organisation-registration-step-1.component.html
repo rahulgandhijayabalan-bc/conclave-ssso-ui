@@ -28,9 +28,10 @@
           </ul>
           <br />
           <p>{{ "REGISTRATION.CREATE_AN_ACCOUNT_PARA_5" | translate }}</p>
-          <!-- <div class="govuk-inset-text">
-            This service is also available <a class="navigation-text" href="javascript:;">in Welsh (Cymraeg)</a>.
-          </div> -->
+          <div class="govuk-inset-text">
+            This service is also available <a class="navigation-text" href="javascript:;" *ngIf="DefaultLanguage == 'en'" (click)="ChangeLanguage('Welsh')">in Welsh (Cymraeg).</a>
+            <a class="navigation-text" href="javascript:;" *ngIf="DefaultLanguage == 'Welsh'" (click)="ChangeLanguage('en')">in English.</a>
+          </div>
           <div class="govuk-details__text detail-text">
             <p><strong>{{ "REGISTRATION.CREATE_AN_ACCOUNT_BEFORE_START" | translate }}</strong></p>
             <p>{{ "REGISTRATION.CREATE_AN_ACCOUNT_PARA_6" | translate }}</p>

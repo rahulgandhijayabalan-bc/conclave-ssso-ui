@@ -7,10 +7,20 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { TranslateService } from '@ngx-translate/core';
 import { UIState } from './store/ui.states';
 import { getSideNavVisible } from './store/ui.selectors';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterState } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  NavigationStart,
+  Router,
+  RouterState,
+} from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
 import { environment } from 'src/environments/environment';
-import { DomSanitizer, SafeResourceUrl, Title } from '@angular/platform-browser';
+import {
+  DomSanitizer,
+  SafeResourceUrl,
+  Title,
+} from '@angular/platform-browser';
 import { LoadingIndicatorService } from './services/helper/loading-indicator.service';
 import { filter, map } from 'rxjs/operators';
 import { GlobalRouteService } from './services/helper/global-route.service';
@@ -19,58 +29,78 @@ import { GoogleTagManagerService } from 'angular-google-tag-manager';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-
   @HostBinding('class') className = '';
   public sideNavVisible$: Observable<boolean>;
-  public IsActivePage:string=''
+  public IsActivePage: string = '';
   isAuthenticated: boolean = false;
   toggleControl = new FormControl(false);
-  opIFrameURL = this.sanitizer.bypassSecurityTrustResourceUrl(environment.uri.api.security + '/security/sessions/?origin=' + environment.uri.web.dashboard);
-  rpIFrameURL = this.sanitizer.bypassSecurityTrustResourceUrl(environment.uri.web.dashboard + '/assets/rpIFrame.html');
+  opIFrameURL = this.sanitizer.bypassSecurityTrustResourceUrl(
+    environment.uri.api.security +
+      '/security/sessions/?origin=' +
+      environment.uri.web.dashboard
+  );
+  rpIFrameURL = this.sanitizer.bypassSecurityTrustResourceUrl(
+    environment.uri.web.dashboard + '/assets/rpIFrame.html'
+  );
   ccsContactUrl: string = environment.uri.ccsContactUrl;
-  public searchForm:any={agreements:'',suppliers:''}
-  constructor(private sanitizer: DomSanitizer, private globalRouteService: GlobalRouteService, private overlay: OverlayContainer, private translate: TranslateService, protected uiStore: Store<UIState>, private router: Router,
-    private route: ActivatedRoute, public authService: AuthService, private gtmService: GoogleTagManagerService,
-    public loadingIndicatorService: LoadingIndicatorService, private titleService: Title) {
+  public searchForm: any = { agreements: '', suppliers: '' };
+  constructor(
+    private sanitizer: DomSanitizer,
+    private globalRouteService: GlobalRouteService,
+    private overlay: OverlayContainer,
+    private translate: TranslateService,
+    protected uiStore: Store<UIState>,
+    private router: Router,
+    private route: ActivatedRoute,
+    public authService: AuthService,
+    private gtmService: GoogleTagManagerService,
+    public loadingIndicatorService: LoadingIndicatorService,
+    private titleService: Title
+  ) {
     translate.setDefaultLang('en');
     this.sideNavVisible$ = this.uiStore.pipe(select(getSideNavVisible));
     //this.gtmService.addGtmToDom();
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd), map(() => {
-      let child = this.route.firstChild;
-      while (child) {
-        if (child.firstChild) {
-          child = child.firstChild;
-        } else if (child.snapshot.data && child.snapshot.data['title']) {
-          return child.snapshot.data['title'];
-        } else {
-          return null;
-        }
-      }
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        map(() => {
+          let child = this.route.firstChild;
+          while (child) {
+            if (child.firstChild) {
+              child = child.firstChild;
+            } else if (child.snapshot.data && child.snapshot.data['title']) {
+              return child.snapshot.data['title'];
+            } else {
+              return null;
+            }
+          }
 
-      return null;
-    })
-    ).subscribe((data: any) => {
-      if (data) {
-        this.IsActivePage=data
-        let gtmTag = {
-          event: 'page',
-          pageName: data
-        };
-        // Can be removed this event when tested by analytics team
-        this.gtmService.pushTag(gtmTag);
-        this.titleService.setTitle(data + ' - CCS');
-      }
-    });
+          return null;
+        })
+      )
+      .subscribe((data: any) => {
+        if (data) {
+          this.IsActivePage = data;
+          let gtmTag = {
+            event: 'page',
+            pageName: data,
+          };
+          // Can be removed this event when tested by analytics team
+          this.gtmService.pushTag(gtmTag);
+          this.titleService.setTitle(data + ' - CCS');
+        }
+      });
   }
 
   async ngOnInit() {
     this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationStart) {
         if ((<NavigationEnd>event).url != localStorage['currentGlobalRoute']) {
-          sessionStorage['previousGlobalRoute'] = localStorage['currentGlobalRoute'];
+          sessionStorage['previousGlobalRoute'] =
+            localStorage['currentGlobalRoute'];
           localStorage['currentGlobalRoute'] = (<NavigationEnd>event).url;
         }
       }
@@ -78,17 +108,18 @@ export class AppComponent implements OnInit {
 
     this.isAuthenticated = this.authService.isUserAuthenticated();
     if (this.isAuthenticated) {
-      let tokenExists = await this.authService.isInMemoryTokenExists()
-      // This handles page refresh to reload access tokens. Ignore authSuccess page 
+      let tokenExists = await this.authService.isInMemoryTokenExists();
+      // This handles page refresh to reload access tokens. Ignore authSuccess page
       var currentGlobalRoute = localStorage['currentGlobalRoute'];
       if (!tokenExists && !currentGlobalRoute.includes('authsuccess')) {
         this.authService.registerTokenRenewal();
         // Url after trimming the leading slash
-        let url = currentGlobalRoute.startsWith('/') ? currentGlobalRoute.replace(/^\/+/, '') : currentGlobalRoute;
+        let url = currentGlobalRoute.startsWith('/')
+          ? currentGlobalRoute.replace(/^\/+/, '')
+          : currentGlobalRoute;
         this.globalRouteService.globalRoute = url;
         this.router.navigate(['/renewtkn'], { replaceUrl: true });
-      }
-      else {
+      } else {
         this.authService.registerTokenRenewal();
       }
     }
@@ -128,18 +159,26 @@ export class AppComponent implements OnInit {
    * header search event
    * @param inputData getting from input
    */
-  public headerSearch(inputData:string):void{
-    if(inputData==="agreements"){
-     window.open('https://www.crowncommercial.gov.uk/agreements/search?q='+this.searchForm.agreements, "_blank");
-    }else if(inputData==="suppliers"){
-      window.open('https://www.crowncommercial.gov.uk/suppliers/search?q='+this.searchForm.suppliers, "_blank");
+  public headerSearch(inputData: string): void {
+    if (inputData === 'agreements') {
+      window.open(
+        'https://www.crowncommercial.gov.uk/agreements/search?q=' +
+          this.searchForm.agreements,
+        '_blank'
+      );
+    } else if (inputData === 'suppliers') {
+      window.open(
+        'https://www.crowncommercial.gov.uk/suppliers/search?q=' +
+          this.searchForm.suppliers,
+        '_blank'
+      );
     }
   }
 
-  public ChangeLanguage():void{
-    var element:any = document.getElementById("Language");
+  public ChangeLanguage(): void {
+    var element: any = document.getElementById('Language');
     var Selectedvalue = element.value;
-   this.translate.setDefaultLang(Selectedvalue);
+    this.translate.setDefaultLang(Selectedvalue);
   }
   // public isAuthenticated(): Observable<boolean> {
   //   return this.authService.isAuthenticated();

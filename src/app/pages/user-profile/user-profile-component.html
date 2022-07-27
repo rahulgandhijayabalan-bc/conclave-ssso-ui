@@ -192,11 +192,17 @@
                         data-module="govuk-button">
                         {{ 'MANAGE_MY_ACC.ADD_ANOTHER_CONTACT_BTN' | translate }}
                     </button>
+
+                  
                     <!-- <button type="button" (click)="onContactAssignRemoveClick()"
                         class="govuk-button govuk-button--secondary" data-module="govuk-button">
                         {{ 'ADD_REMOVE_ORG_CONTACT_BTN' | translate }}
                     </button> -->
                 </div>
+                <div class="govuk-inset-text">
+                    This service is also available <a class="navigation-text" href="javascript:;" *ngIf="DefaultLanguage == 'en'" (click)="ChangeLanguage('Welsh')">in Welsh (Cymraeg).</a>
+                    <a class="navigation-text" href="javascript:;" *ngIf="DefaultLanguage == 'Welsh'" (click)="ChangeLanguage('en')">in English.</a>
+                  </div>
 
                 <div class="govuk-button-group save-cancel-button-group">
                     <button type="submit" class="govuk-button" [disabled]="!formChanged" data-module="govuk-button">

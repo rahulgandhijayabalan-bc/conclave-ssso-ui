@@ -1,7 +1,13 @@
 import { ViewportScroller } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { interval } from 'rxjs';
 import { timeout } from 'rxjs/operators';
 import { slideAnimation } from 'src/app/animations/slide.animation';
@@ -13,30 +19,43 @@ import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { UIState } from 'src/app/store/ui.states';
 
 @Component({
-    selector: 'app-manage-organisation-registration-step-1',
-    templateUrl: './manage-organisation-registration-step-1.component.html',
-    styleUrls: ['./manage-organisation-registration-step-1.component.scss'],
-    animations: [
-        slideAnimation({
-            close: { 'transform': 'translateX(12.5rem)' },
-            open: { left: '-12.5rem' }
-        })
-    ],
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-manage-organisation-registration-step-1',
+  templateUrl: './manage-organisation-registration-step-1.component.html',
+  styleUrls: ['./manage-organisation-registration-step-1.component.scss'],
+  animations: [
+    slideAnimation({
+      close: { transform: 'translateX(12.5rem)' },
+      open: { left: '-12.5rem' },
+    }),
+  ],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ManageOrgRegStep1Component extends BaseComponent implements OnInit {
+export class ManageOrgRegStep1Component
+  extends BaseComponent
+  implements OnInit
+{
 
-  constructor(private dataService: dataService, private router: Router, protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
-    super(uiStore,viewportScroller,scrollHelper);
+  public DefaultLanguage='en'
+  constructor(
+    private dataService: dataService,
+    private router: Router,
+    protected uiStore: Store<UIState>,
+    protected viewportScroller: ViewportScroller,
+    protected scrollHelper: ScrollHelper,
+    private translate: TranslateService
+  ) {
+    super(uiStore, viewportScroller, scrollHelper);
   }
 
-  ngOnInit() {
-
-   }
+  ngOnInit() {}
 
   public onClick() {
     this.router.navigateByUrl(`manage-org/register/initial-search`);
   }
 
+  public ChangeLanguage(lang:string): void {
+    this.DefaultLanguage=lang
+    this.translate.setDefaultLang(this.DefaultLanguage);
+  }
 }

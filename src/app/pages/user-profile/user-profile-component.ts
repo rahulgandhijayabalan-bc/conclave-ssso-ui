@@ -23,6 +23,7 @@ import { FormBaseComponent } from 'src/app/components/form-base/form-base.compon
 import { SessionStorageKey } from 'src/app/constants/constant';
 import { PatternService } from 'src/app/shared/pattern.service';
 import { isBoolean } from 'lodash';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-profile',
@@ -30,6 +31,7 @@ import { isBoolean } from 'lodash';
   styleUrls: ['./user-profile-component.scss'],
 })
 export class UserProfileComponent extends FormBaseComponent implements OnInit {
+  public DefaultLanguage='en'
   submitted!: boolean;
   formGroup!: FormGroup;
   userGroupTableHeaders = ['GROUPS'];
@@ -86,7 +88,8 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
     private orgGroupService: WrapperOrganisationGroupService,
     private contactHelper: ContactHelper,
     private authService: AuthService,
-    private auditLogService: AuditLoggerService
+    private auditLogService: AuditLoggerService,
+    private translate: TranslateService
   ) {
     super(
       viewportScroller,
@@ -432,5 +435,9 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
       }
       this.router.navigateByUrl('confirm-user-mfa-reset?data=' +btoa(JSON.stringify(data)))
     }
+    }
+    public ChangeLanguage(lang:string): void {
+      this.DefaultLanguage=lang
+      this.translate.setDefaultLang(this.DefaultLanguage);
     }
 }
