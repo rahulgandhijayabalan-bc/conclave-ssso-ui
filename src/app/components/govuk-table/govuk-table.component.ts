@@ -22,7 +22,7 @@ export class GovUKTableComponent extends BaseComponent implements OnInit {
   @Input() isCheckBoxVisible?: boolean;
   @Input() isRadioVisible?: boolean;
   @Input() useServerPagination?: boolean;
-  @Input() serverPageCount?: number;
+  @Input() serverPageCount?: any;
   @Input() serverPageCurrentPage?: number;
   @Input() useClientPagination?: boolean;
   @Input() pageName?: string;
@@ -38,7 +38,7 @@ export class GovUKTableComponent extends BaseComponent implements OnInit {
   pageSize: number = environment.listPageSize;
   tableVisibleData!: any[];
   selectedRadioId: string = 'table-radio-id-non';
-
+  public ServerPageCount:any=[]
   constructor(
     // private translateService: TranslateService,
     protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
@@ -60,6 +60,7 @@ export class GovUKTableComponent extends BaseComponent implements OnInit {
       this.pageCount = this.serverPageCount;
       this.tableVisibleData = this.data;
       this.currentPage = this.serverPageCurrentPage || 1;
+      this.ServerPageCount = Array(this.serverPageCount * 10).fill(0).map((x, i) => i + 1);
     }
   }
 
@@ -93,5 +94,23 @@ export class GovUKTableComponent extends BaseComponent implements OnInit {
     else {
       this.changeCurrentPageEvent.emit(pageNumber);
     }
+  }
+
+  onChangeServer(pageOfItems:any,data:string){
+    console.log("pageOfItems",pageOfItems)
+    console.log("data",data)
+    let PageNumber:number;  
+    PageNumber = pageOfItems.pop() / 10
+    // if(pageOfItems){
+    //   this.changeCurrentPageEvent.emit(PageNumber);
+    // }
+  }
+
+
+
+  onChangeClinet(pageOfItems: Array<any>) {
+    if (this.useClientPagination) {
+    this.tableVisibleData = pageOfItems;
+   }
   }
 }

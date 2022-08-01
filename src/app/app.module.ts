@@ -162,6 +162,7 @@ import { ContactAdminComponent } from './pages/contact-admin/contact-admin.compo
 import { ManageOrganisationProfileAddContactToSiteComponent } from './pages/manage-organisation/manage-organisation-profile-add-contact-to-site/manage-organisation-profile-add-contact-to-site.component';
 import { ConfirmMfaResetComponent } from './pages/user-profile-mfa/confirm-mfa-reset/confirm-mfa-reset.component';
 import { SuccessUserMfaComponent } from './pages/user-profile-mfa/success-user-mfa/success-user-mfa.component';
+import { JwPaginationModule } from 'jw-angular-pagination';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -289,7 +290,8 @@ export function createTranslateLoader(http: HttpClient) {
     ContactAdminComponent,
     ManageOrganisationProfileAddContactToSiteComponent,
     ConfirmMfaResetComponent,
-    SuccessUserMfaComponent
+    SuccessUserMfaComponent,
+    JwPaginationComponent
   ],
   imports: [
     // BrowserModule,
@@ -332,7 +334,8 @@ export function createTranslateLoader(http: HttpClient) {
     NzLayoutModule,
     ComponentsModule,
     MatTableModule,
-    NgxIntlTelInputModule
+    JwPaginationModule,
+    NgxIntlTelInputModule,
   ],
   exports: [TranslateModule],
   providers: [
