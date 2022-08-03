@@ -163,6 +163,7 @@ import { ManageOrganisationProfileAddContactToSiteComponent } from './pages/mana
 import { ConfirmMfaResetComponent } from './pages/user-profile-mfa/confirm-mfa-reset/confirm-mfa-reset.component';
 import { SuccessUserMfaComponent } from './pages/user-profile-mfa/success-user-mfa/success-user-mfa.component';
 import { JwPaginationModule } from 'jw-angular-pagination';
+import { ManageOrganisationRemoveIdpConfirmComponent } from './pages/manage-organisation/manage-organisation-remove-idp-confirm/manage-organisation-remove-idp-confirm';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -222,6 +223,7 @@ export function createTranslateLoader(http: HttpClient) {
     ManageOrganisationRegistryDeleteComponent,
     ManageOrganisationRegistryDeleteConfirmationComponent,
     ManageOrganisationRegistryErrorComponent,
+    ManageOrganisationRemoveIdpConfirmComponent,
     ErrorComponent,
     GovUKTableComponent,
     SearchBoxComponent,
