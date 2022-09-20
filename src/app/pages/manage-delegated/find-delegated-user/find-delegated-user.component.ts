@@ -89,7 +89,9 @@ export class FindDelegatedUserComponent implements OnInit {
               status: '002'
             }
             this.route.navigateByUrl('delegated-user-status?data=' + btoa(JSON.stringify(data)))
-          } else {
+          } else if(error.error === 'INVALID_USER_ID'){
+            this.formGroup.controls['email'].setErrors({ incorrect: true });
+          }else{
             this.route.navigateByUrl('delegated-error')
           }
         }
