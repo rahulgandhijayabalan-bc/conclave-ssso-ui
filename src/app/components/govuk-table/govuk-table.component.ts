@@ -57,10 +57,13 @@ export class GovUKTableComponent extends BaseComponent implements OnInit {
       this.currentPage = 1;
     }
     else {
-      this.totalPagesArray = Array(this.serverPageCount).fill(0).map((x, i) => i + 1);
+      this.totalPagesArray =  Array(this.serverPageCount).fill(0).map((x, i) => i + 1);
       this.pageCount = this.serverPageCount;
       this.tableVisibleData = this.data;
       this.currentPage = this.serverPageCurrentPage || 1;
+      console.log("this.currentPage",this.currentPage)
+      console.log("this.pageCount",this.pageCount)
+      this.totalPagesArray = this.getPages(this.currentPage,this.serverPageCount)
     }
   }
 
@@ -100,5 +103,22 @@ export class GovUKTableComponent extends BaseComponent implements OnInit {
     else {
       this.changeCurrentPageEvent.emit(pageNumber);
     }
+  }
+
+
+  private getPages(current: number, total: any): number[] {
+    if (total <= 7) {
+      return [...Array(total).keys()].map(x => ++x)
+    }
+
+    if (current > 5) {
+      if (current >= total - 4) {
+        return [1, -1, total - 4, total - 3, total - 2, total - 1, total]
+      } else {
+        return [1, -1, current - 1, current, current + 1, -1, total]
+      }
+    }
+
+    return [1, 2, 3, 4, 5, -1, total]
   }
 }
