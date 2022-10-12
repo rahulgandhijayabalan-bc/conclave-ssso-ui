@@ -64,6 +64,7 @@ export class GovUKTableComponent extends BaseComponent implements OnInit {
       console.log("this.currentPage",this.currentPage)
       console.log("this.pageCount",this.pageCount)
       this.totalPagesArray = this.getPages(this.currentPage,this.serverPageCount)
+      console.log("pages",this.getPages(this.currentPage,this.serverPageCount))
     }
   }
 
