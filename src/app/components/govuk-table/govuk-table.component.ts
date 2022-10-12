@@ -103,6 +103,7 @@ export class GovUKTableComponent extends BaseComponent implements OnInit {
     }
     else {
       this.changeCurrentPageEvent.emit(pageNumber);
+      this.getPages(pageNumber,this.serverPageCount)
     }
   }
 
