@@ -81,6 +81,7 @@ export class WrapperOrganisationGroupService {
         data.forEach((f) => {
           switch (f.roleKey) {
             case 'CAT_USER': {
+<<<<<<< HEAD
               if (f.roleName === 'CAS User') {
                 f.roleName = 'Contract Award Service (CAS)';
                 f.serviceName = 'add service';
@@ -120,6 +121,29 @@ export class WrapperOrganisationGroupService {
                 f.roleName = 'eSourcing Service';
                 f.serviceName = 'add to dashboard';
               }
+=======
+              f.serviceName = null;
+              break;
+            }
+            case 'ACCESS_CAAAC_CLIENT': {
+              f.serviceName = null;
+              break;
+            }
+            case 'JAEGGER_SUPPLIER': {
+              f.serviceName = null;
+              break;
+            }
+            case 'JAEGGER_BUYER': {
+              f.serviceName = null;
+              break;
+            }
+            case 'JAGGAER_USER': {
+              f.serviceName = null;
+              break;
+            }
+            case 'ACCESS_JAGGAER': {
+              f.serviceName = null;
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
               break;
             }
             default: {
@@ -171,9 +195,18 @@ export class WrapperOrganisationGroupService {
     );
   }
 
+<<<<<<< HEAD
   getUsersAdmin(organisationId: string, currentPage: number, pageSize: number): Observable<any> {
     pageSize = pageSize <= 0 ? 10 : pageSize;
     const url = `${this.url}/${organisationId}/users?currentPage=${currentPage}&pageSize=${pageSize}&isAdmin=true&include-self=true`;
+=======
+  getUsersAdmin(organisationId: string, currentPage: number, pageSize: number, includeUnverifiedAdmin: boolean = false): Observable<any> {
+    pageSize = pageSize <= 0 ? 10 : pageSize;
+    let url = `${this.url}/${organisationId}/users?currentPage=${currentPage}&pageSize=${pageSize}&isAdmin=true&include-self=true`;
+    if(includeUnverifiedAdmin){
+      url += "&include-unverified-admin=true";
+    }
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
     return this.http.get<UserListResponse>(url).pipe(
       map((data: UserListResponse) => {
         return data;
@@ -182,4 +215,9 @@ export class WrapperOrganisationGroupService {
       })
     );
   }
+<<<<<<< HEAD
+=======
+
+  
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
 }

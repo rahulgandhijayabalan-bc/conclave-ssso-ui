@@ -35,8 +35,13 @@ export const environment = {
   listPageSize: 10,
   rollbar: {
     key: '',
+<<<<<<< HEAD
     enable: true,
     security_log:true,
+=======
+    enable: false,
+    security_log:false,
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
     environment:'dev-ccs-sso'
   } ,
   cookies_policy: {
@@ -59,5 +64,14 @@ export const environment = {
       __cf_bm : 30 
     },
   },
+<<<<<<< HEAD
+=======
+  appSetting: {
+   hideIDP:false,
+   hideDelegation:false,
+   hideBulkupload:false,
+   hideAutoValidation:false,
+  },
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
 };
 

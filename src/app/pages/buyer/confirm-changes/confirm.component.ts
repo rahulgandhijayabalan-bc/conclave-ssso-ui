@@ -51,11 +51,15 @@ export class BuyerConfirmChangesComponent extends BaseComponent {
 
   public onSubmitClick() {
     const model = {
-      isBuyer: this.changes.rightToBuy,
+      orgType:parseInt(this.changes.orgType),
       rolesToDelete: this.changes.toDelete,
       rolesToAdd: this.changes.toAdd,
     };
+<<<<<<< HEAD
     this.wrapperOrgService.updateOrgRoles(this.org.ciiOrganisationId, JSON.stringify(model)).toPromise().then(() => {
+=======
+    this.wrapperOrgService.updateOrgRoles(this.org.ciiOrganisationId, JSON.stringify(model),'roles').toPromise().then(() => {
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
     localStorage.removeItem(`mse_org_${this.org.ciiOrganisationId}`);
       this.router.navigateByUrl(`buyer/success`);
     }).catch(error => {

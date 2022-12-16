@@ -21,8 +21,14 @@
 <br *ngIf="ccsModules.length > 0" />
 <br *ngIf="ccsModules.length > 0" />
 <div *ngIf="systemModules.length > 0">
+<<<<<<< HEAD
   <h2 class="gov_uk_header">Administrator Settings</h2>
   <h3>For your own organisation</h3>
+=======
+  <h2 *ngIf="this.isOrgAdmin" class="gov_uk_header">Administrator Settings</h2>
+  <h2 *ngIf="!this.isOrgAdmin" class="gov_uk_header">Account Settings</h2>
+  <h3 *ngIf="this.isOrgAdmin">For your own organisation</h3>
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
   <div class="row">
     <div *ngFor="let systemModule of systemModules;" class="column">
       <div class="card">

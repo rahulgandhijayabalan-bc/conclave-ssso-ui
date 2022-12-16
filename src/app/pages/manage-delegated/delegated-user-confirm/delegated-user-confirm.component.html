@@ -61,6 +61,7 @@
                         </p>
                         <ul class="govuk-list">
                             <li *ngFor="let details of UserSelectedinfo.roleDetails">
+<<<<<<< HEAD
                                 {{
                                 details.roleKey === "JAEGGER_SUPPLIER"
                                 ? "eSourcing Service as a supplier"
@@ -77,6 +78,10 @@
                                 :details.accessRoleName
                                 }}
                                 <span *ngIf="
+=======
+                                {{ details.accessRoleName }}
+                                <span *ngIf=" details.serviceName &&
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
                                   details.roleKey != 'JAEGGER_SUPPLIER' &&
                                   details.roleKey != 'ACCESS_JAGGAER' &&
                                   details.roleKey != 'CAT_USER' &&

@@ -16,8 +16,15 @@ export class ConfirmMfaResetComponent implements OnInit {
   ) {}
 
   public decodedData: any = { };
+<<<<<<< HEAD
 
   ngOnInit(): void {
+=======
+  isOrgAdmin: boolean = false;
+
+  ngOnInit(): void {
+    this.isOrgAdmin = JSON.parse(localStorage.getItem('isOrgAdmin') || 'false');
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
     this.route.queryParams.subscribe((para: any) => {
       let RouteData = JSON.parse(atob(para.data));
       this.decodedData = RouteData;

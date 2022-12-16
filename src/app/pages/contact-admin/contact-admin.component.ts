@@ -17,7 +17,12 @@ export class ContactAdminComponent implements OnInit {
   pageSize: number = environment.listPageSize;
   userListResponse: AdminUserListResponse;
   pageName = 'Contactadmin';
+<<<<<<< HEAD
 
+=======
+  isOrgAdmin: boolean = false;
+  
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
   constructor(
     private WrapperOrganisationGroupService: WrapperOrganisationGroupService
   ) {
@@ -32,6 +37,10 @@ export class ContactAdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
+<<<<<<< HEAD
+=======
+    this.isOrgAdmin = JSON.parse(localStorage.getItem('isOrgAdmin') || 'false');
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
     this.getOrganisationUsers();
   }
 

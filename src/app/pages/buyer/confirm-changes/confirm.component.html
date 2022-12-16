@@ -58,6 +58,7 @@
         <div class="govuk-checkboxes">
           <ng-container *ngFor="let role of changes?.toAdd">
             <div class="govuk-__item">
+<<<<<<< HEAD
               <label class="govuk-label">{{
               role.roleKey === "JAEGGER_SUPPLIER"
               ? "eSourcing Service as a supplier"
@@ -84,6 +85,20 @@
               "
               >- {{ role.serviceName }}</span
             ></label>
+=======
+              <label class="govuk-label">{{ role.roleName }}
+                <span
+                *ngIf=" role.serviceName &&
+                  role.roleKey != 'JAEGGER_SUPPLIER' &&
+                  role.roleKey != 'ACCESS_JAGGAER' &&
+                  role.roleKey != 'CAT_USER' &&
+                  role.roleKey != 'ACCESS_CAAAC_CLIENT' &&
+                  role.roleKey != 'JAEGGER_BUYER' &&
+                  role.roleKey != 'JAGGAER_USER'
+                "
+                >- {{ role.serviceName }}</span
+              ></label>
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
             </div>
           </ng-container>
         </div>
@@ -91,6 +106,7 @@
         <div class="govuk-checkboxes">
           <ng-container *ngFor="let role of changes?.toDelete">
             <div class="govuk-__item">
+<<<<<<< HEAD
               <label class="govuk-label">{{
                 role.roleKey === "JAEGGER_SUPPLIER"
                 ? "eSourcing Service as a supplier"
@@ -117,6 +133,20 @@
                 "
                 >- {{ role.serviceName }}</span
               ></label>
+=======
+              <label class="govuk-label">{{role.roleName}}
+                <span
+                  *ngIf=" role.serviceName &&
+                    role.roleKey != 'JAEGGER_SUPPLIER' &&
+                    role.roleKey != 'ACCESS_JAGGAER' &&
+                    role.roleKey != 'CAT_USER' &&
+                    role.roleKey != 'ACCESS_CAAAC_CLIENT' &&
+                    role.roleKey != 'JAEGGER_BUYER' &&
+                    role.roleKey != 'JAGGAER_USER'
+                  "
+                  >- {{ role.serviceName }}</span
+                ></label>
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
             </div>
           </ng-container>
         </div>

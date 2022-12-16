@@ -23,6 +23,10 @@ import { FormBaseComponent } from 'src/app/components/form-base/form-base.compon
 import { SessionStorageKey } from 'src/app/constants/constant';
 import { PatternService } from 'src/app/shared/pattern.service';
 import { isBoolean } from 'lodash';
+<<<<<<< HEAD
+=======
+import { environment } from 'src/environments/environment';
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
 
 @Component({
   selector: 'app-user-profile',
@@ -69,6 +73,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
   assignedRoleDataList: any[] = [];
   routeStateData: any = {};
   hasGroupViewPermission: boolean = false;
+<<<<<<< HEAD
 
   @ViewChildren('input') inputs!: QueryList<ElementRef>;
 
@@ -105,6 +110,46 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
   }
 
   async ngOnInit() {
+=======
+  isOrgAdmin: boolean = false;
+  
+  @ViewChildren('input') inputs!: QueryList<ElementRef>;
+
+  constructor(
+    private userService: WrapperUserService,
+    private userContactService: WrapperUserContactService,
+    private locationStrategy: LocationStrategy,
+    protected uiStore: Store<UIState>,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private PatternService: PatternService,
+    protected viewportScroller: ViewportScroller,
+    protected scrollHelper: ScrollHelper,
+    private orgGroupService: WrapperOrganisationGroupService,
+    private contactHelper: ContactHelper,
+    private authService: AuthService,
+    private auditLogService: AuditLoggerService
+  ) {
+    super(
+      viewportScroller,
+      formBuilder.group({
+        firstName: ['', Validators.compose([Validators.required,Validators.pattern("^[a-zA-Z][a-z A-Z,.'-]*(?:\s+[a-zA-Z]+)?$")])],
+        lastName: ['', Validators.compose([Validators.required,Validators.pattern("^[a-zA-Z][a-z A-Z,.'-]*(?:\s+[a-zA-Z]+)?$")])],
+        mfaEnabled: [false],
+      })
+    );
+    this.userName = localStorage.getItem('user_name') || '';
+    this.organisationId = localStorage.getItem('cii_organisation_id') || '';
+    this.routeStateData = this.router.getCurrentNavigation()?.extras.state;
+    this.locationStrategy.onPopState(() => {
+      this.onCancelClick();
+    });
+  }
+
+  async ngOnInit() {
+    this.isOrgAdmin = JSON.parse(localStorage.getItem('isOrgAdmin') || 'false');
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
     sessionStorage.removeItem(SessionStorageKey.UserContactUsername);
     await this.auditLogService
       .createLog({
@@ -116,10 +161,21 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
     let user = await this.userService.getUser(this.userName).toPromise();
     if (user != null) {
       this.canChangePassword = user.detail.canChangePassword;
+<<<<<<< HEAD
       this.identityProviderDisplayName =
         user.detail.identityProviders
           ?.map((idp) => idp.identityProviderDisplayName)
           .join(',') || '';
+=======
+      if(!environment.appSetting.hideIDP){
+        this.identityProviderDisplayName =
+        user.detail.identityProviders
+          ?.map((idp) => idp.identityProviderDisplayName)
+          .join(',') || '';
+      }else {
+        this.identityProviderDisplayName = 'User ID and password'
+      }
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
       this.userGroups = user.detail.userGroups || [];
       this.userGroups = this.userGroups.filter(
         (group, index, self) =>
@@ -197,6 +253,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
               if (orgRole) {
                 switch (orgRole.roleKey) {
                   case 'CAT_USER': {
+<<<<<<< HEAD
                     if (orgRole.roleName === 'Contract Award Service (CAS)') {
                       orgRole.roleName = 'Contract Award Service (CAS) - service';
                       orgRole.serviceName = 'Contract Award Service (CAS)';
@@ -236,6 +293,29 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
                       orgRole.roleName = 'eSourcing Service - dashboard';
                       orgRole.serviceName = 'eSourcing Service';
                     }
+=======
+                    orgRole.serviceName = 'Contract Award Service (CAS)';
+                    break;
+                  }
+                  case 'ACCESS_CAAAC_CLIENT': {
+                    orgRole.serviceName = 'Contract Award Service (CAS)';
+                    break;
+                  }
+                  case 'JAEGGER_SUPPLIER': {
+                    orgRole.serviceName = 'eSourcing Service';
+                    break;
+                  }
+                  case 'JAEGGER_BUYER': {
+                    orgRole.serviceName = 'eSourcing Service';
+                    break;
+                  }
+                  case 'JAGGAER_USER': {
+                    orgRole.serviceName = 'eSourcing Service';
+                    break;
+                  }
+                  case 'ACCESS_JAGGAER': {
+                    orgRole.serviceName = 'eSourcing Service';
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
                     break;
                   }
                   default: {

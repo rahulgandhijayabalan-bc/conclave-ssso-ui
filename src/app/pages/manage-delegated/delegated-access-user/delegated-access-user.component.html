@@ -293,6 +293,7 @@
                                         <label
                                             class="govuk-label govuk-checkboxes__label"
                                             for="{{'orgRoleControl_' + orgRole.roleId}}">
+<<<<<<< HEAD
                                             {{
                                             orgRole.roleKey === "JAEGGER_SUPPLIER"
                                             ? "eSourcing Service as a supplier"
@@ -309,6 +310,10 @@
                                             ? "eSourcing Service - click here to add service (Mandatory)"
                                             :orgRole.accessRoleName}}
                                             <span *ngIf="
+=======
+                                            {{ orgRole.accessRoleName }}
+                                            <span *ngIf=" orgRole.serviceName &&
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
                                             orgRole.roleKey != 'JAEGGER_SUPPLIER' &&
                                             orgRole.roleKey != 'ACCESS_JAGGAER' &&
                                             orgRole.roleKey != 'CAT_USER' &&
@@ -316,7 +321,11 @@
                                             orgRole.roleKey != 'JAEGGER_BUYER' &&
                                             orgRole.roleKey != 'JAGGAER_USER' && orgRole.serviceName != null
                                             ">- {{ orgRole.serviceName }}</span>
+<<<<<<< HEAD
                                         </label>
+=======
+                </label>
+>>>>>>> 0ff47456a2e9ef3aa060a26b6dddf8584fa5cd95
                                     </div>
                                 </fieldset>
                             </div>
