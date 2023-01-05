@@ -39,6 +39,10 @@ export class ManageUserProfilesComponent extends BaseComponent implements OnInit
     usersTableHeaders = ['NAME', 'EMAIL'];
     usersColumnsToDisplay = ['name', 'userName'];
     searchSumbited:boolean=false;
+<<<<<<< HEAD
+=======
+    public isBulkUpload=environment.appSetting.hideBulkupload
+>>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
     constructor(private wrapperOrganisationService: WrapperOrganisationService,
         protected uiStore: Store<UIState>, private router: Router, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper,
         private auditLogService: AuditLoggerService) {
@@ -78,6 +82,11 @@ export class ManageUserProfilesComponent extends BaseComponent implements OnInit
 
     onAddClick() {
         this.router.navigateByUrl("manage-users/add-user-selection");
+        if(!this.isBulkUpload){
+            this.router.navigateByUrl("manage-users/add-user-selection");
+        } else {
+            this.router.navigateByUrl("manage-users/add-user/details");
+        }
     }
 
     searchTextChanged(event: any) {

@@ -171,9 +171,18 @@ export class WrapperOrganisationGroupService {
     );
   }
 
+<<<<<<< HEAD
   getUsersAdmin(organisationId: string, currentPage: number, pageSize: number): Observable<any> {
     pageSize = pageSize <= 0 ? 10 : pageSize;
     const url = `${this.url}/${organisationId}/users?currentPage=${currentPage}&pageSize=${pageSize}&isAdmin=true&include-self=true`;
+=======
+  getUsersAdmin(organisationId: string, currentPage: number, pageSize: number, includeUnverifiedAdmin: boolean = false): Observable<any> {
+    pageSize = pageSize <= 0 ? 10 : pageSize;
+    let url = `${this.url}/${organisationId}/users?currentPage=${currentPage}&pageSize=${pageSize}&isAdmin=true&include-self=true`;
+    if(includeUnverifiedAdmin){
+      url += "&include-unverified-admin=true";
+    }
+>>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
     return this.http.get<UserListResponse>(url).pipe(
       map((data: UserListResponse) => {
         return data;
@@ -182,4 +191,9 @@ export class WrapperOrganisationGroupService {
       })
     );
   }
+<<<<<<< HEAD
+=======
+
+  
+>>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
 }

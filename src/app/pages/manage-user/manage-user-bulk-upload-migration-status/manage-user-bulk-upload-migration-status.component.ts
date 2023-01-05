@@ -4,6 +4,10 @@ import * as moment from 'moment';
 import { BulkUploadStatus } from 'src/app/constants/enum';
 import { BulkUploadFileContentRowDetails, BulkUploadResponse, BulkUploadSummaryGridInfo } from 'src/app/models/bulkUploadResponse';
 import { BulkUploadService } from 'src/app/services/postgres/bulk-upload.service';
+<<<<<<< HEAD
+=======
+import { environment } from 'src/environments/environment';
+>>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
 
 @Component({
     selector: 'app-manage-user-bulk-upload-migration-status',
@@ -20,9 +24,19 @@ export class ManageUserBulkUploadMigrationStatusComponent implements OnInit {
     detailTableHeaders = ['IDENTIFIER_ID', "SCHEME_ID", "RIGHT_TO_BUY", "USER_EMAIL", "TITLE", "FIRST_NAME", "LAST_NAME", "ROLES", "STATUS", "STATUS_DESCRIPTION"];
     detailColumnsToDisplay = ['identifierId', 'schemeId', 'rightToBuy', 'email', 'title', 'firstName', 'lastName', 'roles', 'status', 'statusDescription'];
     detailGridInfoList: BulkUploadFileContentRowDetails[] = [];
+<<<<<<< HEAD
 
     constructor(private router: Router, private activatedRoute: ActivatedRoute, private bulkUploadService: BulkUploadService) {
         this.organisationId = localStorage.getItem('cii_organisation_id') || '';
+=======
+    isBulkUpload = environment.appSetting.hideBulkupload
+    constructor(private router: Router, private activatedRoute: ActivatedRoute, private bulkUploadService: BulkUploadService) {
+        this.organisationId = localStorage.getItem('cii_organisation_id') || '';
+        if(this.isBulkUpload){
+            this.router.navigateByUrl('home');
+            return
+         }    
+>>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
     }
 
     ngOnInit() {
@@ -87,4 +101,8 @@ export class ManageUserBulkUploadMigrationStatusComponent implements OnInit {
         this.detailGridInfoList = bulkUploadResponse.bulkUploadMigrationReportDetails.bulkUploadFileContentRowList;
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d

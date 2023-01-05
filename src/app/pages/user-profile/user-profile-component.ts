@@ -23,6 +23,10 @@ import { FormBaseComponent } from 'src/app/components/form-base/form-base.compon
 import { SessionStorageKey } from 'src/app/constants/constant';
 import { PatternService } from 'src/app/shared/pattern.service';
 import { isBoolean } from 'lodash';
+<<<<<<< HEAD
+=======
+import { environment } from 'src/environments/environment';
+>>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
 
 @Component({
   selector: 'app-user-profile',
@@ -116,10 +120,21 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
     let user = await this.userService.getUser(this.userName).toPromise();
     if (user != null) {
       this.canChangePassword = user.detail.canChangePassword;
+<<<<<<< HEAD
       this.identityProviderDisplayName =
         user.detail.identityProviders
           ?.map((idp) => idp.identityProviderDisplayName)
           .join(',') || '';
+=======
+      if(!environment.appSetting.hideIDP){
+        this.identityProviderDisplayName =
+        user.detail.identityProviders
+          ?.map((idp) => idp.identityProviderDisplayName)
+          .join(',') || '';
+      }else {
+        this.identityProviderDisplayName = 'User ID and password'
+      }
+>>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
       this.userGroups = user.detail.userGroups || [];
       this.userGroups = this.userGroups.filter(
         (group, index, self) =>
