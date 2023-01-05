@@ -63,13 +63,10 @@ export const environment = {
             __cf_bm: 30
         },
     },
-<<<<<<< HEAD
-=======
     appSetting: {
      hideIDP:false,
      hideDelegation:false,
      hideBulkupload:false,
      hideAutoValidation:false,
     },
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
 };

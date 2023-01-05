@@ -55,13 +55,10 @@ export enum BulkUploadStatus {
     validationFail,
     migrating,
     migrationCompleted
-<<<<<<< HEAD
-=======
 }
 
 export enum ManualValidationStatus {
     approve,
     decline,
     remove
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
 }

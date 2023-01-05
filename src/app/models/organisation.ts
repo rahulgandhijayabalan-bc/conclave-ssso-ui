@@ -71,8 +71,6 @@ export interface OrganisationSearchDto{
     ciiOrganisationId: string;
     organisationUri: string;
     legalName: string;
-<<<<<<< HEAD
-=======
 }
 
 export interface OrganisationAuditList
@@ -104,5 +102,4 @@ export interface OrganisationAuditEventList
 
 export interface OrganisationAuditEventListResponse extends PaginationInfo {
     organisationAuditEventList: OrganisationAuditEventList[];
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
 }

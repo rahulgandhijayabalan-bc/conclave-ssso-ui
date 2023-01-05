@@ -31,10 +31,7 @@ import { WrapperUserDelegatedService } from 'src/app/services/wrapper/wrapper-us
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent extends BaseComponent implements OnInit {
-<<<<<<< HEAD
-=======
   isDelegation:boolean=!environment.appSetting.hideDelegation
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
   public orgDetails: any = ''
   systemModules: SystemModule[] = [];
   ccsModules: SystemModule[] = [];
@@ -53,7 +50,7 @@ export class HomeComponent extends BaseComponent implements OnInit {
     environment.uri.web.dashboard + '/assets/rpIFrame.html'
   );
   ciiOrganisationId = localStorage.getItem('cii_organisation_id') || '';
-
+  isOrgAdmin: boolean = false;
   constructor(
     protected uiStore: Store<UIState>,
     private sanitizer: DomSanitizer,
@@ -71,6 +68,8 @@ export class HomeComponent extends BaseComponent implements OnInit {
   ngOnInit() {
     this.authService.getPermissions('HOME').toPromise().then((response) => {
       this.servicePermissions = response;
+      this.isOrgAdmin = this.servicePermissions.some(x => x.roleKey === "ORG_ADMINISTRATOR"); 
+      localStorage.setItem('isOrgAdmin', JSON.stringify(this.isOrgAdmin));
         this.authService.getCcsServices().toPromise().then((data: any) => {
             this.ccsServices = data;
             response.forEach((e: any, i: any) => {
@@ -169,11 +168,7 @@ export class HomeComponent extends BaseComponent implements OnInit {
       }
     }
 
-<<<<<<< HEAD
-    if (e.permissionName === 'DELEGATED_ACCESS') {
-=======
     if (e.permissionName === 'DELEGATED_ACCESS' && this.isDelegation) {
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
         this.systemModules.push({
           name: 'Delegated access',
           description: 'Manage delegated access to your approved services',
@@ -217,38 +212,6 @@ export class HomeComponent extends BaseComponent implements OnInit {
         });
       }
     }
-
-  }
-
-  getModuleElementId(moduleName: string) {
-    return moduleName.toLowerCase().replace(/ /g, '_');
-  }
-
-  public getDelegatedOrganisation(): void {
-    this.delegatedApiService.getDeligatedOrg().subscribe({
-      next: (data: any) => {
-        if(data.detail.delegatedOrgs.length > 0){
-          this.systemModules.push({
-            name: 'Manage my delegated access',
-            description: 'Switch between your primary and delegating Organisation',
-            route: '/delegated-organisation',
-          });
-        }
-      },
-      error: (error: any) => {
-        console.log("error",error)
-      },
-    });
-  }
-
-  public GetOrgDetails() {
-    this.ciiService
-      .getOrgDetails(localStorage.getItem('permission_organisation_id') || "").toPromise().then((data:any) => {
-        this.orgDetails=data.identifier.legalName
-      })
-      .catch((err) => {
-        console.log('err', err);
-      });
   }
 
   getModuleElementId(moduleName: string) {

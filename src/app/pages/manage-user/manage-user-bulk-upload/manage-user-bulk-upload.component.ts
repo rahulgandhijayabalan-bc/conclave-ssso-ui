@@ -23,22 +23,15 @@ export class ManageUserBulkUploadComponent {
     maxFileSize: number = environment.bulkUploadMaxFileSizeInBytes / (1024 * 1024);
     bulkUploadTemplateUrl: string;
     @ViewChildren('input') inputs!: QueryList<ElementRef>;
-<<<<<<< HEAD
-
-=======
     isBulkUpload = environment.appSetting.hideBulkupload
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
     constructor(private router: Router, private bulkUploadService: BulkUploadService,
         protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper,) {
         this.organisationId = localStorage.getItem('cii_organisation_id') || '';
         this.bulkUploadTemplateUrl = environment.bulkUploadTemplateFileUrl;
-<<<<<<< HEAD
-=======
         if(this.isBulkUpload){
             this.router.navigateByUrl('home');
             return
          }  
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
     }
 
     setFocus(inputIndex: number) {

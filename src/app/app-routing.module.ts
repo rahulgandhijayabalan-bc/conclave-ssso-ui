@@ -125,8 +125,6 @@ import { DelegatedUserActivationComponent } from './pages/manage-delegated/landi
 import { DelegatedOrganisationComponent } from './pages/manage-delegated/user/delegated-organisation/delegated-organisation.component';
 import { TermsConditionsComponent } from './components/terms-conditions/terms-conditions.component';
 import { ForgotPasswordErrorComponent } from './pages/forgot-password-error/forgot-password-error.component';
-<<<<<<< HEAD
-=======
 import { ViewPendingVerificationComponent } from './pages/manage-buyer-and-both-requests/view-pending-verification/view-pending-verification.component';
 import { ViewVerifiedOrgComponent } from './pages/manage-buyer-and-both-requests/view-verified-org/view-verified-org.component';
 import { UpdateOrgTypeComponent } from './pages/buyer/update-org-type/update-org-type.component';
@@ -139,7 +137,6 @@ import { RemoveRightToBuyComponent } from './pages/manage-buyer-and-both-request
 import { SuccessRightToBuyComponent } from './pages/manage-buyer-and-both-requests/success-right-to-buy/success-right-to-buy.component';
 import { BuyerBothRequestsSuccessComponent } from './pages/manage-buyer-and-both-requests/buyer-both-requests-success/buyer-both-requests-success.component';
 import { BuyerBothErrorComponent } from './pages/manage-buyer-and-both-requests/buyer-both-error/buyer-both-error.component';
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -708,8 +705,6 @@ const routes: Routes = [
     component: BuyerConfirmComponent,
   },
   {
-<<<<<<< HEAD
-=======
     path: 'update-org-type/confirm',
     data: { title: 'Review - Manage Buyers', roles: ['MANAGE_SUBSCRIPTIONS'] },
     pathMatch: 'full',
@@ -724,7 +719,6 @@ const routes: Routes = [
     component: AutoValidationBuyerSuccessComponent,
   },
   {
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
     path: 'buyer/confirm-changes/:id',
     data: {
       title: 'Confirm Changes - Manage Buyers',
@@ -735,8 +729,6 @@ const routes: Routes = [
     component: BuyerConfirmChangesComponent,
   },
   {
-<<<<<<< HEAD
-=======
     path: 'update-org-type/confirm-changes',
     data: {
       title: 'Confirm Changes - Manage Buyers',
@@ -747,7 +739,6 @@ const routes: Routes = [
     component: ConfirmOrgTypeComponent,
   },
   {
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
     path: 'buyer/error',
     data: { title: 'Error - Manage Buyers', roles: ['MANAGE_SUBSCRIPTIONS'] },
     pathMatch: 'full',
@@ -1055,8 +1046,6 @@ const routes: Routes = [
     component: DelegatedErrorComponent,
   },
   {
-<<<<<<< HEAD
-=======
     path: 'manage-buyer-both',
     data: { title: 'Manage Buyer status Requests',roles: ['MANAGE_SUBSCRIPTIONS'] },
     pathMatch: 'full',
@@ -1122,7 +1111,6 @@ const routes: Routes = [
     component: BuyerBothErrorComponent,
   },
   {
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
     path: 'terms-of-use',
     data: { title: 'Terms of Use' },
     pathMatch: 'full',
@@ -1140,8 +1128,4 @@ export const routingConfiguration: ExtraOptions = {
   imports: [RouterModule.forRoot(routes, routingConfiguration)],
   exports: [RouterModule],
 })
-<<<<<<< HEAD
 export class AppRoutingModule {}
-=======
-export class AppRoutingModule {}
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d

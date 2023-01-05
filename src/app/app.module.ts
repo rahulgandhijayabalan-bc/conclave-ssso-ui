@@ -175,8 +175,6 @@ import { DelegatedUserActivationComponent } from './pages/manage-delegated/landi
 import { DelegatedOrganisationComponent } from './pages/manage-delegated/user/delegated-organisation/delegated-organisation.component';
 import { TermsConditionsComponent } from './components/terms-conditions/terms-conditions.component';
 import { ForgotPasswordErrorComponent } from './pages/forgot-password-error/forgot-password-error.component';
-<<<<<<< HEAD
-=======
 import { BuyerBothRequestsComponent } from './pages/manage-buyer-and-both-requests/buyer-both-requests/buyer-both-requests.component';
 import { ConfirmDeclineComponent } from './pages/manage-buyer-and-both-requests/confirm-decline/confirm-decline.component';
 import { BuyerBothRequestsSuccessComponent } from './pages/manage-buyer-and-both-requests/buyer-both-requests-success/buyer-both-requests-success.component';
@@ -189,7 +187,7 @@ import { UpdateOrgTypeComponent } from './pages/buyer/update-org-type/update-org
 import { ConfirmOrgTypeComponent } from './pages/buyer/confirm-org-type/confirm-org-type.component';
 import { AutoValidationBuyerSuccessComponent } from './pages/buyer/auto-validation-buyer-success/auto-validation-buyer-success.component';
 import { BuyerBothErrorComponent } from './pages/manage-buyer-and-both-requests/buyer-both-error/buyer-both-error.component';
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
+import { AccessibilityStatementComponent } from './pages/accessibility-statement/accessibility-statement.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -330,9 +328,6 @@ export function createTranslateLoader(http: HttpClient) {
     DelegatedUserActivationComponent,
     DelegatedOrganisationComponent,
     TermsConditionsComponent,
-<<<<<<< HEAD
-    ForgotPasswordErrorComponent
-=======
     ForgotPasswordErrorComponent,
     BuyerBothRequestsComponent,
     ConfirmDeclineComponent,
@@ -345,8 +340,8 @@ export function createTranslateLoader(http: HttpClient) {
     UpdateOrgTypeComponent,
     ConfirmOrgTypeComponent,
     AutoValidationBuyerSuccessComponent,
-    BuyerBothErrorComponent
->>>>>>> 3d554acd5a0efea7cadcca5d141f70df1310a72d
+    BuyerBothErrorComponent,
+    AccessibilityStatementComponent
   ],
   imports: [
     // BrowserModule,
