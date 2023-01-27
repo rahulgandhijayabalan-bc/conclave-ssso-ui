@@ -67,6 +67,6 @@
     "tslint": "^6.1.0"
   },
   "browser": {
-    "crypto": false
+    "crypto": false 
   }
 }
