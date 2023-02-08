@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
@@ -90,8 +91,8 @@ export class AuthSuccessComponent extends BaseComponent implements OnInit {
                 }
             }
         });
-        // this.route.fragment.subscribe((fragment: string) => {
-        //     console.log("My hash fragment is here => ", fragment)
-        // })
+        this.route.fragment.subscribe((fragment: string) => {
+            console.log("My hash fragment is here => ", fragment)
+        })
     }
 }
