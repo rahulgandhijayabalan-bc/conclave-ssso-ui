@@ -78,46 +78,89 @@ export class WrapperOrganisationGroupService {
   }
 
   getOrganisationRoles(organisationId: string): Observable<any> {
-    const url = `${this.url}/${organisationId}/roles`;
-    return this.http.get<Role[]>(url).pipe(
-      map((data: Role[]) => {
-        data.forEach((f) => {
-          switch (f.roleKey) {
-            case 'CAT_USER': {
-              f.serviceName = null;
-              break;
+    if(!environment.appSetting.hideSimplifyRole){
+      const url = `${this.url}/${organisationId}/roles`;
+      return this.http.get<Role[]>(url).pipe(
+        map((data: Role[]) => {
+          data.forEach((f) => {
+            switch (f.roleKey) {
+              case 'CAT_USER': {
+                f.serviceName = null;
+                break;
+              }
+              case 'ACCESS_CAAAC_CLIENT': {
+                f.serviceName = null;
+                break;
+              }
+              case 'JAEGGER_SUPPLIER': {
+                f.serviceName = null;
+                break;
+              }
+              case 'JAEGGER_BUYER': {
+                f.serviceName = null;
+                break;
+              }
+              case 'JAGGAER_USER': {
+                f.serviceName = null;
+                break;
+              }
+              case 'ACCESS_JAGGAER': {
+                f.serviceName = null;
+                break;
+              }
+              default: {
+                //statements;
+                break;
+              }
             }
-            case 'ACCESS_CAAAC_CLIENT': {
-              f.serviceName = null;
-              break;
-            }
-            case 'JAEGGER_SUPPLIER': {
-              f.serviceName = null;
-              break;
-            }
-            case 'JAEGGER_BUYER': {
-              f.serviceName = null;
-              break;
-            }
-            case 'JAGGAER_USER': {
-              f.serviceName = null;
-              break;
-            }
-            case 'ACCESS_JAGGAER': {
-              f.serviceName = null;
-              break;
-            }
-            default: {
-              //statements;
-              break;
-            }
-          }
+          })
+          return data
+        }), catchError(error => {
+          return throwError(error);
         })
-        return data
-      }), catchError(error => {
-        return throwError(error);
-      })
-    );
+      );
+    } else {
+      const url = `${this.url}/${organisationId}/roles`;
+      return this.http.get<Role[]>(url).pipe(
+        map((data: Role[]) => {
+          data.forEach((f) => {
+            switch (f.roleKey) {
+              case 'CAT_USER': {
+                f.serviceName = null;
+                break;
+              }
+              case 'ACCESS_CAAAC_CLIENT': {
+                f.serviceName = null;
+                break;
+              }
+              case 'JAEGGER_SUPPLIER': {
+                f.serviceName = null;
+                break;
+              }
+              case 'JAEGGER_BUYER': {
+                f.serviceName = null;
+                break;
+              }
+              case 'JAGGAER_USER': {
+                f.serviceName = null;
+                break;
+              }
+              case 'ACCESS_JAGGAER': {
+                f.serviceName = null;
+                break;
+              }
+              default: {
+                //statements;
+                break;
+              }
+            }
+          })
+          return data
+        }), catchError(error => {
+          return throwError(error);
+        })
+      );
+    }
   }
 
   getOrganisationApprovalRequiredRoles(): Observable<any> {
