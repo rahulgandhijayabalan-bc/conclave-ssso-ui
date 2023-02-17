@@ -148,9 +148,10 @@
                         [hyperLinkText]="'VIEW_DETAILS'" (hyperLinkClickEvent)="onGroupViewClick($event)"
                         [useClientPagination]="true"></app-govuk-table>
                 </div>
-
+               <div class="role" id="role">
                 <div *ngIf="roleDataList.length == 0">
-                    <h2 class="govuk-heading-s"> {{ 'ROLES' | translate }}</h2>
+                    <h2  *ngIf="!isServiceVisible" class="govuk-heading-s"> {{ 'ROLES' | translate }}</h2>
+                    <h2  *ngIf="isServiceVisible" class="govuk-heading-s"> {{ 'SERVICE' | translate }}</h2>
                     <app-details [detailsData]="detailsData[2]"></app-details>
                     <p>{{'NONE'| translate}}
                     <p>
@@ -158,9 +159,10 @@
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
                 <div *ngIf="roleDataList.length > 0">
-                    <h2 class="govuk-heading-s"> {{ 'ROLES' | translate }}</h2>
+                    <h2  *ngIf="!isServiceVisible" class="govuk-heading-s"> {{ 'ROLES' | translate }}</h2>
+                    <h2  *ngIf="isServiceVisible" class="govuk-heading-s"> {{ 'SERVICE' | translate }}</h2>
                     <app-details [detailsData]="detailsData[2]"></app-details>
-                    <div class="roles_table" *ngIf="isAdminUser === true">
+                    <div class="roles_table" *ngIf="isAdminUser === true && !isServiceVisible">
                         <span class="table_caption">To help you choose the correct roles use the table below:</span>
                         <table style="width:100%">
                             <tr>
@@ -242,20 +244,23 @@
                             <input class="govuk-checkboxes__input" id="{{'orgRoleControl_' + orgRole.roleId}}"
                                 [attr.disabled]="orgRole.roleKey === 'ORG_DEFAULT_USER' || orgRole.roleKey === 'ORG_ADMINISTRATOR' ? true : null"
                                 [formControlName]="'orgRoleControl_' + orgRole.roleId" type="checkbox" value="hmrc" (ngModelChange)="onUserRoleChecked(orgRole, $event)">
-                            <label *ngIf="orgRole.serviceName == null" class="govuk-label govuk-checkboxes__label"
+                            <label *ngIf="orgRole.serviceName == null"  class="govuk-label govuk-checkboxes__label " [ngClass]="{'role_lable': isServiceVisible === true}"
                                 for="{{'orgRoleControl_' + orgRole.roleId}}">
                                 {{orgRole.accessRoleName}}
                             </label>
-                            <label *ngIf="orgRole.serviceName != null" class="govuk-label govuk-checkboxes__label"
+                            <label *ngIf="orgRole.serviceName != null" class="govuk-label govuk-checkboxes__label" [ngClass]="{'role_lable': isServiceVisible === true}"
                                 for="{{'orgRoleControl_' + orgRole.roleId}}">
                                 {{orgRole.accessRoleName}} - {{orgRole.serviceName}} 
                             </label>
                             <strong class="govuk-tag govuk-tag--grey" *ngIf="checkIsPendingRole(orgRole)">
                                 Pending Approval
                               </strong>
+                              <p *ngIf="isServiceVisible" class="govuk-body description_para">Find and contract suitable suppliers for your procurement project, and ask them about the services they can provide. Progress to one stage further competition.
+                            </p>
                         </div>
                     </fieldset>
                 </div>
+               </div>
                 <h2 class="govuk-heading-s contact-detail"> {{ 'CONTACT_DETAILS' | translate }}</h2>
                 <app-details [detailsData]="detailsData[3]"></app-details>
                 <div class="govuk-grid-row">

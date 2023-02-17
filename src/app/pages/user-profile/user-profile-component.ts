@@ -11,7 +11,7 @@ import {
   ContactGridInfo,
   UserContactInfoList,
 } from 'src/app/models/contactInfo';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { OperationEnum } from 'src/app/constants/enum';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { WrapperOrganisationGroupService } from 'src/app/services/wrapper/wrapper-org--group-service';
@@ -21,8 +21,6 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { AuditLoggerService } from 'src/app/services/postgres/logger.service';
 import { FormBaseComponent } from 'src/app/components/form-base/form-base.component';
 import { SessionStorageKey } from 'src/app/constants/constant';
-import { PatternService } from 'src/app/shared/pattern.service';
-import { isBoolean } from 'lodash';
 import { environment } from 'src/environments/environment';
 import { WrapperOrganisationService } from 'src/app/services/wrapper/wrapper-org-service';
 
@@ -80,6 +78,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
   hasGroupViewPermission: boolean = false;
   isOrgAdmin: boolean = false;
   private selectedRoleIds:number[] = [];
+  public isServiceVisible = !environment.appSetting.hideSimplifyRole
   @ViewChildren('input') inputs!: QueryList<ElementRef>;
 
   constructor(
@@ -89,8 +88,6 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
     protected uiStore: Store<UIState>,
     private formBuilder: FormBuilder,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private PatternService: PatternService,
     protected viewportScroller: ViewportScroller,
     protected scrollHelper: ScrollHelper,
     private orgGroupService: WrapperOrganisationGroupService,
@@ -165,7 +162,103 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
       .getOrganisationRoles(this.organisationId)
       .toPromise()
       .then((orgRoles: Role[]) => {
-             orgRoles.map((r:Role,index) =>{
+            if(this.isServiceVisible){
+              orgRoles.map((r:any) =>{
+                let userRole =
+                user.detail.rolePermissionInfo &&
+                user.detail.rolePermissionInfo.some(
+                  (rp) => rp.roleId == r.Id
+                );
+                if(userRole){
+                  if ( r.RoleGroupNameKey == 'ORG_ADMINISTRATOR' && this.isAdminUser == false) {
+                    this.isAdminUser = true;
+                  }
+                  this.formGroup.addControl(
+                    'orgRoleControl_' + r.Id,
+                    this.formBuilder.control(this.assignedRoleDataList ? true : '')
+                  );
+                } else  {
+                  let PendinguserRole = this.pendingRoleDetails.some(
+                    (pendingRole: any) => pendingRole.roleKey == r.RoleGroupNameKey
+                  );
+                  this.formGroup.addControl(
+                    'orgRoleControl_' + r.Id,
+                    this.formBuilder.control(userRole ? true : PendinguserRole ? true : '')
+                  );
+                  if(userRole){
+                    r.enabled = true
+                  }
+                }
+              });
+  
+          //bind Roles based on User Type
+          if (this.isAdminUser == true) {
+            orgRoles.forEach((element:any) => {
+              this.roleDataList.push({
+                roleId: element.Id,
+                roleKey: element.RoleGroupNameKey,
+                accessRoleName: element.RoleGroupName,
+                serviceName: element.RoleGroupNameKeyDescription,
+              });
+              this.formGroup.addControl(
+                'orgRoleControl_' + element.Id,
+                this.formBuilder.control(this.assignedRoleDataList ? false : '')
+              );
+            });
+            //Find assigned roles then enable checkbox as true
+            user.detail.rolePermissionInfo &&
+              user.detail.rolePermissionInfo.map((roleInfo) => {
+                var orgRole:any = orgRoles.find((r:any) => r.Id == roleInfo.roleId);
+                if (orgRole) {
+                  this.assignedRoleDataList.push({
+                    roleId: orgRole.Id,
+                  });
+                }
+              });
+          } else {
+            user.detail.rolePermissionInfo &&
+              user.detail.rolePermissionInfo.map((roleInfo) => {
+                var orgRole:any = orgRoles.find((r:any) => r.Id == roleInfo.roleId);
+                if (orgRole) {
+                  switch (orgRole.RoleGroupNameKey) {
+                    case 'CAT_USER': {
+                      orgRole.RoleGroupNameKeyDescription = 'Contract Award Service (CAS)';
+                      break;
+                    }
+                    case 'ACCESS_CAAAC_CLIENT': {
+                      orgRole.RoleGroupNameKeyDescription = 'Contract Award Service (CAS)';
+                      break;
+                    }
+                    case 'JAEGGER_SUPPLIER': {
+                      orgRole.RoleGroupNameKeyDescription = 'eSourcing Service';
+                      break;
+                    }
+                    case 'JAEGGER_BUYER': {
+                      orgRole.RoleGroupNameKeyDescription = 'eSourcing Service';
+                      break;
+                    }
+                    case 'JAGGAER_USER': {
+                      orgRole.RoleGroupNameKeyDescription = 'eSourcing Service';
+                      break;
+                    }
+                    case 'ACCESS_JAGGAER': {
+                      orgRole.RoleGroupNameKeyDescription = 'eSourcing Service';
+                      break;
+                    }
+                    default: {
+                      //statements;
+                      break;
+                    }
+                  }
+                  this.roleDataList.push({
+                    accessRoleName: orgRole.RoleGroupName,
+                    serviceName: orgRole.RoleGroupNameKeyDescription,
+                  });
+                }
+              });
+          }
+          } else {
+            orgRoles.map((r:Role,index) =>{
               let userRole =
               user.detail.rolePermissionInfo &&
               user.detail.rolePermissionInfo.some(
@@ -259,6 +352,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
               }
             });
         }
+          }
       });
 
     this.authService

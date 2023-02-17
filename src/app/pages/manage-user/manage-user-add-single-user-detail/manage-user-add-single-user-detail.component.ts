@@ -46,7 +46,7 @@ export class ManageUserAddSingleUserDetailComponent
   userProfileResponseInfo: UserProfileResponseInfo;
   submitted!: boolean;
   orgGroups: Group[];
-  orgRoles: Role[];
+  orgRoles: any[];
   identityProviders: IdentityProvider[];
   allIdps: IdentityProvider[];
   isEdit: boolean = false;
@@ -77,6 +77,7 @@ export class ManageUserAddSingleUserDetailComponent
   @ViewChildren('input') inputs!: QueryList<ElementRef>;
   isInvalidDomain: boolean = false
   subscription: Subscription = new Subscription;
+  public isServiceVisible = !environment.appSetting.hideSimplifyRole
   constructor(
     private organisationGroupService: WrapperOrganisationGroupService,
     private configWrapperService: WrapperConfigurationService,
@@ -309,43 +310,83 @@ export class ManageUserAddSingleUserDetailComponent
     this.orgRoles = await this.organisationGroupService
       .getOrganisationRoles(this.organisationId)
       .toPromise();
-    this.orgRoles.map((role) => {
-      let userRole =
-        this.userProfileResponseInfo.detail.rolePermissionInfo &&
-        this.userProfileResponseInfo.detail.rolePermissionInfo.some(
-          (rp) => rp.roleId == role.roleId
-        );
-      if (!this.isEdit) {
-        this.formGroup.addControl(
-          'orgRoleControl_' + role.roleId,
-          this.formBuilder.control(userRole ? true : '')
-        );
+      if(this.isServiceVisible){
+        this.orgRoles.map((role:any) => {
+          let userRole =
+            this.userProfileResponseInfo.detail.rolePermissionInfo &&
+            this.userProfileResponseInfo.detail.rolePermissionInfo.some(
+              (rp) => rp.roleId == role.Id
+            );
+          if (!this.isEdit) {
+            this.formGroup.addControl(
+              'orgRoleControl_' + role.Id,
+              this.formBuilder.control(userRole ? true : '')
+            );
+          } else {
+            let PendinguserRole = this.pendingRoleDetails.some(
+              (pendingRole: any) => pendingRole.roleKey == role.RoleGroupNameKey
+            );
+            this.formGroup.addControl(
+              'orgRoleControl_' + role.Id,
+              this.formBuilder.control(userRole ? true : PendinguserRole ? true : '')
+            );
+            if (userRole == true) {
+              role.enabled = true
+            }
+            let filterRole = this.pendingRoleDetails.find((element: { roleKey: any; }) => element.roleKey == role.RoleGroupNameKey)
+            if (filterRole != undefined) {
+              role.pendingStatus = true
+            }
+          }
+          //Edit mode Determin Login user whether Admin/Normal user.
+          if (
+            role.RoleGroupNameKey == 'ORG_ADMINISTRATOR' &&
+            userRole == true &&
+            this.isAutoDisableMFA == false
+          ) {
+            this.isAutoDisableMFA = true;
+          }
+    
+        });
       } else {
-        let PendinguserRole = this.pendingRoleDetails.some(
-          (pendingRole: any) => pendingRole.roleKey == role.roleKey
-        );
-        this.formGroup.addControl(
-          'orgRoleControl_' + role.roleId,
-          this.formBuilder.control(userRole ? true : PendinguserRole ? true : '')
-        );
-        if (userRole == true) {
-          role.enabled = true
-        }
-        let filterRole = this.pendingRoleDetails.find((element: { roleKey: any; }) => element.roleKey == role.roleKey)
-        if (filterRole != undefined) {
-          role.pendingStatus = true
-        }
+        this.orgRoles.map((role) => {
+          let userRole =
+            this.userProfileResponseInfo.detail.rolePermissionInfo &&
+            this.userProfileResponseInfo.detail.rolePermissionInfo.some(
+              (rp) => rp.roleId == role.roleId
+            );
+          if (!this.isEdit) {
+            this.formGroup.addControl(
+              'orgRoleControl_' + role.roleId,
+              this.formBuilder.control(userRole ? true : '')
+            );
+          } else {
+            let PendinguserRole = this.pendingRoleDetails.some(
+              (pendingRole: any) => pendingRole.roleKey == role.roleKey
+            );
+            this.formGroup.addControl(
+              'orgRoleControl_' + role.roleId,
+              this.formBuilder.control(userRole ? true : PendinguserRole ? true : '')
+            );
+            if (userRole == true) {
+              role.enabled = true
+            }
+            let filterRole = this.pendingRoleDetails.find((element: { roleKey: any; }) => element.roleKey == role.roleKey)
+            if (filterRole != undefined) {
+              role.pendingStatus = true
+            }
+          }
+          //Edit mode Determin Login user whether Admin/Normal user.
+          if (
+            role.roleKey == 'ORG_ADMINISTRATOR' &&
+            userRole == true &&
+            this.isAutoDisableMFA == false
+          ) {
+            this.isAutoDisableMFA = true;
+          }
+    
+        });
       }
-      //Edit mode Determin Login user whether Admin/Normal user.
-      if (
-        role.roleKey == 'ORG_ADMINISTRATOR' &&
-        userRole == true &&
-        this.isAutoDisableMFA == false
-      ) {
-        this.isAutoDisableMFA = true;
-      }
-
-    });
   }
 
   async getApprovalRequriedRoles() {
