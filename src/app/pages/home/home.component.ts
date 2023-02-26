@@ -32,8 +32,8 @@ import { ManageDelegateService } from '../manage-delegated/service/manage-delega
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent extends BaseComponent implements OnInit {
-  switchedOrgId=''
-  isDelegation:boolean=!environment.appSetting.hideDelegation
+  switchedOrgId = ''
+  isDelegation: boolean = !environment.appSetting.hideDelegation
   public orgDetails: any = ''
   systemModules: SystemModule[] = [];
   ccsModules: SystemModule[] = [];
@@ -45,8 +45,8 @@ export class HomeComponent extends BaseComponent implements OnInit {
   accesstoken: any;
   opIFrameURL = this.sanitizer.bypassSecurityTrustResourceUrl(
     environment.uri.api.security +
-      '/security/sessions/?origin=' +
-      environment.uri.web.dashboard
+    '/security/sessions/?origin=' +
+    environment.uri.web.dashboard
   );
   rpIFrameURL = this.sanitizer.bypassSecurityTrustResourceUrl(
     environment.uri.web.dashboard + '/assets/rpIFrame.html'
@@ -65,50 +65,50 @@ export class HomeComponent extends BaseComponent implements OnInit {
     private DelegateService: ManageDelegateService
   ) {
     super(uiStore, viewportScroller, scrollHelper);
-    this.switchedOrgId = localStorage.getItem('permission_organisation_id') || "" 
+    this.switchedOrgId = localStorage.getItem('permission_organisation_id') || ""
   }
 
   ngOnInit() {
-  this.checkValidOrganisation()
+    this.checkValidOrganisation()
   }
- 
-  public checkValidOrganisation(){
+
+  public checkValidOrganisation() {
     this.delegatedApiService.getDeligatedOrg().subscribe({
       next: (data: any) => {
-        let orgDetails = data.detail.delegatedOrgs.find((element: { delegatedOrgId: string; })=> element.delegatedOrgId == this.switchedOrgId)
-        if(orgDetails === undefined){
-          this.DelegateService.setDelegatedOrg(0,'home');
+        let orgDetails = data.detail.delegatedOrgs.find((element: { delegatedOrgId: string; }) => element.delegatedOrgId == this.switchedOrgId)
+        if (orgDetails === undefined) {
+          this.DelegateService.setDelegatedOrg(0, 'home');
           this.initializer()
         } else {
           this.initializer()
         }
       },
       error: (error: any) => {
-        console.log("error",error)
+        console.log("error", error)
       },
     });
   }
 
 
-  public initializer(){
+  public initializer() {
     this.authService.getPermissions('HOME').toPromise().then((response) => {
       this.servicePermissions = response;
-      this.isOrgAdmin = this.servicePermissions.some(x => x.roleKey === "ORG_ADMINISTRATOR"); 
+      this.isOrgAdmin = this.servicePermissions.some(x => x.roleKey === "ORG_ADMINISTRATOR");
       localStorage.setItem('isOrgAdmin', JSON.stringify(this.isOrgAdmin));
-        this.authService.getCcsServices().toPromise().then((data: any) => {
-            this.ccsServices = data;
-            response.forEach((e: any, i: any) => {
-              this.loadActivities(e);
-            });
-              this.loadServices();
-              this.getDelegatedOrganisation();
-              setTimeout(() => {
-              this.GetOrgDetails()
-              },10 );
-          });
+      this.authService.getCcsServices().toPromise().then((data: any) => {
+        this.ccsServices = data;
+        response.forEach((e: any, i: any) => {
+          this.loadActivities(e);
+        });
+        this.loadServices();
+        this.getDelegatedOrganisation();
+        setTimeout(() => {
+          this.GetOrgDetails()
+        }, 10);
       });
+    });
   }
- 
+
 
   getCcsService(code: string) {
     return this.ccsServices.find((c) => c.code == code);
@@ -195,13 +195,13 @@ export class HomeComponent extends BaseComponent implements OnInit {
     }
 
     if (e.permissionName === 'DELEGATED_ACCESS' && this.isDelegation) {
-        this.systemModules.push({
-          name: 'Delegated access',
-          description: 'Manage delegated access to your approved services',
-          route: '/delegated-access',
-        });
+      this.systemModules.push({
+        name: 'Delegated access',
+        description: 'Manage delegated access to your approved services',
+        route: '/delegated-access',
+      });
     }
-    
+
     // if (e.permissionName === 'MANAGE_SIGN_IN_PROVIDERS') {
     //   if (this.systemModules.findIndex(x => x.name === 'Manage sign in providers') === -1) {
     //     this.systemModules.push({ name: 'Manage sign in providers', description: 'Add and manage sign in providers', route: '/' });
@@ -215,7 +215,7 @@ export class HomeComponent extends BaseComponent implements OnInit {
       ) {
         this.otherModules.push({
           name: 'Manage service eligibility',
-          description: 'Manage services and roles for organisations',
+          description: 'Manage organisations’ type and services',
           route: '/buyer/search',
         });
       }
@@ -247,7 +247,7 @@ export class HomeComponent extends BaseComponent implements OnInit {
   public getDelegatedOrganisation(): void {
     this.delegatedApiService.getDeligatedOrg().subscribe({
       next: (data: any) => {
-        if(data.detail.delegatedOrgs.length > 0 && this.isDelegation){
+        if (data.detail.delegatedOrgs.length > 0 && this.isDelegation) {
           this.systemModules.push({
             name: 'Manage my delegated access',
             description: 'Switch between your primary and delegating Organisation',
@@ -256,15 +256,15 @@ export class HomeComponent extends BaseComponent implements OnInit {
         }
       },
       error: (error: any) => {
-        console.log("error",error)
+        console.log("error", error)
       },
     });
   }
 
   public GetOrgDetails() {
     this.ciiService
-      .getOrgDetails(localStorage.getItem('permission_organisation_id') || "").toPromise().then((data:any) => {
-        this.orgDetails=data.identifier.legalName
+      .getOrgDetails(localStorage.getItem('permission_organisation_id') || "").toPromise().then((data: any) => {
+        this.orgDetails = data.identifier.legalName
       })
       .catch((err) => {
         console.log('err', err);

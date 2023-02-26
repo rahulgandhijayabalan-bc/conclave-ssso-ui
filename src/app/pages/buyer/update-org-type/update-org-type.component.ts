@@ -13,6 +13,7 @@ import { WrapperConfigurationService } from 'src/app/services/wrapper/wrapper-co
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { ViewportScroller } from '@angular/common';
 import { WrapperOrganisationService } from 'src/app/services/wrapper/wrapper-org-service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-update-org-type',
   templateUrl: './update-org-type.component.html',
@@ -55,6 +56,8 @@ export class UpdateOrgTypeComponent implements OnInit {
     this.rolesToDelete = [];
     this.rolesToAddAutoValidation = []
   }
+
+  public hideSimplifyRole: boolean = environment.appSetting.hideSimplifyRole;
   public buyerRemoveList = ['EL_JNR_SUPPLIER', 'EL_SNR_SUPPLIER', 'JAEGGER_SUPPLIER']
   public supplierRemoveList = ['JAEGGER_BUYER', 'ACCESS_CAAAC_CLIENT', 'CAT_USER', 'ACCESS_FP_CLIENT', 'FP_USER']
 

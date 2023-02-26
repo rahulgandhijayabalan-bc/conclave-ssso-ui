@@ -14,25 +14,26 @@
       </div>
       <h1 class="govuk-heading-xl page-title">Manage service eligibility</h1>
       <h2 style="margin-top: -25px; margin-bottom: 40px;">Search and select the organisation profile that you would like
-        to manage the buyer status for</h2>
-      <div class="govuk-form-group" id="search-form-group" [class.govuk-form-group--error]="searchSumbited && searchText ===''">
+        to manage organisation type and services for</h2>
+      <div class="govuk-form-group" id="search-form-group"
+        [class.govuk-form-group--error]="searchSumbited && searchText ===''">
         <label class="govuk-label" for="search"> Search for organisation </label>
-        <span id="first-name-error" class="govuk-error-message"
-        *ngIf="searchSumbited && searchText ===''">
-        <span class="govuk-visually-hidden">{{ 'ERROR_PREFIX' | translate }}</span> Enter an organisation’s name
-      </span>
+        <span id="first-name-error" class="govuk-error-message" *ngIf="searchSumbited && searchText ===''">
+          <span class="govuk-visually-hidden">{{ 'ERROR_PREFIX' | translate }}</span> Enter an organisation’s name
+        </span>
         <app-search-box [(searchText)]="searchText" (onSearchClickEvent)="onSearchClick()">
         </app-search-box>
       </div>
     </div>
   </div>
-  
+
   <div class="govuk-grid-row" *ngIf="data && data.orgList.length !=0;else no_results">
     <div class="govuk-grid-column-full">
       <div>
-        <app-govuk-table [headerTextKeys]="tableHeaders" [data]="data.orgList" [serverPageCount]="pageCount" 
-          [dataKeys]="tableColumnsToDisplay" [isRadioVisible]="true" (radioClickEvent)="onSelectRow($event)"  
-          [useServerPagination]="true" [serverPageCurrentPage]="currentPage" (changeCurrentPageEvent)="setPage($event)"></app-govuk-table>
+        <app-govuk-table [headerTextKeys]="tableHeaders" [data]="data.orgList" [serverPageCount]="pageCount"
+          [dataKeys]="tableColumnsToDisplay" [isRadioVisible]="true" (radioClickEvent)="onSelectRow($event)"
+          [useServerPagination]="true" [serverPageCurrentPage]="currentPage"
+          (changeCurrentPageEvent)="setPage($event)"></app-govuk-table>
       </div>
     </div>
   </div>
@@ -41,9 +42,8 @@
     <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
   </ng-template>
   <div class="govuk-button-group">
-    <button type="button" class="govuk-button"
-      [class.govuk-button--disabled]="selectedOrgId === ''" data-module="govuk-button" (click)="onContinueClick()"
-      [disabled]="selectedOrgId === ''">Continue</button>
+    <button type="button" class="govuk-button" [class.govuk-button--disabled]="selectedOrgId === ''"
+      data-module="govuk-button" (click)="onContinueClick()" [disabled]="selectedOrgId === ''">Continue</button>
     <button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button"
       (click)="onCancelClick()">Cancel</button>
   </div>

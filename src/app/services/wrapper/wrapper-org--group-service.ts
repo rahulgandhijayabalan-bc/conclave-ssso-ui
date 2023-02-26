@@ -165,6 +165,13 @@ export class WrapperOrganisationGroupService {
   }
 
   getGroupOrganisationRoles(organisationId: string): Observable<any> {
+    if (environment.appSetting.hideSimplifyRole)
+      return this.getGroupOrganisationRolesWithoutGroup(organisationId);
+    else
+      return this.getGroupOrganisationServiceRoleGroup(organisationId);
+  }
+
+  getGroupOrganisationRolesWithoutGroup(organisationId: string): Observable<any> {
     const url = `${this.url}/${organisationId}/roles`;
     return this.http.get<Role[]>(url).pipe(
       map((data: Role[]) => {
@@ -174,6 +181,33 @@ export class WrapperOrganisationGroupService {
       })
     );
   }
+
+  getGroupOrganisationServiceRoleGroup(organisationId: string): Observable<any> {
+    const url = `${this.url}/${organisationId}/servicerolegroups`;
+
+    return this.http.get<ServiceRoleGroup[]>(url).pipe(
+      map((data: ServiceRoleGroup[]) => {
+        let roles: Role[] = [];
+
+        data.forEach(roleGroup => {
+          let tempRoleGrop = JSON.parse(JSON.stringify(roleGroup))
+          delete tempRoleGrop.id;
+          delete tempRoleGrop.name;
+          delete tempRoleGrop.key;
+          tempRoleGrop.roleId = roleGroup.id;
+          tempRoleGrop.roleKey = roleGroup.key;
+          tempRoleGrop.roleName = roleGroup.name;
+          tempRoleGrop.description = "Description Development under process";
+          roles.push(tempRoleGrop);
+        });
+        return roles;
+      }), catchError(error => {
+        return throwError(error);
+      })
+    );
+  }
+
+
 
 
 

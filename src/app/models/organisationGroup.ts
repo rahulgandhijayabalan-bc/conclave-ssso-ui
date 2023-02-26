@@ -47,6 +47,14 @@ export interface Role extends RoleDetail {
 }
 
 export interface ServiceRoleGroup extends RoleDetail {
+    pendingStatus?: boolean;
+    id: number;
+    key: string;
+    name: string;
+}
+
+
+export interface ServiceRoleGroup extends RoleDetail {
     id: number;
     key: string;
     name: string;
