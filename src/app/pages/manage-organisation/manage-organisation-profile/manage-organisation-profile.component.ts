@@ -224,7 +224,7 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
         this.router.navigateByUrl(`home`);
     }
 
-    public getSchemaName(schema: string): string {
+    public getSchemaName(schema: string): string { 
         let selecedScheme = this.schemeData.find(s => s.scheme === schema);
         return selecedScheme?.schemeName;
     }
