@@ -4,7 +4,7 @@ import {
     InjectionToken,
     ErrorHandler
 } from '@angular/core';
-import * as Rollbar from 'rollbar';
+import Rollbar from 'rollbar';
 import { environment } from 'src/environments/environment';
 
 const rollbarConfig = {

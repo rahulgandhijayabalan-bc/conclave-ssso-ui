@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as moment from 'moment';
+import moment from 'moment';
 import { BulkUploadStatus } from 'src/app/constants/enum';
 import { BulkUploadFileContentRowDetails, BulkUploadResponse, BulkUploadSummaryGridInfo } from 'src/app/models/bulkUploadResponse';
 import { BulkUploadService } from 'src/app/services/postgres/bulk-upload.service';
