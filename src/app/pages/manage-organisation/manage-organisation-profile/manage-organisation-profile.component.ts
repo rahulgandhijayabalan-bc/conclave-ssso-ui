@@ -53,6 +53,7 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
     ];
     submitted: boolean = false;
     @ViewChildren('input') inputs!: QueryList<ElementRef>;
+    pponSchema: any;
 
 
 
@@ -100,6 +101,11 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
             await this.ciiService.getOrgDetails(ciiOrgId).toPromise().then((data: any) => {
                 localStorage.setItem('cii_registries', JSON.stringify(data));
                 this.registries = data;
+                data.additionalIdentifiers.forEach((Identifier:any)=>{
+                 if(Identifier.scheme != this.pponSchema){
+                    this.additionalIdentifiers.push(Identifier)
+                  }   
+                })
                 this.additionalIdentifiers = data.additionalIdentifiers;
             }).catch(e => {
             });
