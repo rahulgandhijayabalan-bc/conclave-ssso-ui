@@ -64,6 +64,10 @@ export class ManageUserAddSingleUserDetailComponent
   public pendingRoleDetails: any = []
   public selectedApproveRequiredRole: any = []
   public pendingRoledeleteDetails: any = []
+  public tabConfig = {
+    userservices: true,
+    groupservices: false
+  }
   public groupsMember = {
     isAdmin:true,
     headerTextKey: "Groups this user is a member of",
@@ -961,6 +965,16 @@ export class ManageUserAddSingleUserDetailComponent
 
   }
 
+  public tabChanged(activetab: string): void {
+     
+    if (activetab === 'userservices') {
+      this.tabConfig.userservices = true
+      this.tabConfig.groupservices = false
+    } else {
+      this.tabConfig.groupservices = true
+      this.tabConfig.userservices = false
+    }
+  }
 
   public groupsMemberCheckBoxAddRoles(data:Role){
     console.log("checkBoxAddRoles",data)
