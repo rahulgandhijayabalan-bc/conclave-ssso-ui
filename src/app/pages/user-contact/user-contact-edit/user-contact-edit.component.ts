@@ -48,6 +48,7 @@ export class UserContactEditComponent
   extends FormBaseComponent
   implements OnInit
 {
+  checkBoxChecked = false;
   userName: string = '';
   contactData: ContactPoint;
   submitted!: boolean;
@@ -297,6 +298,8 @@ export class UserContactEditComponent
                   this.setError(form, 'mobile', 'invalid');
                 } else if (error.error == 'INVALID_FAX_NUMBER') {
                   this.setError(form, 'fax', 'invalid');
+                } else if (error.error == 'INVALID_WEB_ADD') {
+                  this.setError(form, 'webUrl', 'invalid');
                 }
               },
             });
@@ -321,6 +324,8 @@ export class UserContactEditComponent
                   this.setError(form, 'mobile', 'invalid');
                 } else if (error.error == 'INVALID_FAX_NUMBER') {
                   this.setError(form, 'fax', 'invalid');
+                } else if (error.error == 'INVALID_WEB_ADD') {
+                  this.setError(form, 'webUrl', 'invalid');
                 }
               },
             });
