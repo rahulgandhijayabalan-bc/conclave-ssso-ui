@@ -2,7 +2,7 @@ export const environment = {
 
   production: true,
 
-  idam_client_id: 'IDAM',
+  idam_client_id: 'IDAM_ID',
 
   uri: {
 
@@ -14,7 +14,7 @@ export const environment = {
 
       postgres: 'https://nft.api.crowncommercial.gov.uk/core',
 
-      //cii: 'https://conclave-cii-integration-brash-shark-mk.london.cloudapps.digital',
+      cii: 'https://conclave-cii-integration-brash-shark-mk.london.cloudapps.digital',
 
       wrapper: {
 
@@ -58,6 +58,7 @@ export const environment = {
     },
 
     ccsContactUrl: "https://webuat.crowncommercial.gov.uk/contact"
+    ccsDashboardUrl: "https://webuat.crowncommercial.gov.uk"
 
   },
 
@@ -85,7 +86,7 @@ export const environment = {
 
     security_log: false,
     
-    environment: 'nft'
+    environment: 'nft-ccs-sso'
 
   },
   cookies_policy: {
@@ -113,6 +114,10 @@ export const environment = {
    hideDelegation:false,
    hideBulkupload:false,
    hideAutoValidation:false,
+   
+   hideSimplifyRole:false,
+   blockedScheme: ["GB-PPG"],
+   
   },
 
 };
