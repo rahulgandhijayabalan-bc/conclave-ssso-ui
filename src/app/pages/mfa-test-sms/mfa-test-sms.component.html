@@ -1,0 +1,13 @@
+<!--<app-sidenav [collapsed]="sideNavVisible$ | async"></app-sidenav>-->
+<div class="content flex">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group" id="phone-form-group">
+            <label class="govuk-label" for="phone"> Enter otp </label>
+            <input #phone formControlName="phone" class="govuk-input" id="phone" name="phone" type="text" />
+        </div>
+
+        <button id="mfaenroll" class="btn btn-primary btn-margin" (click)="sendSmsOtp(phone.value)">
+            Send otp
+        </button>
+    </div>
+</div>

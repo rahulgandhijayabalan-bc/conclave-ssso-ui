@@ -331,4 +331,8 @@ export class HomeComponent extends BaseComponent implements OnInit {
         console.log('err', err);
       });
   }
+
+  public TestMfaEnrollment(){
+    window.location.href = this.authService.getMfaAuthorizedEndpoint();
+  }
 }

@@ -1,0 +1,13 @@
+<!--<app-sidenav [collapsed]="sideNavVisible$ | async"></app-sidenav>-->
+<div class="content flex">
+    <div>
+        <div class="govuk-form-group" id="otp-form-group">
+            <label class="govuk-label" for="otp"> Enter otp </label>
+            <input #otp formControlName="otp" class="govuk-input" id="otp" name="otp" type="text" />
+        </div>
+        
+        <button id="mfaenroll" class="btn btn-primary btn-margin" (click)="verifySmsOtp(otp.value)">
+            Verify otp
+        </button>
+    </div>
+</div>

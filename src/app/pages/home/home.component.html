@@ -1,6 +1,9 @@
 <!--<app-sidenav [collapsed]="sideNavVisible$ | async"></app-sidenav>-->
 <h1 class="govuk-heading-xl page-title margine">Public Procurement Gateway Dashboard</h1>
 <strong>Organisation: {{orgDetails}}</strong>
+<button id="mfaenroll" class="btn btn-primary btn-margin" (click)="TestMfaEnrollment()">
+        Test mfa enrollment
+</button>
 <h2 *ngIf="ccsModules.length > 0" class="gov_uk_header">Here are all of your CCS Services</h2>
 <h3 class="govuk-heading-m" *ngIf="ccsModules.length > 0">Services will open in a new tab</h3>
 <div class="row" *ngIf="ccsModules.length > 0">
