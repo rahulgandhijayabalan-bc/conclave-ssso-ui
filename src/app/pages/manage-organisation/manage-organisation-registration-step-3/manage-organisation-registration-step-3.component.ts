@@ -125,7 +125,10 @@ export class ManageOrgRegStep3Component
           error: (err) => {
             if (err.status == '404') {
               this.router.navigateByUrl(`manage-org/register/error/notfound`);
-            } else if (err.status == '409') {
+            } else if (err.status == '503'){
+              this.router.navigateByUrl(`manage-org/register/error/cii`);
+            } 
+            else if (err.status == '409') {
               this.ciiOrgId = err.error.organisationId;
               this.setOrgIdForOrgDetails(this.ciiOrgId);
               window.location.replace(
@@ -220,6 +223,8 @@ export class ManageOrgRegStep3Component
 
   public onSubmit() {
     if(this.countryCode){
+      this.orgDetails.address.countryCode=this.countryCode
+      localStorage.setItem('cii_organisation', JSON.stringify(this.orgDetails));
       if (this.orgGroup === 'manage-org/register/user') {
         let organisation = JSON.parse(
           localStorage.getItem('cii_organisation') + ''
@@ -237,8 +242,6 @@ export class ManageOrgRegStep3Component
             scheme:this.routeParams.scheme,
             id:this.id
           }
-          this.orgDetails.address.countryCode=this.countryCode
-          localStorage.setItem('cii_organisation', JSON.stringify(this.orgDetails));
           localStorage.setItem('cii_scheme', JSON.stringify(cii_scheme));
           this.router.navigateByUrl(this.orgGroup);
         }
