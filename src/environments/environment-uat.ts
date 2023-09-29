@@ -7,15 +7,15 @@ export const environment = {
       //security: 'https://uat-api-security.london.cloudapps.digital',
       security: 'https://uat.api.crowncommercial.gov.uk/aws',
       //postgres: 'https://uat-api-core.london.cloudapps.digital',
-      postgres: 'https://uat.api.crowncommercial.gov.uk/aws/dashboard-wrapper',
+      postgres: 'https://uat.api.crowncommercial.gov.uk/dashboard-wrapper',
       //cii: 'https://conclave-cii-integration-brash-shark-mk.london.cloudapps.digital',
       wrapper: {
         apiGatewayEnabled: {
-          user: 'https://uat.api.crowncommercial.gov.uk/aws/user-profile',
-          organisation: 'https://uat.api.crowncommercial.gov.uk/aws/organisation-profile',
-          contact: 'https://uat.api.crowncommercial.gov.uk/aws/contact-service',
-          configuration: 'https://uat.api.crowncommercial.gov.uk/aws/configuration-service',
-          dataMigration: 'https://uat.api.crowncommercial.gov.uk/aws/organisation-profile/datamigration',
+          user: 'https://uat.api.crowncommercial.gov.uk/user-profile',
+          organisation: 'https://uat.api.crowncommercial.gov.uk/organisation-profile',
+          contact: 'https://uat.api.crowncommercial.gov.uk/contact-service',
+          configuration: 'https://uat.api.crowncommercial.gov.uk/configuration-service',
+          dataMigration: 'https://uat.api.crowncommercial.gov.uk/organisation-profile/datamigration',
         },
         apiGatewayDisabled: {
           user: 'https://uat.ppg-sso-service.crowncommercial.gov.uk/user-profile',
