@@ -162,6 +162,24 @@ export class AuthService {
     );
   }
 
+  mfatoken(code: string): Observable<any> {
+    const options = {
+      headers: new HttpHeaders().append('Content-Type', 'application/x-www-form-urlencoded')
+    }
+    let body = `client_id=${environment.idam_client_id}&code=${code}&grant_type=authorization_code&code_verifier=${this.getCodeVerifier()}&redirect_uri=${environment.uri.web.dashboard + '/mfatestsuccess'}`;
+    this.RollbarErrorService.RollbarDebug('Token_req:'+ body)
+    return this.httpService.post(`${this.url}/security/token`, body, options).pipe(
+      map(data => {
+       this.RollbarErrorService.RollbarDebug('Token_res:'+ JSON.stringify(data)) 
+        return data;
+      }),
+      catchError(error => {
+       this.RollbarErrorService.RollbarDebug('Token_error:' + JSON.stringify(error))
+        return throwError(error);
+      })
+    );
+  }
+
   renewToken(refreshToken: string): Observable<TokenInfo> {
     const options = {
       headers: new HttpHeaders().append('Content-Type', 'application/x-www-form-urlencoded')
@@ -215,6 +233,22 @@ export class AuthService {
       + '&code_challenge_method=S256' + '&code_challenge=' + codeChallenge
       + '&redirect_uri=' + environment.uri.web.dashboard + '/authsuccess'
      this.RollbarErrorService.RollbarDebug("getAuthorizedEndpoint:"+url)
+    return url;
+  }
+
+  getMfaAuthorizedEndpoint() {
+    debugger;
+    let codeVerifier = this.getCodeVerifier();
+    const codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
+    const codeChallenge = codeVerifierHash
+      .replace(/=/g, '')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_');
+    let url = environment.uri.api.security + '/security/mfa/authorize?scope=email profile openid offline_access&response_type=code&client_id='
+      + environment.idam_client_id
+      + '&code_challenge_method=S256' + '&code_challenge=' + codeChallenge
+      + '&redirect_uri=' + environment.uri.web.dashboard + '/mfatestsuccess'
+    //  this.RollbarErrorService.RollbarDebug("getAuthorizedEndpoint:"+url)
     return url;
   }
 
@@ -327,4 +361,80 @@ export class AuthService {
       })
     );
   }
+
+  Associate(accessToken: string, phoneNumber: string, isSms: boolean = false): Observable<any> {
+    const options = {
+      headers: new HttpHeaders({
+        'X-API-Key' : ''
+      })
+    }
+    let tokenBody = {
+
+      "client_id":'',
+      "client_secret":'',      
+      "authenticator_types": isSms ? ["oob"] : ["otp"],
+      "oob_channels":["sms"],
+      "phone_number": phoneNumber,
+      "access_token": accessToken
+    }
+    return this.httpService.post(`https://localhost:44352/security/test/associate`, tokenBody, options).pipe(
+
+      map(data => {
+        console.log(data);
+
+        return data;
+
+      }),
+
+      catchError(error => {
+
+        debugger;
+
+        console.log(error);
+
+        return throwError(error);
+
+      })
+
+    );
+
+  }
+
+ 
+
+  VerifyOTP(otp: string, token:string, oob_code: string, auth_type: string): Observable<any> {
+    const options = {
+      headers: new HttpHeaders({
+        'X-API-Key' : ''
+      })
+    }
+
+   
+
+    let tokenBody = {
+      "client_id":'',
+      "client_secret":'',
+      "mfa_token": token,
+      "otp": otp,
+      "oob_code": oob_code  ,
+      "auth_type" : auth_type
+    }
+
+
+    return this.httpService.post(`https://localhost:44352/security/test/verifyotp`, tokenBody, options).pipe(
+      map(data => {
+        console.log(data);
+        return data;
+      }),
+
+      catchError(error => {
+        debugger;
+        console.log(error);
+        return throwError(error);
+      })
+
+    );
+
+  }
+
 }

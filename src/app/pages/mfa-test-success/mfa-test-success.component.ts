@@ -32,6 +32,7 @@ import { WorkerService } from 'src/app/services/worker.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MfaTestSuccessComponent extends BaseComponent implements OnInit {
+public formValue:string ='SMS'
 public orgGroup: string = 'SMS';    
 authcode: string ="";
 auth0token: string = "";
@@ -56,6 +57,7 @@ constructor(private router: Router,
                     // let accessToken = this.tokenService.getDecodedToken(tokenInfo.access_token);
                     this.auth0token = tokenInfo.auth0_access_token;
                     localStorage.setItem('auth_token', this.auth0token);
+                    this.getQROtp();
                 }, (err) => {
                     if (err.status == 404) {
                         this.router.navigateByUrl('error?error_description=USER_NOT_FOUND');
@@ -95,7 +97,32 @@ constructor(private router: Router,
         console.log(event);
       }
 
-    public gotoMfa(){
-        window.location.href = "http://localhost:4200/mfatestsms";
+    public gotoMfa(event:string){
+        console.log("event",event);
+        if(event == "SMS"){
+            window.location.href = "http://localhost:4200/mfatestsms";
+        }
+        else{
+            window.location.href = "http://localhost:4200/mfatestQrsuccess";
+        }
+    }
+
+    getQROtp(): any{
+        debugger;
+        this.auth0token = localStorage.getItem('auth_token') ?? '';
+        this.authService.Associate(this.auth0token, "", false).subscribe({
+            next: (response) => {
+            debugger;
+              console.log(response);
+  
+              //this.oob_code = response.oob_Code;
+            //    this.myAngularxQrCode = response.barcode_Uri;
+             //this.setQr(response.barcode_Uri);
+             localStorage.setItem('qr_code', response.barcode_Uri);
+              return response.barcode_Uri;
+            },
+            error: () => console.log("Error"),
+          }
+          );
     }
 }

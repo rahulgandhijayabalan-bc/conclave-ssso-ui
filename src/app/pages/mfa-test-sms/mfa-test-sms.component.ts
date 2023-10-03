@@ -36,7 +36,6 @@ export class MfaTestSmsComponent extends BaseComponent implements OnInit {
 auth0token: string = "";
 oob_code: any;    
 qrCodeStr: string = "";
-showVerifyOtp: boolean = false;
 phone: string = "";
 
 constructor(private router: Router,
@@ -47,7 +46,6 @@ constructor(private router: Router,
         private readonly tokenService: TokenService, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper
     ) {
         super(uiStore, viewportScroller, scrollHelper);
-        this.showVerifyOtp = false;
     }
     ngOnInit() {
         // this.route.queryParams.subscribe(params => {
@@ -99,7 +97,6 @@ constructor(private router: Router,
   
               this.oob_code = response.oob_Code;
             //   this.qrCodeStr = response.barcode_Uri;
-              this.showVerifyOtp = true;
               window.location.href = "http://localhost:4200/mfatestsmssuccess?code=" + response.oob_Code;
             },
             error: () => console.log("Error"),

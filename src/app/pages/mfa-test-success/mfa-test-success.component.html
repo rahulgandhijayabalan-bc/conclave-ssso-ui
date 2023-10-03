@@ -1,53 +1,50 @@
-<!--<app-sidenav [collapsed]="sideNavVisible$ | async"></app-sidenav>-->
+
+
 <div class="content flex">
-    <!-- <qrcode [qrdata]="'Your data string'" [width]="256" [errorCorrectionLevel]="'M'"></qrcode> -->
-    <!-- <qrcode (qrCodeURL)="onChangeURL($event)" [qrdata]="myAngularxQrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode> -->
-    
-    <!-- <iframe width="100%" height="300px" frameBorder="0" src="https://www.qr4.nl/igen.aspx?key=MYKEYVALUE"></iframe>
-    <button id="mfaenroll" class="btn btn-primary btn-margin" (click)="sendOtp()">
-        Send otp
-    </button>
-    <div class="govuk-form-group" id="otp-form-group">
-        <label class="govuk-label" for="otp"> Enter otp </label>
-        <input #otp formControlName="otp" class="govuk-input" id="otp" name="otp" type="text" />
-    </div>
-    
-    <button id="mfaenroll" class="btn btn-primary btn-margin" (click)="verifyOtp(otp.value)">
-        Verify otp
-    </button> -->
-    <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            Turn on two-factor authentication
-          </legend>
-          <div class="govuk-radios">
-            <div class="govuk-radios__item" id="authappRadioSelection">
-              <input class="govuk-radios__input" type="radio" name="authGroup"
-                value="APP"  
-                id="authappButton">
-              <label class="govuk-label govuk-radios__label" for="authappButton">
-                Authenticator app
-              </label>
-            </div>
-            <div class="govuk-radios__item" id="smsRadioSelection">
-              <input class="govuk-radios__input" type="radio" name="authGroup" checked="checked"
-                value="SMS"  
-                id="smsRadioButton">
-              <label class="govuk-label govuk-radios__label" for="smsRadioButton">
-                Text message
-              </label>
-            </div>
-            <!-- <div class="govuk-radios__item" id="notMyOrgRadioSelection">
-              <input class="govuk-radios__input" type="radio" name="orgGroup"
-                value="manage-org/register/error/not-my-details" [(ngModel)]="orgGroup" id="notMyOrgRadioButton">
-              <label class="govuk-label govuk-radios__label" for="notMyOrgRadioButton">
-                No, this isn't my organisation
-              </label>
-            </div> -->
-          </div>
-        </fieldset>
+
+  <div class="govuk-form-group">
+
+    <fieldset class="govuk-fieldset">
+
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+
+        Turn on two-factor authentication
+
+      </legend>
+
+      <div class="govuk-radios">
+
+        <div class="govuk-radios__item" id="authappRadioSelection">
+          <input class="govuk-radios__input" type="radio" name="auth_app" value="QR" id="auth_app" [(ngModel)]="formValue">
+          <label class="govuk-label govuk-radios__label" for="auth_app">
+            Authenticator app
+          </label>
+
+        </div>
+
+        <div class="govuk-radios__item" id="smsRadioSelection">
+
+          <input class="govuk-radios__input" type="radio" name="auth_text" checked="checked" id="auth_text" value="SMS" [(ngModel)]="formValue">
+
+          <label class="govuk-label govuk-radios__label" for="auth_text">
+
+            Text message
+
+          </label>
+
+        </div>
+
+
       </div>
-      <button id="mfaenroll" class="btn btn-primary btn-margin" (click)="gotoMfa()">
-        Continue
-      </button> 
+
+    </fieldset>
+
+  </div>
+
+  <button id="mfaenroll" class="btn btn-primary btn-margin" (click)="gotoMfa(formValue)">
+
+    Continue
+
+  </button>
+
 </div>

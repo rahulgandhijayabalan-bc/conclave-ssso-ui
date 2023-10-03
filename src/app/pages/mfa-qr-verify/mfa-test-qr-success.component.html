@@ -1,0 +1,15 @@
+<!--<app-sidenav [collapsed]="sideNavVisible$ | async"></app-sidenav>-->
+
+<div class="content flex">
+  <qrcode [qrdata]="myAngularxQrCode" [width]="256" [errorCorrectionLevel]="'M'" [allowEmptyString]="true"></qrcode>
+  <div class="govuk-form-group">
+ 
+    <input class="govuk-input govuk-input--width-20" id="width-20" name="otp" type="text" #otp>
+  </div>
+  <button id="mfaenroll" class="btn btn-primary btn-margin" (click)="verifyQROtp(otp.value)">
+
+    Continue
+
+  </button>
+
+</div>

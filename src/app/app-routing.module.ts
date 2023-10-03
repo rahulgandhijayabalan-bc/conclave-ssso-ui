@@ -150,6 +150,10 @@ import { DataMigrationStatusComponent } from './pages/data-migration/data-migrat
 import { DataMigrationErrorComponent } from './pages/data-migration/data-migration-error/data-migration-error.component';
 import { DataMigrationSummaryComponent } from './pages/data-migration/data-migration-summary/data-migration-summary.component';
 import { ManageOrganisationRegisterationCiiComponent } from './pages/manage-organisation/manage-organisation-registeration-cii/manage-organisation-registeration-cii.component';
+import { MfaTestSuccessComponent } from './pages/mfa-test-success/mfa-test-success.component';
+import { MfaTestSmsComponent } from './pages/mfa-test-sms/mfa-test-sms.component';
+import { MfaTestSmsSuccessComponent } from './pages/mfa-test-sms-success/mfa-test-sms-success.component';
+import { MfaTestQrSuccessComponent } from './pages/mfa-qr-verify/mfa-test-qr-success.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -1228,6 +1232,26 @@ const routes: Routes = [
     data: { title: 'Terms of Use' },
     pathMatch: 'full',
     component: TermsConditionsComponent,
+  },
+  {
+    path: 'mfatestsuccess',
+    data: { title: 'Mfa test Success' },
+    component: MfaTestSuccessComponent,
+  },
+  {
+    path: 'mfatestQrsuccess',
+    data: { title: 'Mfa test qr Success' },
+    component: MfaTestQrSuccessComponent,
+  },
+  {
+    path: 'mfatestsms',
+    data: { title: 'Mfa test Sms' },
+    component: MfaTestSmsComponent,
+  },
+  {
+    path: 'mfatestsmssuccess',
+    data: { title: 'Mfa test sms Success' },
+    component: MfaTestSmsSuccessComponent,
   },
   { path: '**', redirectTo: 'home', pathMatch: 'full' },
 ];

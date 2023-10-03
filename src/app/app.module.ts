@@ -208,6 +208,9 @@ import { EnvironmentBannerComponent } from './components/environment-banner/envi
 import { PermissionPipe } from './pipes/permission.pipe';
 import { SchemePipe } from './pipes/scheme.pipe';
 import { ManageOrganisationRegisterationCiiComponent } from './pages/manage-organisation/manage-organisation-registeration-cii/manage-organisation-registeration-cii.component';
+import { QRCodeModule } from 'angularx-qrcode'; 
+import { MfaTestSuccessComponent } from './pages/mfa-test-success/mfa-test-success.component';
+import { MfaTestQrSuccessComponent } from './pages/mfa-qr-verify/mfa-test-qr-success.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -379,6 +382,8 @@ export function createTranslateLoader(http: HttpClient) {
     AccordionComponent,
     GovukRadioComponent,
     EnvironmentBannerComponent,
+    MfaTestSuccessComponent,
+    MfaTestQrSuccessComponent,
     PermissionPipe,
     SchemePipe,
     ManageOrganisationRegisterationCiiComponent
@@ -424,7 +429,8 @@ export function createTranslateLoader(http: HttpClient) {
     NzLayoutModule,
     ComponentsModule,
     MatTableModule,
-    NgxIntlTelInputModule
+    NgxIntlTelInputModule,
+    QRCodeModule
   ],
   exports: [TranslateModule],
   providers: [
