@@ -1,8 +1,8 @@
 export const environment = {
 
-  production: false,
+  production: true,
 
-  idam_client_id: 'IDAM_ID',
+  idam_client_id: '%IDAM%',
 
   uri: {
 
@@ -12,34 +12,35 @@ export const environment = {
 
           security: 'https://pre.api.crowncommercial.gov.uk',
 
-          //security: 'https://pre.api.crowncommercial.gov.uk', 
-
           postgres: 'https://pre.api.crowncommercial.gov.uk/dashboard-wrapper',
 
-          //postgres: 'https://pre.api.crowncommercial.gov.uk/core', 
 
           wrapper: {
 
               apiGatewayEnabled: {
 
-                  user: 'https://pre.api.crowncommercial.gov.uk/user-profiles',
+                  user: 'https://pre.api.crowncommercial.gov.uk/user-profile',
 
-                  organisation: 'https://pre.api.crowncommercial.gov.uk/organisation-profiles',
+                  organisation: 'https://pre.api.crowncommercial.gov.uk/organisation-profile',
 
-                  contact: 'https://pre.api.crowncommercial.gov.uk/contacts',
+                  contact: 'https://pre.api.crowncommercial.gov.uk/contact-service',
 
-                  configuration: 'https://pre.api.crowncommercial.gov.uk/configurations',
+                  configuration: 'https://pre.api.crowncommercial.gov.uk/configuration-service',
+
+                  dataMigration: 'https://pre.api.crowncommercial.gov.uk/organisation-profile/migrations',
               },
 
               apiGatewayDisabled: {
 
-                  user: 'https://preprod-api-wrapper.london.cloudapps.digital/users',
+                  user: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/user-profile',
 
-                  organisation: 'https://preprod-api-wrapper.london.cloudapps.digital/organisations',
+                  organisation: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/organisation-profile',
 
-                  contact: 'https://preprod-api-wrapper.london.cloudapps.digital/contacts',
+                  contact: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/contact-service',
 
-                  configuration: 'https://preprod-api-wrapper.london.cloudapps.digital/configurations',
+                  configuration: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/configuration-service',
+
+                  dataMigration: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/organisation-profile/migrations',
 
               }
 
@@ -48,8 +49,6 @@ export const environment = {
       },
 
       web: {
-
-          //dashboard: 'https://preprod-ccs-sso.london.cloudapps.digital' 
 
           dashboard: 'https://preprod.identify.crowncommercial.gov.uk',
           name: "PRE-PROD"
@@ -60,7 +59,7 @@ export const environment = {
 
   },
 
-  googleTagMangerId: 'GTM',
+  googleTagMangerId: 'GTM-TZCX5VP',
 
   bulkUploadPollingFrequencyInSeconds: 5,
 
@@ -78,13 +77,13 @@ export const environment = {
 
   rollbar: {
 
-      key: 'ROLLBAR',
+      key: '%ROLLBAR%',
 
       enable: false,
 
       security_log:false,
     
-    environment: 'pre-production'
+    environment: 'preprod-ccs-sso'
 
   },
   
@@ -109,9 +108,11 @@ export const environment = {
       },
   },
   appSetting: {
-   hideIDP:false,
-   hideDelegation:false,
-   hideBulkupload:false,
-   hideAutoValidation:false,
-  },
+    hideIDP:true,
+    hideDelegation:false,
+    hideBulkupload:false,
+    hideAutoValidation:false,
+    hideSimplifyRole:false,
+    blockedScheme: ["GB-PPG"],
+   },
 };
