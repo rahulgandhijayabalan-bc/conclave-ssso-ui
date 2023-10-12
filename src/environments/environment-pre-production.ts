@@ -50,7 +50,7 @@ export const environment = {
 
       web: {
 
-          dashboard: 'https://pre-ppg-sso.crowncommercial.gov.uk',
+          dashboard: 'https://preprod.identify.crowncommercial.gov.uk',
           name: "PRE-PROD"
       },
 
@@ -67,7 +67,7 @@ export const environment = {
 
   bulkUploadMaxFileSizeInBytes:1048576,
 
-  bulkUploadTemplateFileUrl: 'BUCKET_URL',
+  bulkUploadTemplateFileUrl: 'https://pre.api.crowncommercial.gov.uk/templates/DataMigrationTemplate.csv',
 
   usedPasswordThreshold: 5, //This value should be changed when Auth0 password history policy changed, 
 
