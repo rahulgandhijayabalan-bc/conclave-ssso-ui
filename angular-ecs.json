@@ -15,8 +15,8 @@
         {
             "name": "%SPACE%-angular",
             "image": "%AWS_ACCOUNT_ID%.dkr.ecr.eu-west-2.amazonaws.com/%SPACE%-angular:%SPACE%-angular-%BUILD_NUMBER%",
-            "cpu": 0,
-            "memoryReservation": 512,
+            "cpu": 1,
+            "memoryReservation": 2048,
             "portMappings": [
                 {
                     "containerPort": 80,
