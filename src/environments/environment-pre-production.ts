@@ -10,7 +10,7 @@ export const environment = {
 
           isApiGateWayEnabled: true,
 
-          security: 'https://pre.api.crowncommercial.gov.uk',
+          security: 'https://preprod-api-security.london.cloudapps.digital',
 
           //security: 'https://pre.api.crowncommercial.gov.uk', 
 
@@ -56,7 +56,7 @@ export const environment = {
 
           //dashboard: 'https://preprod-ccs-sso.london.cloudapps.digital' 
 
-          dashboard: 'https://preprod.identify.crowncommercial.gov.uk',
+          dashboard: 'https://preprod-ccs-sso.london.cloudapps.digital',
           name: "PRE-PROD"
       },
 
