@@ -14,7 +14,7 @@ export const environment = {
 
           //security: 'https://pre.api.crowncommercial.gov.uk', 
 
-          postgres: 'https://pre.api.crowncommercial.gov.uk/core',
+          postgres: 'https://preprod-api-core.london.cloudapps.digital',
 
           //postgres: 'https://pre.api.crowncommercial.gov.uk/core', 
 
