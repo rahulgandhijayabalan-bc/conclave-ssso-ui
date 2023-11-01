@@ -69,6 +69,7 @@ export const environment = {
       hideDelegation: false,
       hideBulkupload: false,
       hideAutoValidation: false,
+      enableMockLogin : false,
       hideSimplifyRole: false,
       blockedScheme: ['GB-EDU',"GB-PPG"]
     },
