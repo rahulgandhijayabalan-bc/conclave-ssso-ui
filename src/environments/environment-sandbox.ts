@@ -1,47 +1,50 @@
 export const environment = {
   production: true,
-  idam_client_id:'IDAM_ID',
+  idam_client_id:'%IDAM%',
   uri: {
     api: {
-      isApiGateWayEnabled: false,
-      security: 'https://sand-api-security.london.cloudapps.digital',
-      postgres: 'https://sand-api-core.london.cloudapps.digital/dashboard-wrapper',
-      cii: 'https://conclave-cii-testing-talkative-oryx-hh.london.cloudapps.digital',
+      isApiGateWayEnabled: true,
+      security: 'https://sbx.api.crowncommercial.gov.uk',
+      postgres: 'https://sbx.api.crowncommercial.gov.uk/dashboard-wrapper',
+      cii: 'https://conclave-cii-integration-brash-shark-mk.london.cloudapps.digital',
       wrapper: {
         apiGatewayEnabled: {
-          user: 'https://sand-api-wrapper.london.cloudapps.digital/user-profiles',
-          organisation: 'https://sand-api-wrapper.london.cloudapps.digital/organisation-profiles',
-          contact: 'https://sand-api-wrapper.london.cloudapps.digital/contacts',
-          configuration: 'https://sand-api-wrapper.london.cloudapps.digital/configurations',
+          user: 'https://sbx.api.crowncommercial.gov.uk/user-profile',
+          organisation: 'https://sbx.api.crowncommercial.gov.uk/organisation-profile',
+          contact: 'https://sbx.api.crowncommercial.gov.uk/contact-service',
+          configuration: 'https://sbx.api.crowncommercial.gov.uk/configuration-service',
+          dataMigration: 'https://sbx.api.crowncommercial.gov.uk/organisation-profile/migrations',
         },
         apiGatewayDisabled: {
-          user: 'https://sand-api-wrapper.london.cloudapps.digital/users',
-          organisation: 'https://sand-api-wrapper.london.cloudapps.digital/organisations',
-          contact: 'https://sand-api-wrapper.london.cloudapps.digital/contacts',
-          configuration: 'https://sand-api-wrapper.london.cloudapps.digital/configurations',
+          user: 'https://sbx1.ppg-sso-service.crowncommercial.gov.uk/user-profile',
+          organisation: 'https://sbx1.ppg-sso-service.crowncommercial.gov.uk/organisation-profile',
+          contact: 'https://sbx1.ppg-sso-service.crowncommercial.gov.uk/contact-service',
+          configuration: 'https://sbx1.ppg-sso-service.crowncommercial.gov.uk/configuration-service',
+          dataMigration: 'https://sbx1.ppg-sso-service.crowncommercial.gov.uk/organisation-profile/migrations',
         }
       }
     },
     web: {
-      dashboard: 'https://sand-ccs-sso.london.cloudapps.digital',
-      name: "Sandbox"
+      dashboard: 'https://sand.identify.crowncommercial.gov.uk',
+      name: "TEST"
     },
-    ccsContactUrl: "https://webdev.crowncommercial.gov.uk/contact",
-    ccsDashboardUrl: "https://webdev.crowncommercial.gov.uk"
+    ccsContactUrl: "https://webuat.crowncommercial.gov.uk/contact",
+    ccsDashboardUrl: "https://webuat.crowncommercial.gov.uk"
   },
-  googleTagMangerId: 'GTM',
+  
+  googleTagMangerId: 'GTM-TZCX5VP',
   cookieExpirationTimeInMinutes: 525600,
   bulkUploadPollingFrequencyInSeconds: 5,
   bulkUploadMaxFileSizeInBytes:1048576,
-  bulkUploadTemplateFileUrl: 'BUCKET_URL',
+  bulkUploadTemplateFileUrl: 'https://sbx.api.crowncommercial.gov.uk/templates/DataMigrationTemplate.csv', // Put the publicly accessible url of the template file
   usedPasswordThreshold: 5, //This value should be changed when Auth0 password history policy changed,
   listPageSize: 10,
-  mailDecryptKey:'conclavesimpleemailencrypt',  
+  mailDecryptKey:'conclavesimpleemailencrypt',
   rollbar: {
-    key: 'ROLLBAR',
-    enable : false,
-    security_log: false,
-    environment: 'sand-ccs-sso'
+        key: '%ROLLBAR%',
+        enable : false,
+        security_log:false,
+        environment: 'test-ccs-sso'
   },
   cookies_policy: {
     essentialcookies: {
@@ -64,10 +67,10 @@ export const environment = {
     },
   },
   appSetting: {
-   hideIDP:false,
+   hideIDP:true,
    hideDelegation:false,
    hideBulkupload:false,
-   hideAutoValidation:true,
+   hideAutoValidation:false,
    hideSimplifyRole:false,
    blockedScheme: ["GB-PPG"],
   },
