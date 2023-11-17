@@ -5,7 +5,7 @@ export const environment = {
     api: {
       isApiGateWayEnabled: true,
       //security: 'https://uat-api-security.london.cloudapps.digital',
-      security: 'https://uat.api.crowncommercial.gov.uk/aws',
+      security: 'https://uat.api.crowncommercial.gov.uk',
       //postgres: 'https://uat-api-core.london.cloudapps.digital',
       postgres: 'https://uat.api.crowncommercial.gov.uk/dashboard-wrapper',
       //cii: 'https://conclave-cii-integration-brash-shark-mk.london.cloudapps.digital',
@@ -28,7 +28,7 @@ export const environment = {
     },
     web: {
       //dashboard: 'https://uat-ccs-sso.london.cloudapps.digital'
-      dashboard: 'https://uat-ppg-sso.crowncommercial.gov.uk',
+      dashboard: 'https://uat.identify.crowncommercial.gov.uk',
       name: "UAT"
     },
     ccsContactUrl: "https://webuat.crowncommercial.gov.uk/contact",
