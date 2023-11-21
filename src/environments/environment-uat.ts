@@ -5,9 +5,9 @@ export const environment = {
     api: {
       isApiGateWayEnabled: false,
       //security: 'https://uat-api-security.london.cloudapps.digital',
-      security: 'https://uat.api.crowncommercial.gov.uk',
+      security: 'https://uat.ppg-sso-service.crowncommercial.gov.uk',
       //postgres: 'https://uat-api-core.london.cloudapps.digital',
-      postgres: 'https://uat.api.crowncommercial.gov.uk/dashboard-wrapper',
+      postgres: 'https://uat.ppg-sso-service.crowncommercial.gov.uk/dashboard-wrapper',
       //cii: 'https://conclave-cii-integration-brash-shark-mk.london.cloudapps.digital',
       wrapper: {
         apiGatewayEnabled: {
