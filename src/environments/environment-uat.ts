@@ -3,7 +3,7 @@ export const environment = {
   idam_client_id: '%IDAM%',
   uri: {
     api: {
-      isApiGateWayEnabled: false,
+      isApiGateWayEnabled: true,
       //security: 'https://uat-api-security.london.cloudapps.digital',
       security: 'https://uat.ppg-sso-service.crowncommercial.gov.uk',
       //postgres: 'https://uat-api-core.london.cloudapps.digital',
@@ -28,7 +28,7 @@ export const environment = {
     },
     web: {
       //dashboard: 'https://uat-ccs-sso.london.cloudapps.digital'
-      dashboard: 'https://uat-ppg-sso.crowncommercial.gov.uk',
+      dashboard: 'https://uat.identify.crowncommercial.gov.uk',
       name: "UAT"
     },
     ccsContactUrl: "https://webuat.crowncommercial.gov.uk/contact",
