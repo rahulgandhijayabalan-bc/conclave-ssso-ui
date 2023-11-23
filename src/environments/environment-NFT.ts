@@ -99,7 +99,7 @@ export const environment = {
     hideDelegation:false,
     hideBulkupload:false,
     hideAutoValidation:false,
-    enableMockLogin : false,
+    enableMockLogin : true,
     hideSimplifyRole: false,
     blockedScheme: ["GB-PPG"]
    },
