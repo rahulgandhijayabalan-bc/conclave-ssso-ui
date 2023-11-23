@@ -10,7 +10,7 @@ export const environment = {
 
           isApiGateWayEnabled: false,
 
-          security: 'https://pre.api.crowncommercial.gov.uk',
+          security: 'https://pre.ppg-sso-service.crowncommercial.gov.uk',
 
           postgres: 'https://pre.api.crowncommercial.gov.uk/dashboard-wrapper',
 
@@ -50,7 +50,7 @@ export const environment = {
 
       web: {
 
-          dashboard: 'https://preprod.identify.crowncommercial.gov.uk',
+          dashboard: 'https://pre-ppg-sso.crowncommercial.gov.uk',
           name: "PRE-PROD"
       },
 
