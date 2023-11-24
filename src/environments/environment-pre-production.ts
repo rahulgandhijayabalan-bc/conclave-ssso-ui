@@ -50,7 +50,7 @@ export const environment = {
 
       web: {
 
-          dashboard: 'https://pre-ppg-sso.crowncommercial.gov.uk',
+          dashboard: 'https://preprod.identify.crowncommercial.gov.uk',
           name: "PRE-PROD"
       },
 
