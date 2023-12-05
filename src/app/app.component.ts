@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
   @HostBinding('class') className = '';
   public sideNavVisible$: Observable<boolean>;
   public IsActivePage:string=''
+  nonce: any; 
   isAuthenticated: boolean = false;
   toggleControl = new FormControl(false);
   opIFrameURL = this.sanitizer.bypassSecurityTrustResourceUrl(environment.uri.api.security + '/security/sessions/?origin=' + environment.uri.web.dashboard);
@@ -34,6 +35,7 @@ export class AppComponent implements OnInit {
   constructor(private sanitizer: DomSanitizer, private globalRouteService: GlobalRouteService, private overlay: OverlayContainer, private translate: TranslateService, protected uiStore: Store<UIState>, private router: Router,
     private route: ActivatedRoute, public authService: AuthService, private gtmService: GoogleTagManagerService,
     public loadingIndicatorService: LoadingIndicatorService, private titleService: Title) {
+    this.nonce = this.generateNonce();
     translate.setDefaultLang('en');
     this.sideNavVisible$ = this.uiStore.pipe(select(getSideNavVisible));
     //this.gtmService.addGtmToDom();
@@ -64,8 +66,17 @@ export class AppComponent implements OnInit {
       }
     });
   }
-
-  async ngOnInit() {        
+  generateNonce(): string {
+    const nonceChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const nonceLength = 16;
+    for (let i = 0; i < nonceLength; i++) {
+      result += nonceChars.charAt(Math.floor(Math.random() * nonceChars.length));
+    }
+    return result;
+  }
+  async ngOnInit() {
+    this.nonce = this.sanitizer.bypassSecurityTrustResourceUrl('RANDOMLY_GENERATED_NONCE_VALUE');
     this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationStart) {
         if(localStorage.getItem('user_name') === null){

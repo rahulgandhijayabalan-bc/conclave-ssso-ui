@@ -38,7 +38,7 @@ export class ManageOrganisationRegistryConfirmComponent extends BaseComponent im
   public user!: User;
   id!: string;
 
-  constructor(public ciiService: ciiService, private router: Router, private route: ActivatedRoute, protected uiStore: Store<UIState>,
+  constructor(private ciiService: ciiService, private router: Router, private route: ActivatedRoute, protected uiStore: Store<UIState>,
     private readonly tokenService: TokenService, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
     super(uiStore, viewportScroller, scrollHelper);
     this.organisationId = localStorage.getItem('cii_organisation_id') || '';
@@ -64,10 +64,7 @@ export class ManageOrganisationRegistryConfirmComponent extends BaseComponent im
               this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/notfound`);
             } else if (err.status == '409') {
               this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/existsInConclave`);
-            } else if (err.status == '503') {
-              this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/ciidown`);
-            }
-            else {
+            } else {
               this.router.navigateByUrl(`manage-org/profile/${this.organisationId}/registry/error/generic`);
             }
           }
