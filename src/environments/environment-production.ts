@@ -8,11 +8,11 @@ export const environment = {
 
     api: {
 
-      isApiGateWayEnabled: false,
+      isApiGateWayEnabled: true,
 
-      security: 'https://prod.ppg-sso-service.crowncommercial.gov.uk',
+      security: 'https://api.crowncommercial.gov.uk',
 
-      postgres: 'https://prod.ppg-sso-service.crowncommercial.gov.uk/dashboard-wrapper',
+      postgres: 'https://api.crowncommercial.gov.uk/dashboard-wrapper',
 
       //cii: 'https://conclave-cii-integration-brash-shark-mk.london.cloudapps.digital',
 
@@ -37,7 +37,7 @@ export const environment = {
 
     web: {
 
-      dashboard: 'https://prod-ppg-sso.crowncommercial.gov.uk',
+      dashboard: 'https://identify.crowncommercial.gov.uk',
       name: "NFT"
 
     },
@@ -100,6 +100,8 @@ export const environment = {
     hideBulkupload:true,
     hideAutoValidation:false,
     hideSimplifyRole: false,
-    blockedScheme: ["GB-PPG"]
+    blockedScheme: ["GB-PPG"],
+    isMaintenance: true,    
+    customMfaEnabled : false,
    },
 };
