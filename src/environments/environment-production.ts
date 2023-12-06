@@ -100,8 +100,6 @@ export const environment = {
     hideBulkupload:true,
     hideAutoValidation:false,
     hideSimplifyRole: false,
-    blockedScheme: ["GB-PPG"],
-    isMaintenance: true,    
-    customMfaEnabled : false,
+    blockedScheme: ["GB-PPG"]
    },
 };
