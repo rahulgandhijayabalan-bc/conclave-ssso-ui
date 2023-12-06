@@ -38,7 +38,7 @@ export const environment = {
     web: {
 
       dashboard: 'https://identify.crowncommercial.gov.uk',
-      name: "NFT"
+      name: ""
 
     },
 
