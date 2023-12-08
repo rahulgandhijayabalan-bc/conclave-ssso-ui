@@ -3,7 +3,7 @@ export const environment = {
   idam_client_id:'%IDAM%',
   uri: {
     api: {
-      isApiGateWayEnabled: true,
+      isApiGateWayEnabled: false,
       security: 'https://sbx.api.crowncommercial.gov.uk',
       postgres: 'https://sbx.api.crowncommercial.gov.uk/dashboard-wrapper',
       cii: 'https://conclave-cii-integration-brash-shark-mk.london.cloudapps.digital',
