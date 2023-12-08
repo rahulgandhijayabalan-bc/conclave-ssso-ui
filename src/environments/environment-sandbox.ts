@@ -25,7 +25,7 @@ export const environment = {
       }
     },
     web: {
-      dashboard: 'https://sand.identify.crowncommercial.gov.uk',
+      dashboard: 'https://sbx1-ppg-sso.crowncommercial.gov.uk',
       name: "TEST"
     },
     ccsContactUrl: "https://webuat.crowncommercial.gov.uk/contact",
