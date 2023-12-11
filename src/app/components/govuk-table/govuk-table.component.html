@@ -55,14 +55,14 @@
           <br>
         </td>
         <td class="govuk-table__cell" *ngIf="isHyperLinkVisible == true">
-          <a class="navigation-text" href="javascript:;"
+          <a class="navigation-text" 
           [ngClass]="{'navigation-text-empty':hyperLinkText==='.'}">
             {{ hyperLinkText || "" | translate }}</a>
         </td>
         <td *ngIf="hyperArrayVisible == true" class="govuk-table__cell">
           <div class="govuk-table_action-links">
             <span *ngFor="let hypertex of hyperLinkArray">
-              <a class="navigation-text" href="javascript:;"
+              <a class="navigation-text" 
                 [ngClass]="{'navigation-text-red': hypertex == 'Remove' || hypertex == 'Decline' }">
                 {{ hypertex }}</a>
             </span>
@@ -118,7 +118,7 @@
   " class="pagination-area" aria-label="Pagination">
   <ul>
     <li (click)="onSetPageClick(currentPage - 1)" *ngIf="currentPage != 1">
-      <a  href="javascript:;"  aria-label="Previous" class="govuk-pagination__link-title">
+      <a aria-label="Previous" class="govuk-pagination__link-title">
         <svg class="govuk-pagination__icon govuk-pagination__icon--prev" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
           <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
         </svg>
@@ -126,12 +126,12 @@
       </a>
     </li>
     <li *ngFor="let page of getPaginationData(); let i = index"  [class.active]="page == currentPage" [ngClass]="{'custom-listing': page === '...'}" (click)="onSetPageClick(page)">
-      <a *ngIf="page !== '...'" href="javascript:;"  >
+      <a *ngIf="page !== '...'" >
         {{ page }}</a>
         <span  *ngIf="page === '...'">{{ page }}</span>
     </li>
     <li class="inline-list" *ngIf="currentPage != pageCount" (click)="onSetPageClick(currentPage + 1)">
-      <a  href="javascript:;" 
+      <a 
         aria-label="Next" class="govuk-pagination__link-title">
         <span>{{ "NEXT" | translate }}</span>
         <svg class="govuk-pagination__icon govuk-pagination__icon--next" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
