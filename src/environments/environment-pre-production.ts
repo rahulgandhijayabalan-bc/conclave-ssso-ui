@@ -22,7 +22,7 @@ export const environment = {
 
               apiGatewayEnabled: {
 
-                  user: 'https://nft.api.crowncommercial.gov.uk/user-profile',
+                  user: 'https://pre.api.crowncommercial.gov.uk/user-profile',
 
                   organisation: 'https://pre.api.crowncommercial.gov.uk/organisation-profile',
 
