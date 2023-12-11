@@ -1,8 +1,8 @@
 export const environment = {
 
-  production: false,
+  production: true,
 
-  idam_client_id: 'IDAM_ID',
+  idam_client_id: '%IDAM%',
 
   uri: {
 
@@ -33,13 +33,13 @@ export const environment = {
 
               apiGatewayDisabled: {
 
-                  user: 'https://preprod-api-wrapper.london.cloudapps.digital/users',
+                  user: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/users',
 
-                  organisation: 'https://preprod-api-wrapper.london.cloudapps.digital/organisations',
+                  organisation: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/organisations',
 
-                  contact: 'https://preprod-api-wrapper.london.cloudapps.digital/contacts',
+                  contact: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/contacts',
 
-                  configuration: 'https://preprod-api-wrapper.london.cloudapps.digital/configurations',
+                  configuration: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/configurations',
 
               }
 
@@ -60,7 +60,7 @@ export const environment = {
 
   },
 
-  googleTagMangerId: 'GTM',
+  googleTagMangerId: 'GTM-TZCX5VP',
 
   bulkUploadPollingFrequencyInSeconds: 5,
 
@@ -68,7 +68,7 @@ export const environment = {
 
   bulkUploadMaxFileSizeInBytes:1048576,
 
-  bulkUploadTemplateFileUrl: 'BUCKET_URL',
+  bulkUploadTemplateFileUrl: 'https://pre.api.crowncommercial.gov.uk/templates/DataMigrationTemplate.csv',
 
   usedPasswordThreshold: 5, //This value should be changed when Auth0 password history policy changed, 
 
@@ -84,7 +84,7 @@ export const environment = {
 
       security_log:false,
     
-    environment: 'pre-production'
+    environment: 'preprod-ccs-sso'
 
   },
   
@@ -109,9 +109,12 @@ export const environment = {
       },
   },
   appSetting: {
-   hideIDP:false,
+   hideIDP:true,
    hideDelegation:false,
    hideBulkupload:false,
    hideAutoValidation:false,
+   hideSimplifyRole: false,
+   blockedScheme: ["GB-PPG"],
+   customMfaEnabled: true
   },
 };
