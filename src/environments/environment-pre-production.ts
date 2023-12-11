@@ -22,24 +22,28 @@ export const environment = {
 
               apiGatewayEnabled: {
 
-                  user: 'https://pre.api.crowncommercial.gov.uk/user-profiles',
+                  user: 'https://nft.api.crowncommercial.gov.uk/user-profile',
 
-                  organisation: 'https://pre.api.crowncommercial.gov.uk/organisation-profiles',
+                  organisation: 'https://pre.api.crowncommercial.gov.uk/organisation-profile',
 
-                  contact: 'https://pre.api.crowncommercial.gov.uk/contacts',
+                  contact: 'https://pre.api.crowncommercial.gov.uk/contact-service',
 
-                  configuration: 'https://pre.api.crowncommercial.gov.uk/configurations',
+                  configuration: 'https://pre.api.crowncommercial.gov.uk/configuration-service',
+
+                  dataMigration: 'https://pre.api.crowncommercial.gov.uk/organisation-profile/datamigration',
               },
 
               apiGatewayDisabled: {
 
-                  user: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/users',
+                  user: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/user-profile',
 
-                  organisation: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/organisations',
+                  organisation: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/organisation-profile',
 
-                  contact: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/contacts',
+                  contact: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/contact-service',
 
-                  configuration: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/configurations',
+                  configuration: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/configuration-service',
+
+                  dataMigration: 'https://pre.ppg-sso-service.crowncommercial.gov.uk/organisation-profile/datamigration',
 
               }
 
