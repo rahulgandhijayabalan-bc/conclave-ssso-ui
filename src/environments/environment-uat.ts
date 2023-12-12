@@ -3,7 +3,7 @@ export const environment = {
   idam_client_id: '%IDAM%',
   uri: {
     api: {
-      isApiGateWayEnabled: false,
+      isApiGateWayEnabled: true,
       //security: 'https://uat-api-security.london.cloudapps.digital',
       security: 'https://uat.api.crowncommercial.gov.uk',
       //postgres: 'https://uat-api-core.london.cloudapps.digital',
