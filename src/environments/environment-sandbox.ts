@@ -66,10 +66,10 @@ export const environment = {
     },
   },
   appSetting: {
-   hideIDP:false,
+   hideIDP:true,
    hideDelegation:false,
    hideBulkupload:false,
-   hideAutoValidation:true,
+   hideAutoValidation:false,
    hideSimplifyRole:true,
    blockedScheme: ["GB-PPG"],
   },
