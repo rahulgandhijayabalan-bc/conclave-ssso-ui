@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 import { UserListResponse } from 'src/app/models/user';
 import { WrapperOrganisationService } from 'src/app/services/wrapper/wrapper-org-service';
 import { WrapperUserDelegatedService } from 'src/app/services/wrapper/wrapper-user-delegated.service';
@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from "src/app/services/auth/auth.service";
 import { SessionService } from 'src/app/shared/session.service';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
+import { UserListInfo } from 'src/app/models/user';
 
 @Component({
   selector: 'app-delegated-user-list',
@@ -46,7 +47,7 @@ export class DelegatedUserListComponent implements OnInit ,OnDestroy {
   }
 
   constructor(public router: Router, private WrapperUserDelegatedService: WrapperUserDelegatedService, private sessionService:SessionService,
-               private dataLayerService: DataLayerService, private authService: AuthService, protected scrollHelper: ScrollHelper,) {
+               public route: ActivatedRoute,private dataLayerService: DataLayerService, private authService: AuthService, protected scrollHelper: ScrollHelper,) {
 
     this.organisationId = localStorage.getItem('cii_organisation_id') || ''
     this.currentUserstableConfig.userList = {
@@ -73,6 +74,14 @@ export class DelegatedUserListComponent implements OnInit ,OnDestroy {
       this.getOrganisationExpiredUsers()
     }, 10);
     this.getOrganisationCurrentUsers()
+
+    this.route.queryParams.subscribe(params => {
+      if (params['isNewTab'] === 'true') {
+        const urlTree = this.router.parseUrl(this.router.url);
+        delete urlTree.queryParams['isNewTab'];
+        this.router.navigateByUrl(urlTree.toString(), { replaceUrl: true });
+      }
+    });
   }
 
   public onSearchClick(): void {
@@ -96,7 +105,7 @@ export class DelegatedUserListComponent implements OnInit ,OnDestroy {
     }
   }
 
-  public OnClickView(event: any) {
+  public OnClickView(event: UserListInfo) {
     let data = {
       header: 'View expired delegated access',
       Description: '',
@@ -128,7 +137,40 @@ export class DelegatedUserListComponent implements OnInit ,OnDestroy {
       next: (userListResponse: UserListResponse) => {
         if (userListResponse != null) {
           this.currentUserstableConfig.userList = userListResponse;
-          this.currentUserstableConfig.pageCount = this.currentUserstableConfig.userList.pageCount
+          this.currentUserstableConfig.pageCount = this.currentUserstableConfig.userList.pageCount;
+          console.log(this.currentUserstableConfig);
+          Array.from(this.currentUserstableConfig.userList.userList).forEach((f: any) => {        
+                  f.pageaccessmode = 'edit';
+                  let queryParams = { data: btoa(JSON.stringify(f)),isNewTab:true };
+                  f.routeLink = `/delegate-access-user`;
+                  f.routeData = queryParams;
+            
+                let datas={
+                  "servicePermissionInfo":f.servicePermissionInfo=
+                  {
+                    "id": f.id,
+                    "name": f.name,
+                    "key": f.key
+                  },
+                  "id": f.id,
+                  "name": f.name,
+                  "userName":f.userName,
+                  "remainingDays":f.remainingDays,
+                  "startDate": f.startDate,
+                  "endDate":f.endDate,
+                  "originOrganisation":f.originOrganisation,
+                  "delegationAccepted":f.delegationAccepted,  
+                  "isAdmin":f.isAdmin,           
+                  "isDormant":f.isDormant,
+                  "pageaccessmode":"remove"
+                }
+
+                let queryDeclineParams = { data: btoa(JSON.stringify(datas)),isNewTab: true };
+                console.log("datas",datas);
+                f.pageaccessmode = 'remove';
+                f.declineRouteLink = `/delegated-remove-confirm`;
+                f.declineRouteData = queryDeclineParams;
+          });
         }
       },
       error: (error: any) => {
@@ -148,7 +190,20 @@ export class DelegatedUserListComponent implements OnInit ,OnDestroy {
       next: (userListResponse: UserListResponse) => {
         if (userListResponse != null) {
           this.expiredUserstableConfig.userList = userListResponse;
-          this.expiredUserstableConfig.pageCount = this.expiredUserstableConfig.userList.pageCount
+          this.expiredUserstableConfig.pageCount = this.expiredUserstableConfig.userList.pageCount;
+          Array.from(this.expiredUserstableConfig.userList.userList).forEach((f: any)=>{
+            let data: any= {
+              header: 'View expired delegated access',
+              Description: '',
+              Breadcrumb: 'View expired delegated access',
+              status: '003',
+              event: f
+            }
+              //data.event.userName = escape(encodeURIComponent(data.event.userName));
+              let queryParams = {data: btoa(JSON.stringify(data)),isNewTab: true}
+               f.routeLink= `/delegated-user-status`,
+               f.routeData = queryParams
+          })
         }
       },
       error: (error: any) => {

@@ -61,6 +61,12 @@ export class ForgotPasswordSuccessComponent extends BaseComponent implements OnI
         this.authService.logOutAndRedirect();
     }
 
+    getSignOutEndpoint() {
+        return environment.uri.api.security + '/security/log-out?client-id=' + environment.idam_client_id
+          + '&redirect-uri=' + environment.uri.web.dashboard;
+      }
+    
+
     ngOnDestroy(){
         sessionStorage.removeItem(SessionStorageKey.ForgotPasswordUserName);
         const detailsElement = this.elementRef.nativeElement.querySelector('details');

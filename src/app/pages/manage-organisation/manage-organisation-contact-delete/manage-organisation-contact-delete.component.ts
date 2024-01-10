@@ -44,6 +44,13 @@ export class ManageOrganisationContactDeleteComponent extends BaseComponent impl
     }
 
     ngOnInit() {
+        this.activatedRoute.queryParams.subscribe(params => {
+            if (params['isNewTab'] === 'true') {
+              const urlTree = this.router.parseUrl(this.router.url);
+              delete urlTree.queryParams['isNewTab'];
+              this.router.navigateByUrl(urlTree.toString(), { replaceUrl: true });
+            }
+          });
         this.dataLayerService.pushPageViewEvent();
     }
 
@@ -83,6 +90,15 @@ export class ManageOrganisationContactDeleteComponent extends BaseComponent impl
         this.router.navigateByUrl('manage-org/profile/contact-edit?data=' + JSON.stringify(data));
     }
 
+    getEditQueryData(): string {
+        let data = {
+          isEdit: true,
+          contactId : this.contactId,
+          siteId: this.siteId,
+        };
+        return JSON.stringify(data);
+      }
+    
     public onBack(buttonText:string):void{
         window.history.back()
         this.pushDataLayerEvent(buttonText);

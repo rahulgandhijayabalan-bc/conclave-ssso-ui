@@ -12,8 +12,8 @@
               {{ 'MANAGE_YOUR_ORGANISATION' |translate }}</a>
           </li>
           <li class="govuk-breadcrumbs__list-item">
-            <a class="govuk-breadcrumbs__link" (click)="onCancelClick('Edit site')">
-              {{ 'EDIT_SITE' | translate }}</a>
+            <a class="govuk-breadcrumbs__link" [routerLink]="['/manage-org/profile/site/edit']" [queryParams]="{ data: getEditQueryData() }"
+            (click)="onCancelClick('Edit site')"> {{ 'EDIT_SITE' | translate }}</a>
           </li>
           <li class="govuk-breadcrumbs__list-item">
             <span class="govuk-breadcrumbs__link"> {{ 'DELETE_SITE' | translate }}</span>
@@ -27,7 +27,7 @@
           data-module="govuk-button">
           {{ 'CONFIRM_DELETE_BTN' | translate }}
         </button>
-        <button type="button" (click)="onCancelClick('Cancel')" class="govuk-button govuk-button--secondary"
+        <button type="button" [routerLink]="['/manage-org/profile/site/edit']" [queryParams]="{ data: getEditQueryData() }" (click)="onCancelClick('Cancel')" class="govuk-button govuk-button--secondary"
           data-module="govuk-button">
           {{ 'CANCEL_BTN' | translate }}
         </button>
