@@ -8,7 +8,9 @@ import { AuthService } from "src/app/services/auth/auth.service";
 import { ScrollHelper } from "src/app/services/helper/scroll-helper.services";
 import { UIState } from "src/app/store/ui.states";
 import { WrapperUserService } from 'src/app/services/wrapper/wrapper-user.service';
+import { DataLayerService } from "src/app/shared/data-layer.service";
 import { environment } from "src/environments/environment";
+
 
 @Component({
     selector: 'app-no-mfa-confirmation',
@@ -26,17 +28,18 @@ export class NoMfaConfiramtionComponent extends BaseComponent implements OnInit 
     userName = localStorage.getItem('user_name') ?? ''
     public isMfaOpted : boolean = false;
     constructor(private activatedRoute: ActivatedRoute, private router: Router, private authService: AuthService, private wrapperUserService: WrapperUserService,
-        protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+        protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
         super(uiStore, viewportScroller, scrollHelper);
     }
     ngOnInit() {
-
+        this.dataLayerService.pushPageViewEvent();
     }
-    public onGoBackClick() {
+    public onGoBackClick(buttonText:string) {
         this.router.navigateByUrl('mfa-selection');
+        this.pushDataLayerEvent(buttonText);
     }
 
-    public onDontTurnOnClick() {
+    public onDontTurnOnClick(buttonText:string) {
         this.wrapperUserService.resetMfaopted(this.userName, true).subscribe({
             next: (response) => {
                 this.isMfaOpted = true;
@@ -48,6 +51,10 @@ export class NoMfaConfiramtionComponent extends BaseComponent implements OnInit 
                 console.log(err)
             },
         })
+        this.pushDataLayerEvent(buttonText);
     }
 
+    pushDataLayerEvent(buttonText:string) {
+		this.dataLayerService.pushClickEvent(buttonText)
+	  }
 }

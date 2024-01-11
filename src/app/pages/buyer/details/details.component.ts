@@ -11,6 +11,7 @@ import { WrapperOrganisationService } from 'src/app/services/wrapper/wrapper-org
 import { CiiAdditionalIdentifier, CiiOrgIdentifiersDto } from 'src/app/models/org';
 import { environment } from 'src/environments/environment';
 import { SharedDataService } from 'src/app/shared/shared-data.service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-buyer-details',
@@ -27,7 +28,7 @@ export class BuyerDetailsComponent extends BaseComponent implements OnInit {
 
   constructor(private ciiService: ciiService, private organisationService: WrapperOrganisationService,private SharedDataService:SharedDataService,
     private router: Router, private route: ActivatedRoute, protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller,
-    protected scrollHelper: ScrollHelper) {
+    protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
     super(uiStore, viewportScroller, scrollHelper);
     this.registries = {};
   }
@@ -45,6 +46,7 @@ export class BuyerDetailsComponent extends BaseComponent implements OnInit {
         }
       }
     });
+    this.dataLayerService.pushPageViewEvent({id: this.selectedOrgId});
   }
 
   public getSchemaName(schema: string): string {
@@ -68,7 +70,7 @@ export class BuyerDetailsComponent extends BaseComponent implements OnInit {
   return this.SharedDataService.convertIdToHyphenId(id)
   }
 
-  public onContinueClick() {
+  public onContinueClick(buttonText:string) {
     if(environment.appSetting.hideAutoValidation){
      this.router.navigateByUrl(`buyer/confirm/${this.selectedOrgId}`);
     }
@@ -86,9 +88,15 @@ export class BuyerDetailsComponent extends BaseComponent implements OnInit {
       }
       this.router.navigateByUrl('update-org-services/confirm?data=' + btoa(JSON.stringify(data)));
     }
+    this.pushDataLayerEvent(buttonText);
   }
 
-  public onCancelClick() {
+  public onCancelClick(buttonText:string) {
     this.router.navigateByUrl('buyer-supplier/search');
+    this.pushDataLayerEvent(buttonText);
+  }
+
+  pushDataLayerEvent(buttonText:string) {
+    this.dataLayerService.pushClickEvent(buttonText);
   }
 }

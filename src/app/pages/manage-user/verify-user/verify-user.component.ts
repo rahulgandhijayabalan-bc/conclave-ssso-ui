@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WrapperUserService } from 'src/app/services/wrapper/wrapper-user.service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-verify-user',
@@ -11,10 +12,12 @@ export class VerifyUserComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private wrapperUserService: WrapperUserService
+    private wrapperUserService: WrapperUserService,
+    private dataLayerService: DataLayerService
   ) {}
 
   ngOnInit(): void {
+    this.dataLayerService.pushPageViewEvent();
     this.route.queryParams.subscribe((para: any) => {
       this.addUserTokenVerification(para.details);
     });

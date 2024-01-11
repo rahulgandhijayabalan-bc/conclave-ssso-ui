@@ -18,6 +18,7 @@ import { OperationEnum } from 'src/app/constants/enum';
 import { Title } from '@angular/platform-browser';
 import { FormBaseComponent } from 'src/app/components/form-base/form-base.component';
 import { SharedDataService } from 'src/app/shared/shared-data.service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-manage-group-edit-name',
@@ -35,6 +36,7 @@ export class ManageGroupEditNameComponent
   editingGroupId: number = 0;
   groupName: string = '';
   private specialChars = /^[ @().,;:'/#&+-]*$/;
+  public formId : string = 'Manage_groups Edit_groups Update_group_name';
 
              
   @ViewChildren('input') inputs!: QueryList<ElementRef>;
@@ -48,7 +50,8 @@ export class ManageGroupEditNameComponent
     protected scrollHelper: ScrollHelper,
     private orgGroupService: WrapperOrganisationGroupService,
     private titleService: Title,
-    private SharedDataService: SharedDataService
+    private SharedDataService: SharedDataService,
+    private dataLayerService: DataLayerService
   ) {
     super(
       viewportScroller,
@@ -68,6 +71,7 @@ export class ManageGroupEditNameComponent
   }
 
   ngOnInit() {
+    this.dataLayerService.pushPageViewEvent();
     this.titleService.setTitle(
       `${this.isEdit ? 'Edit Name' : 'Create'} - Manage Groups - CCS`
     );
@@ -76,6 +80,7 @@ export class ManageGroupEditNameComponent
     this.formGroup.controls['groupName'].setValue(this.groupName);
     }
     this.onFormValueChange();
+    this.dataLayerService.pushFormStartEvent(this.formId, this.formGroup);
   }
   
    public get specialCharsVaidation(){
@@ -90,7 +95,10 @@ export class ManageGroupEditNameComponent
     }
 
 
- 
+ 	 pushDataLayerEvent(buttonText:string) {
+    this.dataLayerService.pushClickEvent(buttonText);
+      }
+  
 
   ngAfterViewChecked() {
     this.scrollHelper.doScroll();
@@ -113,6 +121,7 @@ export class ManageGroupEditNameComponent
           let groupPatchRequestInfo: OrganisationGroupRequestInfo = {
             groupName: this.groupName,
           };
+          this.dataLayerService.pushFormSubmitEvent(this.formId);
           this.orgGroupService
             .patchUpdateOrganisationGroup(
               this.organisationId,
@@ -135,10 +144,12 @@ export class ManageGroupEditNameComponent
                 if (error.status == 409) {
                   form.controls['groupName'].setErrors({ alreadyExists: true });
                   this.scrollHelper.scrollToFirst('error-summary');
+                  this.dataLayerService.pushFormErrorEvent(this.formId);
                 }
                 if (error.status == 400) {
                   this.formGroup.controls['groupName'].setErrors({ 'specialCharsincluded': true})
                   this.scrollHelper.scrollToFirst('error-summary');
+                  this.dataLayerService.pushFormErrorEvent(this.formId);
                 }
                 console.log(error);
                 console.log(error.error);
@@ -149,6 +160,7 @@ export class ManageGroupEditNameComponent
             groupName: this.groupName,
           };
           this.SharedDataService.manageGroupStorage(this.groupName);
+          this.dataLayerService.pushFormSubmitEvent(this.formId);
           this.orgGroupService
             .createOrganisationGroups(this.organisationId, groupRequest)
             .subscribe(
@@ -169,10 +181,12 @@ export class ManageGroupEditNameComponent
                 if (error.status == 409) {
                   form.controls['groupName'].setErrors({ alreadyExists: true });
                   this.scrollHelper.scrollToFirst('error-summary');
+                  this.dataLayerService.pushFormErrorEvent(this.formId);
                 }
                 if (error.status == 400) {
                   this.formGroup.controls['groupName'].setErrors({ 'specialCharsincluded': true})
                   this.scrollHelper.scrollToFirst('error-summary');
+                  this.dataLayerService.pushFormErrorEvent(this.formId);
                 }
                 console.log(error);
                 console.log(error.error);
@@ -181,9 +195,11 @@ export class ManageGroupEditNameComponent
         }
       }else{
         this.formGroup.controls['groupName'].setErrors({ 'specialCharsincluded': true})
+        this.dataLayerService.pushFormErrorEvent(this.formId);        
       }
     } else {
       this.scrollHelper.scrollToFirst('error-summary');
+      this.dataLayerService.pushFormErrorEvent(this.formId);
     }
   }
 
@@ -193,15 +209,20 @@ export class ManageGroupEditNameComponent
     return form.valid;
   }
 
-  onCancelAndGoToGroupClick() {
+  onCancelAndGoToGroupClick(buttonText:string) {
     if (this.isEdit == true) {
       this.router.navigateByUrl(
         'manage-groups/view?data=' + JSON.stringify(this.routeData)
       );
     }
+    if(buttonText==='Cancel and go to group')
+    {
+    this.pushDataLayerEvent(buttonText);
+    }
   }
 
-  onCancelClick() {
+  onCancelClick(buttonText:string) {
     this.router.navigateByUrl('manage-groups');
+    this.pushDataLayerEvent(buttonText);
   }
 }

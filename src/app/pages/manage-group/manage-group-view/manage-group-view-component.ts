@@ -12,6 +12,7 @@ import { OrganisationGroupResponseInfo } from 'src/app/models/organisationGroup'
 import { Title } from '@angular/platform-browser';
 import { SharedDataService } from 'src/app/shared/shared-data.service';
 import { environment } from 'src/environments/environment';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-manage-group-view',
@@ -50,7 +51,8 @@ export class ManageGroupViewComponent extends BaseComponent implements OnInit {
     private orgGroupService: WrapperOrganisationGroupService,
     private locationStrategy: LocationStrategy,
     private titleService: Title,
-    private SharedDataService: SharedDataService
+    private SharedDataService: SharedDataService,
+    private dataLayerService: DataLayerService
   ) {
     super(uiStore, viewportScroller, scrollHelper);
     this.group = {
@@ -83,6 +85,7 @@ export class ManageGroupViewComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataLayerService.pushPageViewEvent();
     this.titleService.setTitle(
       `${this.isEdit ? 'Edit' : 'View'} - Manage Groups - CCS`
     );
@@ -113,7 +116,7 @@ export class ManageGroupViewComponent extends BaseComponent implements OnInit {
       else{return true};
     })
   }
-  onNameEditClick() {
+  onNameEditClick(buttonText:string) {
     let data = {
       isEdit: this.isEdit,
       groupId: this.editingGroupId,
@@ -122,9 +125,10 @@ export class ManageGroupViewComponent extends BaseComponent implements OnInit {
     this.router.navigateByUrl(
       'manage-groups/edit-name?data=' + JSON.stringify(data)
     );
+    this.pushDataLayerEvent(buttonText);
   }
 
-  onRoleEditClick() {
+  onRoleEditClick(buttonText:string) {
     this.SharedDataService.manageGroupStorage(this.group.groupName);
     let roleIds = this.group.roles.map((role) => role.id);
     let data = {
@@ -136,9 +140,10 @@ export class ManageGroupViewComponent extends BaseComponent implements OnInit {
     this.router.navigateByUrl(
       'manage-groups/edit-roles?data=' + JSON.stringify(data)
     );
+    this.pushDataLayerEvent(buttonText);
   }
 
-  onUserEditClick() {
+  onUserEditClick(buttonText:string) {
     let userNames = this.group.users.map((user) => user.userId);
     sessionStorage.setItem('group_existing_users', JSON.stringify(userNames));
     this.SharedDataService.manageGroupStorage(this.group.groupName);
@@ -150,6 +155,7 @@ export class ManageGroupViewComponent extends BaseComponent implements OnInit {
     this.router.navigateByUrl(
       'manage-groups/edit-users?data=' + JSON.stringify(data)
     );
+    this.pushDataLayerEvent(buttonText);
   }
 
   onDeleteClick() {
@@ -207,4 +213,8 @@ export class ManageGroupViewComponent extends BaseComponent implements OnInit {
       this.router.navigateByUrl('manage-users/add-user/details');
     }
   }
+
+  pushDataLayerEvent(buttonText:string) {
+		this.dataLayerService.pushClickEvent(buttonText);
+	  }
 }

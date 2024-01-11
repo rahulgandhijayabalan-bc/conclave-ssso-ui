@@ -6,6 +6,7 @@ import { dataMigrationReportDetailsResponce } from 'src/app/models/data-migratio
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { BulkUploadService } from 'src/app/services/postgres/bulk-upload.service';
 import { DataMigrationService } from 'src/app/services/postgres/data-migration.service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 import { environment } from 'src/environments/environment';
 @Component({
     selector: 'app-data-migration-upload',
@@ -20,6 +21,7 @@ export class DataMigrationUploadComponent implements OnInit {
     fileSizeExceedError: boolean = false;
     file: any;
     maxFileSize: number = environment.bulkUploadMaxFileSizeInBytes / (1024 * 1024);
+    public formId :string = 'Data_migration upload';
     @ViewChildren('input') inputs!: QueryList<ElementRef>;
     public userUploadHistoryTable: any = {
         currentPage: 1,
@@ -32,7 +34,7 @@ export class DataMigrationUploadComponent implements OnInit {
         hyperTextrray: ['Download report', 'View summary']
     }
     constructor(private router: Router, private bulkUploadService: BulkUploadService,
-        protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private DataMigrationService: DataMigrationService) {
+        protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private DataMigrationService: DataMigrationService, private dataLayerService: DataLayerService) {
         this.userUploadHistoryTable.userList = {
             currentPage: this.userUploadHistoryTable.currentPage,
             pageCount: 0,
@@ -42,6 +44,8 @@ export class DataMigrationUploadComponent implements OnInit {
     }
     ngOnInit(): void {
         this.getUploadedFilesDetails()
+        this.dataLayerService.pushPageViewEvent();
+        this.dataLayerService.pushFormStartOnInitEvent(this.formId);
     }
 
     public getUploadedFilesDetails() {
@@ -99,12 +103,18 @@ export class DataMigrationUploadComponent implements OnInit {
         }
     }
 
-    public onContinueClick() {
+    public onContinueClick(buttonText:string) {
         this.submitted = true;
         this.resetError();
+        let uploadStartTime = performance.now();
         if (this.validateFile()) {
+            this.dataLayerService.pushFormSubmitEvent(this.formId);
             this.DataMigrationService.uploadDataMigrationFile(this.file).subscribe({
                 next: (response: dataMigrationReportDetailsResponce) => {
+                    let uploadEndTime = performance.now();
+                    let timeElapsedInSeconds = (uploadEndTime - uploadStartTime) / 1000;
+
+                    this.sendAnalyticsData(timeElapsedInSeconds,this.file);
                     this.router.navigateByUrl(
                         'data-migration/status?data=' + response.id
                       );
@@ -115,7 +125,21 @@ export class DataMigrationUploadComponent implements OnInit {
                     }
                 }
             });
+        } else {
+            this.dataLayerService.pushFormErrorEvent(this.formId);
         }
+       this.pushDataLayerEvent(buttonText);
+    }
+
+    sendAnalyticsData(timeElapsedInSeconds: number,file:any) {
+        this.dataLayerService.pushEvent({ 
+            event: "document_upload" ,
+            interaction_type: "Data migration",
+            time_elapsed: timeElapsedInSeconds.toFixed(3) + "seconds",
+            file_extension: file.name.split('.').pop(),  
+            file_size: file.size,  
+            file_name: file.name
+          });
     }
 
     public validateFile() {
@@ -131,6 +155,11 @@ export class DataMigrationUploadComponent implements OnInit {
         return true;
     }
 
+    pushDataLayerEvent(buttonText:string) {
+        this.dataLayerService.pushClickEvent(buttonText);
+      }
+      
+
     public resetError() {
         this.errorInvalidFileFormat = false;
         this.errorServer = false;
@@ -138,8 +167,9 @@ export class DataMigrationUploadComponent implements OnInit {
         this.fileSizeExceedError = false;
     }
 
-    public onCancelClick() {
+    public onCancelClick(buttonText:string) {
         this.router.navigateByUrl('home');
+        this.pushDataLayerEvent(buttonText);
     }
 
     public onLinkClick(data: any): void {
@@ -153,4 +183,12 @@ export class DataMigrationUploadComponent implements OnInit {
           }
         }
       }
+
+    pushDataLayer(event:string){
+        this.dataLayerService.pushEvent({
+            'event': event,
+            'form_id': 'Data_migration upload'
+        });
+    }
 }
+

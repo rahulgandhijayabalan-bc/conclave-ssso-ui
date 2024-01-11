@@ -17,6 +17,7 @@ import { WrapperOrganisationService } from 'src/app/services/wrapper/wrapper-org
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { ViewportScroller } from '@angular/common';
 import { environment } from 'src/environments/environment';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-confirm-org-service',
@@ -49,7 +50,8 @@ export class ConfirmOrgServiceComponent extends BaseComponent {
     private route: ActivatedRoute,
     protected uiStore: Store<UIState>,
     protected viewportScroller: ViewportScroller,
-    protected scrollHelper: ScrollHelper
+    protected scrollHelper: ScrollHelper,
+    private dataLayerService: DataLayerService
   ) {
     super(uiStore, viewportScroller, scrollHelper);
     this.route.queryParams.subscribe((params) => {
@@ -69,6 +71,10 @@ export class ConfirmOrgServiceComponent extends BaseComponent {
         });
       }
     });
+  }
+
+  ngOnInit() {
+    this.dataLayerService.pushPageViewEvent();
   }
 
   public updateTableData() {
@@ -104,7 +110,7 @@ export class ConfirmOrgServiceComponent extends BaseComponent {
     }
   }
 
-  public onSubmitClick() {
+  public onSubmitClick(buttonText:string) {
     const model = {
       orgType: parseInt(this.changes.orgType),
       serviceRoleGroupsToDelete: this.filterRoleId(this.changes.toDelete),
@@ -128,6 +134,7 @@ export class ConfirmOrgServiceComponent extends BaseComponent {
         console.log(error);
         this.router.navigateByUrl(`buyer/error`);
       });
+      this.pushDataLayerEvent(buttonText);
   }
 
   public filterRoleId(roleArray: any) {
@@ -142,7 +149,7 @@ export class ConfirmOrgServiceComponent extends BaseComponent {
     this.router.navigateByUrl('buyer-supplier/search');
   }
 
-  public onBackClick() {
+  public onBackClick(buttonText:string) {
     localStorage.removeItem(`mse_org_${this.org.ciiOrganisationId}`);
     let data = {
       companyHouseId: this.routeData.companyHouseId,
@@ -157,5 +164,10 @@ export class ConfirmOrgServiceComponent extends BaseComponent {
         'update-org-services/confirm?data=' + btoa(JSON.stringify(data))
       );
     }
+    this.pushDataLayerEvent(buttonText)
+  }
+
+  pushDataLayerEvent(buttonText:string) {
+    this.dataLayerService.pushClickEvent(buttonText)
   }
 }

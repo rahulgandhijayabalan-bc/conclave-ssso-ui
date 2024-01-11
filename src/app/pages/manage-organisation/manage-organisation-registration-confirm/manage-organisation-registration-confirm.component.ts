@@ -10,6 +10,7 @@ import { Data } from 'src/app/models/data';
 import { dataService } from 'src/app/services/data/data.service';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { UserService } from 'src/app/services/postgres/user.service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 import { UIState } from 'src/app/store/ui.states';
 import { environment } from 'src/environments/environment';
 
@@ -27,7 +28,7 @@ export class ManageOrgRegConfirmComponent extends BaseComponent implements OnIni
   constructor(private userService: UserService, private route: ActivatedRoute,
     protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller,
     protected scrollHelper: ScrollHelper,
-    private router: Router,private ActivatedRoute: ActivatedRoute) {
+    private router: Router,private ActivatedRoute: ActivatedRoute, private dataLayerService: DataLayerService) {
     super(uiStore, viewportScroller, scrollHelper);
     this.ActivatedRoute.queryParams.subscribe((para: any) => {
       if(para.data != undefined){
@@ -49,6 +50,7 @@ export class ManageOrgRegConfirmComponent extends BaseComponent implements OnIni
         });
       }
     });
+    this.dataLayerService.pushPageViewEvent();
   }
 
 

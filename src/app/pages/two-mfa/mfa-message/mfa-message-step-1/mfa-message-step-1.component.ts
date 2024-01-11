@@ -14,6 +14,7 @@ import {
     SearchCountryField,
   } from 'ngx-intl-tel-input';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { DataLayerService } from "src/app/shared/data-layer.service";
 
 @Component({
     selector: 'app-mfa-message-step-1',
@@ -39,11 +40,12 @@ export class MfaMessageStep1Component extends BaseComponent implements OnInit {
   ];
     auth0token: string = "";
     oob_code: any;
+    public formId : string = 'mfa_setup_Enter_your_mobile_number'
  
     
     
     constructor(private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, private router: Router, private PatternService: PatternService, private authService: AuthService,
-        protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+        protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
         super(uiStore, viewportScroller, scrollHelper);
         this.formGroup = this.formBuilder.group({
             mobile: ['', [Validators.required]],
@@ -51,7 +53,8 @@ export class MfaMessageStep1Component extends BaseComponent implements OnInit {
     }
     
         ngOnInit() {
-            
+          this.dataLayerService.pushPageViewEvent();
+          this.dataLayerService.pushFormStartEvent(this.formId, this.formGroup);
         }
 
     onContinueBtnClick() {
@@ -61,18 +64,20 @@ export class MfaMessageStep1Component extends BaseComponent implements OnInit {
               console.log(phoneNumber);
               console.log(phoneNumber.e164Number);
             localStorage.setItem('phonenumber', phoneNumber.e164Number);
+            this.dataLayerService.pushFormSubmitEvent(this.formId);
               this.router.navigateByUrl('mfa-message-step-2');
 
             }
-            
         }
-    onBackBtnClick() {
+    onBackBtnClick(buttonText:string) {
             this.router.navigateByUrl('mfa-selection');
+            this.pushDataLayerEvent(buttonText);
         }
     onNavigateToMFAClick() {
             this.router.navigateByUrl('mfa-selection');
         }
 
-
-
+        pushDataLayerEvent(buttonText:string) {
+          this.dataLayerService.pushClickEvent(buttonText);
+          }
     }

@@ -20,6 +20,7 @@ import { WrapperOrganisationGroupService } from 'src/app/services/wrapper/wrappe
 import { WrapperConfigurationService } from 'src/app/services/wrapper/wrapper-configuration.service';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { ViewportScroller } from '@angular/common';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-buyer-confirm',
@@ -37,6 +38,7 @@ export class BuyerConfirmComponent extends BaseComponent implements OnInit {
   public organisation: any;
   public org$!: Observable<any>;
   public verified: boolean = false;
+  private id!: string;
   userProfileForm: FormGroup;
   orgRoles: Role[];
   roles: Role[];
@@ -58,7 +60,8 @@ export class BuyerConfirmComponent extends BaseComponent implements OnInit {
     protected uiStore: Store<UIState>,
     private organisationGroupService: WrapperOrganisationGroupService,
     protected viewportScroller: ViewportScroller,
-    protected scrollHelper: ScrollHelper
+    protected scrollHelper: ScrollHelper,
+    private dataLayerService: DataLayerService
   ) {
     super(uiStore, viewportScroller, scrollHelper);
     this.orgRoles = [];
@@ -74,6 +77,7 @@ export class BuyerConfirmComponent extends BaseComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       if (params.id) {
+        this.id = params.id;
         this.org$ = this.organisationService.getById(params.id).pipe(share());
         this.org$.subscribe({
           next: (data) => {
@@ -84,6 +88,7 @@ export class BuyerConfirmComponent extends BaseComponent implements OnInit {
         });
       }
     });
+    this.dataLayerService.pushPageViewEvent({id: this.id});
   }
 
   public onSelect(verified: boolean) {
@@ -235,7 +240,11 @@ export class BuyerConfirmComponent extends BaseComponent implements OnInit {
     }
   }
 
-  public onSubmitClick() {
+  pushDataLayerEvent(buttonText:string) {
+    this.dataLayerService.pushClickEvent(buttonText);
+  }
+
+  public onSubmitClick(buttonText:string) {
     let selection = {
       org: this.organisation,
       toDelete: this.rolesToDelete,
@@ -255,11 +264,13 @@ export class BuyerConfirmComponent extends BaseComponent implements OnInit {
     this.router.navigateByUrl(
       `buyer/confirm-changes/${this.organisation.ciiOrganisationId}`
     );
+    this.pushDataLayerEvent(buttonText);
   }
 
-  public onCancelClick() {
+  public onCancelClick(buttonText:string) {
     localStorage.removeItem(`mse_org_${this.organisation.ciiOrganisationId}`);
     this.router.navigateByUrl('buyer-supplier/search');
+    this.pushDataLayerEvent(buttonText);
   }
 
   getOrgRoles() {

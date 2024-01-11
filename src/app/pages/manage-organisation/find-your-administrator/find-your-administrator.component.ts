@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-find-your-administrator',
@@ -7,12 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FindyouradministratorComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router, private dataLayerService: DataLayerService) { }
 
   ngOnInit(): void {
+    this.dataLayerService.pushPageViewEvent();
   }
 
-  goBack() {
+  goBack(buttonText:string) {
     window.history.back();
+    this.dataLayerService.pushClickEvent(buttonText);
   }
 }

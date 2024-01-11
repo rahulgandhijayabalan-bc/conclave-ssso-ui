@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookiesService } from 'src/app/shared/cookies.service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -34,14 +35,17 @@ export class CookiesSettingsComponent implements OnInit {
   public ppg_cookies_policy: string = this.CookiesService.getCookie('ppg_cookies_policy');
   public userName =  '';
   public isOrgAdmin: boolean = false;
+  public isFormEdited: boolean = false;
+  public formId : string = 'cookies_settings';
 
 
-  constructor(private CookiesService: CookiesService,private router: Router) {
+  constructor(private CookiesService: CookiesService,private router: Router, private dataLayerService: DataLayerService) {
     this.isOrgAdmin = JSON.parse(localStorage.getItem('isOrgAdmin') || 'false');
     this.userName = localStorage.getItem('user_name') || '';
    }
 
   ngOnInit(): void {
+    this.dataLayerService.pushPageViewEvent();
     this.cookiesValue = JSON.parse(this.ppg_cookies_policy)
     if (this.ppg_cookies_preferences_set == "true") {
       this.cookiesValue = JSON.parse(this.ppg_cookies_policy)
@@ -57,6 +61,7 @@ export class CookiesSettingsComponent implements OnInit {
     setTimeout(() => {
       this.scrollView()
     }, 500);
+    this.dataLayerService.pushFormSubmitEvent(this.formId);
   }
 
   public checkCompination(cookiesValue:any):void{
@@ -76,5 +81,10 @@ export class CookiesSettingsComponent implements OnInit {
     const element = document.getElementById("govuk-notification-banner-title");
     element?.scrollIntoView();
   }
-
+  public formEdited() {
+    if(this.isFormEdited == false){
+      this.dataLayerService.pushFormStartOnInitEvent(this.formId);
+      this.isFormEdited = true;
+    }
+  }
 }

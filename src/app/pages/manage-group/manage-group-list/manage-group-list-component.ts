@@ -10,6 +10,7 @@ import { WrapperOrganisationGroupService } from "src/app/services/wrapper/wrappe
 import { ScrollHelper } from "src/app/services/helper/scroll-helper.services";
 import { ViewportScroller } from "@angular/common";
 import { environment } from "src/environments/environment";
+import { DataLayerService } from "src/app/shared/data-layer.service";
 
 @Component({
     selector: 'app-manage-group-list',
@@ -31,7 +32,7 @@ export class ManageGroupListComponent extends BaseComponent implements OnInit {
     groupsColumnsToDisplay = ['groupName', 'createdDate'];
     searchSumbited:boolean=false;
     constructor(private groupService: WrapperOrganisationGroupService,
-        protected uiStore: Store<UIState>, private router: Router, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+        protected uiStore: Store<UIState>, private router: Router, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
         super(uiStore,viewportScroller,scrollHelper);
         this.organisationId = localStorage.getItem('cii_organisation_id') || '';
         this.groupList = {
@@ -42,6 +43,7 @@ export class ManageGroupListComponent extends BaseComponent implements OnInit {
 
     ngOnInit() {
         this.getOrganisationUsers();
+        this.dataLayerService.pushPageViewEvent();
     }
 
     getOrganisationUsers() {
@@ -65,12 +67,13 @@ export class ManageGroupListComponent extends BaseComponent implements OnInit {
         });
     }
 
-    onAddClick() {
+    onAddClick(buttonText:string) {
         let data = {
             'isEdit': false,
             'groupId': 0
         };
         this.router.navigateByUrl('manage-groups/edit-name?data=' + JSON.stringify(data));
+        this.dataLayerService.pushClickEvent(buttonText);
     }
 
     searchTextChanged(event: any) {
