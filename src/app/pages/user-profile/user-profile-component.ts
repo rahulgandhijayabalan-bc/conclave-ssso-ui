@@ -24,7 +24,9 @@ import { SessionStorageKey } from 'src/app/constants/constant';
 import { environment } from 'src/environments/environment';
 import { WrapperOrganisationService } from 'src/app/services/wrapper/wrapper-org-service';
 import { SharedDataService } from 'src/app/shared/shared-data.service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 import { TokenService } from 'src/app/services/auth/token.service';
+
 
 
 @Component({
@@ -133,6 +135,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
   public mfaOpted: boolean = false;
   public mfaRadioButtonValue : boolean = false;
   public isMfaRadioChange : boolean = false;
+  public formId : string = 'Manage_my_account';
 
   @ViewChildren('input') inputs!: QueryList<ElementRef>;
 
@@ -151,8 +154,10 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
     private auditLogService: AuditLoggerService,
     private organisationService: WrapperOrganisationService,
     private route: ActivatedRoute,
+    private dataLayerService: DataLayerService,
     private tokenService: TokenService,
     private wrapperOrganisationService: WrapperOrganisationService
+
   ) {
     super(
       viewportScroller,
@@ -167,7 +172,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
     this.routeStateData = this.router.getCurrentNavigation()?.extras.state;
     this.approveRequiredRole = []
     this.locationStrategy.onPopState(() => {
-      this.onCancelClick();
+      this.onCancelClick('Cancel');
     });
     this.orgGroups = [];
   }
@@ -230,7 +235,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
           lastName: user.lastName,
           mfaEnabled: user.mfaEnabled
         });
-      }
+      } 
     }
     await this.getApprovalRequriedRoles()
     await this.getPendingApprovalUserRole();
@@ -397,8 +402,13 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
     }
     this.removeDefaultUserRoleFromServiceRole();
     this.setAccordinoForUser()
+    this.dataLayerService.pushPageViewEvent();
+    this.dataLayerService.pushFormStartEvent(this.formId, this.formGroup);
   }
 
+  pushDataLayerEvent(buttonText: string) {
+    this.dataLayerService.pushClickEvent(buttonText);
+  }
 
   ngAfterViewChecked() {
     this.scrollHelper.doScroll();
@@ -477,8 +487,9 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
     });
   }
 
-  onChangePasswordClick() {
+  onChangePasswordClick(buttonText:string) {
     this.router.navigateByUrl('change-password');
+    this.pushDataLayerEvent(buttonText);
   }
 
   onRequestRoleChangeClick() {
@@ -497,7 +508,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
     this.router.navigateByUrl('user-contact-edit?data=' + JSON.stringify(data));
   }
 
-  onContactAddClick() {
+  onContactAddClick(buttonText:string) {
     let data = {
       isEdit: false,
       contactId: 0,
@@ -509,6 +520,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
     );
     localStorage.setItem('UserContactUsername',this.userName);
     this.router.navigateByUrl('user-contact-edit?data=' + JSON.stringify(data));
+    this.pushDataLayerEvent(buttonText);
   }
 
   onContactAssignRemoveClick() {
@@ -518,6 +530,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
   onSubmit(form: FormGroup) {
     this.submitted = true;
     if (this.formValid(form)) {
+      this.dataLayerService.pushFormSubmitEvent(this.formId);
       this.submitted = false;
       let userRequest: UserProfileRequestInfo = {
         title: '',
@@ -554,6 +567,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
       this.checkApproveRolesSelected()
     } else {
       this.scrollHelper.scrollToFirst('error-summary');
+      this.dataLayerService.pushFormErrorEvent(this.formId);
     }
   }
 
@@ -563,8 +577,9 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
     return form.valid;
   }
 
-  onCancelClick() {
+  onCancelClick(buttonText:string) {
     this.router.navigateByUrl('home');
+    this.pushDataLayerEvent(buttonText);
   }
 
 
@@ -759,7 +774,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
       this.inputs.toArray()[1].nativeElement.focus();
     }
   }
-  ResetAdditionalSecurity() {
+  ResetAdditionalSecurity(buttonText:string) {
     if (this.formGroup.controls.mfaEnabled.value) {
       let data = {
         data: this.userName,
@@ -767,6 +782,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
       }
       this.router.navigateByUrl('confirm-user-mfa-reset?data=' + btoa(JSON.stringify(data)))
     }
+    this.pushDataLayerEvent(buttonText);
   }
 
   async getOrgGroups() {
@@ -886,6 +902,11 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
       this.tabConfig.groupservices = true
       this.tabConfig.userservices = false
     }
+
+    this.dataLayerService.pushEvent({
+      event: "tab_navigation",
+      link_text: activetab === 'user-service' ? "Individual access": "Group access"
+    })
   }
 
   public IsChangeInGroupAdminSelection(responseGroups: any): void {
@@ -932,6 +953,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
       inline: 'nearest',
     });
   }
+
   public async GetOrganisationMfaSettings() {
     this.ciiOrgId = this.tokenService.getCiiOrgId();
     await this.wrapperOrganisationService.getOrganisationMfaStatus(this.ciiOrgId).toPromise().then((data: any) => {
@@ -942,7 +964,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
       });
 
   }
-  onResetMfaClick() {
+  onResetMfaClick(buttonText:string) {
     if (this.formGroup.controls.mfaEnabled.value) {
       let data = {
         data: this.userName,
@@ -950,6 +972,7 @@ export class UserProfileComponent extends FormBaseComponent implements OnInit {
       }
       this.router.navigateByUrl('confirm-user-mfa-reset?data=' + btoa(JSON.stringify(data)))
     }
+    this.pushDataLayerEvent(buttonText);
 
   }
   onRadioChange(form: FormGroup)

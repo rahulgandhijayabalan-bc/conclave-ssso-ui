@@ -6,6 +6,7 @@ import { slideAnimation } from "src/app/animations/slide.animation";
 import { BaseComponent } from "src/app/components/base/base.component";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { ScrollHelper } from "src/app/services/helper/scroll-helper.services";
+import { DataLayerService } from "src/app/shared/data-layer.service";
 import { UIState } from "src/app/store/ui.states";
 
 @Component({
@@ -23,11 +24,11 @@ import { UIState } from "src/app/store/ui.states";
 })
 export class MfaOffSaveSuccessComponent extends BaseComponent implements OnInit {
     constructor(private activatedRoute: ActivatedRoute,private router:Router, private authService: AuthService,
-        protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+        protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
         super(uiStore,viewportScroller,scrollHelper);
     }
     ngOnInit() {
-        
+        this.dataLayerService.pushPageViewEvent();
     }
 
 }

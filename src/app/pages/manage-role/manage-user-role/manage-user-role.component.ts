@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WrapperUserService } from 'src/app/services/wrapper/wrapper-user.service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-manage-user-role',
@@ -12,7 +13,7 @@ public userDetails:any
 public errorResponce:boolean = false;
 public isOrgAdmin: boolean = false;
 public tokenPara : any=[];
-  constructor(private wrapperUserService: WrapperUserService,private router: Router,private route: ActivatedRoute) { 
+  constructor(private wrapperUserService: WrapperUserService,private router: Router,private route: ActivatedRoute, private dataLayerService: DataLayerService) { 
     this.isOrgAdmin = JSON.parse(localStorage.getItem('isOrgAdmin') || 'false');
   }
 
@@ -21,6 +22,7 @@ public tokenPara : any=[];
       this.tokenPara = para.token;
       this.verifytoken(para.token)
     });
+    this.dataLayerService.pushPageViewEvent();
   }
 
   public verifytoken(encryptedtoken:string):void {
@@ -31,7 +33,7 @@ public tokenPara : any=[];
     })
   }
 
-  public acceptRejectRequest(responce:number):void{
+  public acceptRejectRequest(responce:number,buttonText:string):void{
     this.userDetails=null;
     this.wrapperUserService.userTokenVerify(this.tokenPara).subscribe((data)=>{
     this.userDetails = data;  
@@ -56,5 +58,6 @@ public tokenPara : any=[];
   },(err)=>{
     this.errorResponce = true
   })
+  this.dataLayerService.pushClickEvent(buttonText);
   }
 }

@@ -6,6 +6,7 @@ import { slideAnimation } from "src/app/animations/slide.animation";
 import { BaseComponent } from "src/app/components/base/base.component";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { ScrollHelper } from "src/app/services/helper/scroll-helper.services";
+import { DataLayerService } from "src/app/shared/data-layer.service";
 import { UIState } from "src/app/store/ui.states";
 
 @Component({
@@ -26,26 +27,28 @@ export class MfaInformationComponent extends BaseComponent implements OnInit{
     qrCodeStr: string = "";
 
     constructor(private activatedRoute: ActivatedRoute, private router: Router,private authService: AuthService,
-        protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+        protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
         super(uiStore,viewportScroller,scrollHelper);
     }
     ngOnInit()
     {
-        
+      this.dataLayerService.pushPageViewEvent();
     }
     public onNavigateToMFAClick()
     {
          
       this.router.navigateByUrl('mfa-selection');
     }
-    public onContinueBtnClick()
+    public onContinueBtnClick(buttonText: string)
     {
       this.getQRCode();
      // this.router.navigateByUrl('mfa-authenticator-setup');
+     this.pushDataLayerEvent(buttonText);
     }
-    public onBackBtnClick()
+    public onBackBtnClick(buttonText:string)
     {
       this.router.navigateByUrl('mfa-selection');
+      this.pushDataLayerEvent(buttonText);
     }
     getQRCode () : any {
       this.auth0token = localStorage.getItem('auth0_token') ?? '';
@@ -74,6 +77,11 @@ export class MfaInformationComponent extends BaseComponent implements OnInit{
       });
   }
 
+
+  pushDataLayerEvent(buttonText: string) {
+		this.dataLayerService.pushClickEvent(buttonText)
+	  }
+
   public async RenewToken(){
     this.refreshtoken = localStorage.getItem('auth0_refresh_token')+'';
     await this.authService.mfarenewtoken(this.refreshtoken).toPromise().then((tokeninfo) => {              
@@ -87,5 +95,6 @@ export class MfaInformationComponent extends BaseComponent implements OnInit{
     });
 
 }
+
 
 }

@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { MFAService } from 'src/app/services/auth/mfa.service';
 import { Title } from '@angular/platform-browser';
 import { SessionStorageKey } from 'src/app/constants/constant';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'mfa-reset-component',
@@ -23,7 +24,7 @@ export class MFAResetComponent extends BaseComponent implements OnInit {
 
   constructor(private router: Router, private route: ActivatedRoute, protected uiStore: Store<UIState>,
     private mfaService: MFAService, private authService: AuthService, private titleService: Title,
-    protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+    protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
     super(uiStore, viewportScroller, scrollHelper);
   }
 
@@ -39,6 +40,7 @@ export class MFAResetComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataLayerService.pushPageViewEvent();
     this.route.queryParams.subscribe(para => {
       this.mfaService.resetMFA(para.t).toPromise().then(() => {
         this.resetSuccess = true;

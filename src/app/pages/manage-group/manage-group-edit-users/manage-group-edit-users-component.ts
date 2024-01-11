@@ -16,6 +16,7 @@ import {
 import { environment } from 'src/environments/environment';
 import { Title } from '@angular/platform-browser';
 import { SharedDataService } from 'src/app/shared/shared-data.service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-manage-group-edit-users',
@@ -58,7 +59,8 @@ export class ManageGroupEditUsersComponent
     protected scrollHelper: ScrollHelper,
     private titleService: Title,
     private wrapperOrganisationService: WrapperOrganisationService,
-    private SharedDataService: SharedDataService
+    private SharedDataService: SharedDataService,
+    private dataLayerService: DataLayerService
   ) {
     super(uiStore, viewportScroller, scrollHelper);
     let queryParams = this.activatedRoute.snapshot.queryParams;
@@ -86,6 +88,7 @@ export class ManageGroupEditUsersComponent
   }
 
   ngOnInit() {
+    this.dataLayerService.pushPageViewEvent();
     this.titleService.setTitle(
       `${this.isEdit ? 'Add/Remove Users' : 'Add Users'} - Manage Groups - CCS`
     );
@@ -190,7 +193,7 @@ export class ManageGroupEditUsersComponent
     }
   }
 
-  onContinueClick() {
+  onContinueClick(buttonText:string) {
     sessionStorage.setItem(
       'group_existing_users',
       JSON.stringify(this.userNames)
@@ -211,9 +214,16 @@ export class ManageGroupEditUsersComponent
     this.router.navigateByUrl(
       'manage-groups/edit-users-confirm?data=' + JSON.stringify(data)
     );
+    this.pushDataLayerEvent(buttonText);
   }
 
-  onCancelClick() {
+  pushDataLayerEvent(buttonText:string) {
+    this.dataLayerService.pushClickEvent(buttonText);
+      }
+  
+  
+
+  onCancelClick(buttonText:string) {
     let data = {
       isEdit: true,
       groupId: this.editingGroupId,
@@ -224,6 +234,18 @@ export class ManageGroupEditUsersComponent
     this.router.navigateByUrl(
       'manage-groups/view?data=' + JSON.stringify(data)
     );
+    if(buttonText!="Edit group")
+    {
+    if(this.showRoleView)
+    {
+      buttonText=buttonText+'roles';
+    }
+    else if(!this.showRoleView)
+    {
+      buttonText=buttonText+'services';
+    }
+    this.pushDataLayerEvent(buttonText);
+  }
   }
 
   public isAdminGroupAndUser(totalUserName:string){

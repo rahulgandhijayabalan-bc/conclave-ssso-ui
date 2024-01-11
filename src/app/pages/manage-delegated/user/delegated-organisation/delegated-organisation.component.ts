@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { WrapperUserDelegatedService } from 'src/app/services/wrapper/wrapper-user-delegated.service';
 import { environment } from 'src/environments/environment';
 import { ManageDelegateService } from '../../service/manage-delegate.service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-delegated-organisation',
@@ -24,6 +25,8 @@ export class DelegatedOrganisationComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private delegatedService: WrapperUserDelegatedService,
     private DelegateService: ManageDelegateService,
+    private router: Router,
+    private dataLayerService: DataLayerService
   ) {
      this.isOrgAdmin = JSON.parse(localStorage.getItem('isOrgAdmin') || 'false');
     if(this.isDeleagation === true){
@@ -40,6 +43,7 @@ export class DelegatedOrganisationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dataLayerService.pushPageViewEvent();
     if (
       this.DelegateService.getDelegatedOrg == '0' ||
       this.DelegateService.getDelegatedOrg == null || this.DelegateService.getDelegatedOrg == ''
@@ -88,10 +92,16 @@ export class DelegatedOrganisationComponent implements OnInit {
     this.primaryRoleSelected = null;
     this.roleInfo = orgDetails.delegatedOrgId;
   }
-  onSubmit() {
+  onSubmit(buttonText:string) {
     this.DelegateService.setDelegatedOrg(this.roleInfo,'home');
+    this.pushDataLayerEvent(buttonText);
   }
-  public Cancel() {
+  public Cancel(buttonText:string) {
     window.history.back();
+    this.pushDataLayerEvent(buttonText);
   }
+
+  pushDataLayerEvent(buttonText:string) {
+		this.dataLayerService.pushClickEvent(buttonText);
+	  }
 }

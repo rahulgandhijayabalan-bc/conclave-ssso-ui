@@ -8,6 +8,7 @@ import { UIState } from 'src/app/store/ui.states';
 import { ViewportScroller } from '@angular/common';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { environment } from 'src/environments/environment';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-manage-organisation-registration-buyer-type',
@@ -26,14 +27,16 @@ export class ManageOrgRegBuyerTypeComponent extends BaseComponent implements OnI
   
   public isCustomMfaEnabled=environment.appSetting.customMfaEnabled;
   defaultChoice: string = "Central Government";
+  public formId : string = 'Register_organisation Buyer_type';
 
   constructor(private router: Router, private route: ActivatedRoute, protected uiStore: Store<UIState>,
-    protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+    protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
     super(uiStore,viewportScroller,scrollHelper);
   }
 
   ngOnInit() {
-
+    this.dataLayerService.pushPageViewEvent();
+    this.dataLayerService.pushFormStartOnInitEvent(this.formId);
   }
 
   onBack(){
@@ -44,6 +47,7 @@ export class ManageOrgRegBuyerTypeComponent extends BaseComponent implements OnI
   public onSubmit() {
     localStorage.setItem("manage-org_buyer_type", this.defaultChoice);
     //this.router.navigateByUrl(`manage-org/register/start`);
+    this.dataLayerService.pushFormSubmitEvent(this.formId);
     this.router.navigateByUrl(`manage-org/register/search?data=` + btoa(JSON.stringify(3)));
   }
 }

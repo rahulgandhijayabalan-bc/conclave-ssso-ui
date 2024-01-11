@@ -13,6 +13,7 @@ import { ManualValidationStatus } from 'src/app/constants/enum';
 import { OrganisationAuditListResponse } from 'src/app/models/organisation';
 import { SharedDataService } from 'src/app/shared/shared-data.service';
 import { HelperService } from 'src/app/shared/helper.service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-view-verified-org',
@@ -67,7 +68,8 @@ export class ViewVerifiedOrgComponent implements OnInit {
     private router: Router,
     private ciiService: ciiService,
     private translate: TranslateService,
-    public helperService:HelperService
+    public helperService:HelperService,
+    private dataLayerService: DataLayerService
   ) {
     this.organisationId = localStorage.getItem('cii_organisation_id') || '';
     this.organisationAdministrator.userListResponse = {
@@ -92,6 +94,7 @@ export class ViewVerifiedOrgComponent implements OnInit {
       this.routeDetails = JSON.parse(atob(para.data));
       this.getPendingVerificationOrg()
     });
+    this.dataLayerService.pushPageViewEvent();
   }
 
   public async getSchemeData() {
@@ -227,7 +230,12 @@ export class ViewVerifiedOrgComponent implements OnInit {
     });
   }
 
-  public removeRightToBuy(): void {
+
+  private pushDataLayerEvent(buttonText:string) {
+    this.dataLayerService.pushClickEvent(buttonText);
+  }
+
+  public removeRightToBuy(buttonText:string): void {
     let data = {
       id: this.routeDetails.event.organisationId,
       status: ManualValidationStatus.decline,
@@ -236,14 +244,19 @@ export class ViewVerifiedOrgComponent implements OnInit {
     this.router.navigateByUrl(
       'remove-right-to-buy?data=' + btoa(JSON.stringify(data))
     );
+    this.pushDataLayerEvent(buttonText);
   }
 
-  goBack() {
+  goBack(buttonText:string) {
     if (this.routeDetails.lastRoute === "pending-verification") {
       this.router.navigateByUrl('manage-buyer-both');
     } else {
       sessionStorage.setItem('activetab', 'verifiedOrg');
       window.history.back();
+    }
+    if(buttonText==='Back')
+    {
+    this.pushDataLayerEvent(buttonText);
     }
   }
 

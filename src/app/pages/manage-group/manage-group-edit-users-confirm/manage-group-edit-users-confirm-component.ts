@@ -12,6 +12,7 @@ import { OrganisationGroupRequestInfo } from "src/app/models/organisationGroup";
 import { UserListInfo } from "src/app/models/user";
 import { OperationEnum } from "src/app/constants/enum";
 import { Title } from "@angular/platform-browser";
+import { DataLayerService } from "src/app/shared/data-layer.service";
 
 @Component({
     selector: 'app-manage-group-edit-users-confirm',
@@ -36,7 +37,7 @@ export class ManageGroupEditUsersConfirmComponent extends BaseComponent implemen
     usersColumnsToDisplay = ['name', 'userName'];
     groupName:string=''
     constructor(protected uiStore: Store<UIState>, private router: Router, private activatedRoute: ActivatedRoute, private titleService: Title,
-        protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private orgGroupService: WrapperOrganisationGroupService) {
+        protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private orgGroupService: WrapperOrganisationGroupService, private dataLayerService: DataLayerService) {
         super(uiStore, viewportScroller, scrollHelper);
         let queryParams = this.activatedRoute.snapshot.queryParams;
         if (queryParams.data) {
@@ -56,9 +57,10 @@ export class ManageGroupEditUsersConfirmComponent extends BaseComponent implemen
 
     ngOnInit() {
         this.titleService.setTitle(`Confirm - ${this.isEdit ? "Add/Remove Users" : "Add Users"} - Manage Groups - CCS`);
+        this.dataLayerService.pushPageViewEvent();
     }
 
-    onConfirmClick() {
+    onConfirmClick(buttonText:string) {
         let groupPatchRequestInfo: OrganisationGroupRequestInfo = {
             userInfo: {
                 addedUserIds: this.addingUsers.map(au => au.userName),
@@ -98,6 +100,7 @@ export class ManageGroupEditUsersConfirmComponent extends BaseComponent implemen
                         this.router.navigateByUrl(`manage-groups/error?data=` + JSON.stringify(data));
                     }
                 });
+        this.pushDataLayerEvent(buttonText);
     }
 
     onGoToEditGroupClick() {
@@ -106,8 +109,9 @@ export class ManageGroupEditUsersConfirmComponent extends BaseComponent implemen
         this.router.navigateByUrl("manage-groups/view?data=" + JSON.stringify(this.routeData));
     }
 
-    onCancelClick() {
+    onCancelClick(buttonText:string) {
         this.router.navigateByUrl("manage-groups/edit-users?data=" + JSON.stringify(this.routeData));
+        this.pushDataLayerEvent(buttonText);
     }
 
     clearSessionStorageGroupUserData() {
@@ -115,4 +119,9 @@ export class ManageGroupEditUsersConfirmComponent extends BaseComponent implemen
         sessionStorage.removeItem("group_added_users");
         sessionStorage.removeItem("group_removed_users");
     }
+
+    pushDataLayerEvent(buttonText:string) {
+		this.dataLayerService.pushClickEvent(buttonText);
+	  }
+  
 }

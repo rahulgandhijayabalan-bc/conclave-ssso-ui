@@ -18,6 +18,7 @@ import { environment } from "src/environments/environment";
 import { AuditLoggerService } from "src/app/services/postgres/logger.service";
 import { SessionStorageKey } from "src/app/constants/constant";
 import { SharedDataService } from "src/app/shared/shared-data.service";
+import { DataLayerService } from "src/app/shared/data-layer.service";
 
 
 @Component({
@@ -44,7 +45,7 @@ export class ManageUserProfilesComponent extends BaseComponent implements OnInit
     public isBulkUpload=environment.appSetting.hideBulkupload
     constructor(private wrapperOrganisationService: WrapperOrganisationService,
         protected uiStore: Store<UIState>, private router: Router, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper,
-        private auditLogService: AuditLoggerService,private sharedDataService:SharedDataService) {
+        private auditLogService: AuditLoggerService,private sharedDataService:SharedDataService, private dataLayerService: DataLayerService) {
         super(uiStore, viewportScroller, scrollHelper);
         this.organisationId = localStorage.getItem('cii_organisation_id') || '';
         this.userList = {
@@ -61,6 +62,7 @@ export class ManageUserProfilesComponent extends BaseComponent implements OnInit
     }
 
     async ngOnInit() {
+        this.dataLayerService.pushPageViewEvent();
         await this.auditLogService.createLog({
             eventName: "Access", applicationName: "Manage-user-account",
             referenceData: `UI-Log`
@@ -81,13 +83,14 @@ export class ManageUserProfilesComponent extends BaseComponent implements OnInit
         });
     }
 
-    onAddClick() {
+    onAddClick(buttonText:string) {
         this.router.navigateByUrl("manage-users/add-user-selection");
         if(!this.isBulkUpload){
             this.router.navigateByUrl("manage-users/add-user-selection");
         } else {
             this.router.navigateByUrl("manage-users/add-user/details");
         }
+        this.dataLayerService.pushClickEvent(buttonText);
     }
 
     searchTextChanged(event: any) {
