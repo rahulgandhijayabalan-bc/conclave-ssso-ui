@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-role-request-failed',
@@ -12,7 +13,7 @@ export class RoleRequestFailedComponent implements OnInit {
   public isOrgAdmin: boolean = false;
   public errorCode: any = '';
 
-  constructor(private ActivatedRoute: ActivatedRoute) { }
+  constructor(private ActivatedRoute: ActivatedRoute, private router: Router, private dataLayerService: DataLayerService) { }
 
   ngOnInit(): void {
     this.ActivatedRoute.queryParams.subscribe((para: any) => {
@@ -20,6 +21,7 @@ export class RoleRequestFailedComponent implements OnInit {
       this.errorCode = this.userInfo.responce.status;
     });
     this.isOrgAdmin = JSON.parse(localStorage.getItem('isOrgAdmin') || 'false');
+    this.dataLayerService.pushPageViewEvent();
   }
 
   public goBack():void{

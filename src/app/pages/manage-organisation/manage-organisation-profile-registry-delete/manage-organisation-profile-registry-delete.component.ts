@@ -13,6 +13,7 @@ import { UserProfileResponseInfo } from 'src/app/models/user';
 import { TokenService } from 'src/app/services/auth/token.service';
 import { ViewportScroller } from '@angular/common';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-manage-organisation-profile-registry-delete',
@@ -35,7 +36,7 @@ export class ManageOrganisationRegistryDeleteComponent extends BaseComponent imp
 
   constructor(private ciiService: ciiService, private wrapperService: WrapperUserService, private router: Router,
     private route: ActivatedRoute, protected uiStore: Store<UIState>, private readonly tokenService: TokenService,
-    protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+    protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
     super(uiStore, viewportScroller, scrollHelper);
     this.organisationId = JSON.parse(localStorage.getItem('organisation_id') + '');
   }
@@ -47,19 +48,29 @@ export class ManageOrganisationRegistryDeleteComponent extends BaseComponent imp
         this.item$ = this.ciiService.getOrganisationIdentifierDetails(this.tokenService.getCiiOrgId(), params.scheme, params.id).pipe(share());
       }
     });
+    this.dataLayerService.pushPageViewEvent({
+      organisationId: this.routeParams.this.organisationId,
+      scheme: this.routeParams.this.scheme,
+      id: this.routeParams.this.id
+    });
   }
 
-  public onSubmit() {
+  public onSubmit(buttonText:string) {
     this.ciiService.deleteRegistry(this.tokenService.getCiiOrgId(), this.routeParams.scheme, this.routeParams.id)
       .subscribe((data) => {
         this.router.navigateByUrl('manage-org/profile/' + this.organisationId + '/registry/delete/confirmation/' + this.routeParams.scheme + '/' + this.routeParams.id);
       }, (error) => {
         console.log(error);
       });
+      this.pushDataLayerEvent(buttonText);
   }
 
-  public goBack() {
+  public goBack(buttonText:string) {
     this.router.navigateByUrl('manage-org/profile');
+    this.pushDataLayerEvent(buttonText);
   }
 
+  pushDataLayerEvent(buttonText:string) {
+		this.dataLayerService.pushClickEvent(buttonText)
+	  }
 }

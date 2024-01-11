@@ -18,6 +18,7 @@ import { WrapperConfigurationService } from 'src/app/services/wrapper/wrapper-co
 import { ReplaySubject, Subject } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
 import { take, takeUntil } from 'rxjs/operators';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-manage-organisation-profile-site-edit',
@@ -41,6 +42,7 @@ export class ManageOrganisationSiteEditComponent extends FormBaseComponent imple
 
   public bankFilterCtrl: FormControl = new FormControl();
   protected _onDestroy = new Subject<void>();
+  public formId : string = 'Manage_organisation Edit_site';
 
   @ViewChildren('input') inputs!: QueryList<ElementRef>;
   @ViewChild('singleSelect', { static: true }) singleSelect!: MatSelect;
@@ -48,7 +50,7 @@ export class ManageOrganisationSiteEditComponent extends FormBaseComponent imple
   constructor(private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute,
     protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper,
     public orgSiteService: WrapperOrganisationSiteService, private siteContactService: WrapperSiteContactService,
-    private contactHelper: ContactHelper, private titleService: Title, private wrapperConfigService: WrapperConfigurationService) {
+    private contactHelper: ContactHelper, private titleService: Title, private wrapperConfigService: WrapperConfigurationService, private dataLayerService: DataLayerService) {
     super(viewportScroller, formBuilder.group({                                        
       name: ['', Validators.compose([Validators.required,Validators.pattern(/^[ A-Za-z0-9@().,;:'/#&+-]*$/),Validators.maxLength(256), Validators.minLength(3)])],
       streetAddress: ['', Validators.compose([Validators.required,Validators.pattern(/^[ A-Za-z0-9@().,;:'/#&+-]*$/),Validators.maxLength(256), Validators.minLength(1)])],
@@ -68,6 +70,7 @@ export class ManageOrganisationSiteEditComponent extends FormBaseComponent imple
   }
 
   async ngOnInit() {
+    this.dataLayerService.pushPageViewEvent();
     this.titleService.setTitle(`${this.isEdit ? "Edit" : "Add"} - Site - CCS`);
     this.countryDetails = await this.wrapperConfigService.getCountryDetails().toPromise();
     this.setTopCountries(false);
@@ -103,6 +106,7 @@ export class ManageOrganisationSiteEditComponent extends FormBaseComponent imple
     else {
       this.onFormValueChange();
     }
+    this.dataLayerService.pushFormStartEvent(this.formId, this.formGroup);
   }
 
   ngAfterViewInit() {
@@ -215,6 +219,7 @@ export class ManageOrganisationSiteEditComponent extends FormBaseComponent imple
         }
       };
 
+      this.dataLayerService.pushFormSubmitEvent(this.formId);
       if (this.isEdit) {
         this.orgSiteService.updateOrganisationSite(this.organisationId, this.siteId, orgSiteInfo).subscribe(
           {
@@ -231,6 +236,7 @@ export class ManageOrganisationSiteEditComponent extends FormBaseComponent imple
                 this.serverError="INVALID_SITE_NAME"
               }
               this.scrollHelper.scrollToFirst('error-summary');
+              this.dataLayerService.pushFormErrorEvent(this.formId);
               return;
             }
           });
@@ -256,6 +262,7 @@ export class ManageOrganisationSiteEditComponent extends FormBaseComponent imple
                 // form.controls['countryCode'].setErrors(errorObject);
                 this.serverError = error.error;
                 this.scrollHelper.scrollToFirst('error-summary');
+                this.dataLayerService.pushFormErrorEvent(this.formId);
                 if(error.status==409){
                   this.serverError="INVALID_SITE_NAME"
                 }
@@ -267,6 +274,7 @@ export class ManageOrganisationSiteEditComponent extends FormBaseComponent imple
     }
     else {
       this.scrollHelper.scrollToFirst('error-summary');
+      this.dataLayerService.pushFormErrorEvent(this.formId);
     }
   }
 
@@ -276,8 +284,9 @@ export class ManageOrganisationSiteEditComponent extends FormBaseComponent imple
     return form.valid;
   }
 
-  onCancelClick() {
+  onCancelClick(buttonText:string) {
     this.router.navigateByUrl('manage-org/profile');
+    this.pushDataLayerEvent(buttonText);
   }
 
   onDeleteClick() {
@@ -296,7 +305,7 @@ export class ManageOrganisationSiteEditComponent extends FormBaseComponent imple
     return JSON.stringify(data);
   }
   
-  public onContactAddClick() {
+  public onContactAddClick(buttonText:string) {
     let data = {
       'isEdit': false,
       'contactId': 0,
@@ -306,13 +315,15 @@ export class ManageOrganisationSiteEditComponent extends FormBaseComponent imple
       'contactAddAnother':this.contactAddAnother,
     };
     this.router.navigateByUrl('manage-org/profile/site/contact-edit?data=' + JSON.stringify(data));
+    this.pushDataLayerEvent(buttonText);
   }
 
-  public onContactAssignClick() {
+  public onContactAssignClick(buttonText:string) {
     let data = {
       'assigningSiteId': this.siteId
     };
     this.router.navigateByUrl('contact-assign/select?data=' + JSON.stringify(data));
+    this.pushDataLayerEvent(buttonText);
   }
 
   onContactEditClick(contactInfo: ContactGridInfoWithLink) {
@@ -327,4 +338,8 @@ export class ManageOrganisationSiteEditComponent extends FormBaseComponent imple
   public formValueChanged(){
    this.serverError=''
   }
+
+  pushDataLayerEvent(buttonText:string) {
+		this.dataLayerService.pushClickEvent(buttonText)
+	  }
 }

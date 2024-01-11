@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-delegated-success',
@@ -12,10 +13,13 @@ export class DelegatedSuccessComponent implements OnInit {
 
   constructor(
     public ActivatedRoute: ActivatedRoute,
-    public titleService: Title
+    public titleService: Title,
+    private router: Router,
+    private dataLayerService: DataLayerService
   ) {}
 
   ngOnInit(): void {
+    this.dataLayerService.pushPageViewEvent();
     this.ActivatedRoute.queryParams.subscribe((para: any) => {
       this.userInfo = JSON.parse(atob(para.data));
       this.userInfo.userName = decodeURIComponent(

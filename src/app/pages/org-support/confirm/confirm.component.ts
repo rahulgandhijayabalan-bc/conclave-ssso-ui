@@ -11,6 +11,7 @@ import { ViewportScroller } from '@angular/common';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { MFAService } from 'src/app/services/auth/mfa.service';
 import { SessionStorageKey } from 'src/app/constants/constant';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-org-support-confirm',
@@ -37,11 +38,12 @@ export class OrgSupportConfirmComponent extends BaseComponent implements OnInit 
     private wrapperUserService: WrapperUserService,
     private mfaService: MFAService,
     private router: Router, private route: ActivatedRoute, protected uiStore: Store<UIState>,
-    protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+    protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
     super(uiStore, viewportScroller, scrollHelper);
   }
 
   ngOnInit() {
+    this.dataLayerService.pushPageViewEvent();
     this.userName = sessionStorage.getItem(SessionStorageKey.OrgUserSupportUserName) ?? '';
     this.route.queryParams.subscribe(para => {
       if (para.rpwd != undefined) {
@@ -80,7 +82,7 @@ export class OrgSupportConfirmComponent extends BaseComponent implements OnInit 
     }
   }
 
-  public async onSubmitClick() {
+  public async onSubmitClick(buttonText:string) {
     try {
       if (this.changePassword) {
         await this.wrapperUserService.resetUserPassword(this.userName, "Org-user-support").toPromise();
@@ -104,10 +106,17 @@ export class OrgSupportConfirmComponent extends BaseComponent implements OnInit 
     catch (err: any) {
       this.router.navigateByUrl(`org-support/error?errCode=${err.error}`);
     }
+    this.pushDataLayerEvent(buttonText); 
   }
 
-  public onCancelClick() {
+  public onCancelClick(buttonText:string) {
     this.router.navigateByUrl(`org-support/details?rpwd=` + this.changePassword + `&rmfa=` + this.resetMfa +
       `&chrole=` + this.changeRoleType);
+      this.pushDataLayerEvent(buttonText);
   }
+
+  pushDataLayerEvent(buttonText:string) {
+		this.dataLayerService.pushClickEvent('buttonText')
+	  }
+  
 }

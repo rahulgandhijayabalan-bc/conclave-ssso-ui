@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminUserListResponse, UserListResponse } from 'src/app/models/user';
 import { WrapperOrganisationGroupService } from 'src/app/services/wrapper/wrapper-org--group-service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -22,7 +23,9 @@ export class ContactAdminComponent implements OnInit {
   
   constructor(
     private WrapperOrganisationGroupService: WrapperOrganisationGroupService,
-    private router:Router
+    private router: Router,
+    private dataLayerService: DataLayerService
+
   ) {
     this.organisationId = localStorage.getItem('cii_organisation_id') || '';
     this.userListResponse = {
@@ -37,6 +40,7 @@ export class ContactAdminComponent implements OnInit {
   ngOnInit(): void {
     this.isOrgAdmin = JSON.parse(localStorage.getItem('isOrgAdmin') || 'false');
     this.getOrganisationUsers();
+    this.dataLayerService.pushPageViewEvent();
   }
 
   public openEmailWindow(data: any): void {
@@ -69,7 +73,8 @@ export class ContactAdminComponent implements OnInit {
     this.currentPage = pageNumber;
     this.getOrganisationUsers();
   }
-  goBack() {
+  goBack(buttonText:string) {
     this.router.navigateByUrl('profile');
+    this.dataLayerService.pushClickEvent(buttonText);
   }
 }

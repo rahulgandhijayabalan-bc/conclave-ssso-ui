@@ -20,6 +20,7 @@ import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedDataService } from 'src/app/shared/shared-data.service';
 import { environment } from 'src/environments/environment';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-manage-organisation-registration-step-2',
@@ -55,6 +56,7 @@ export class ManageOrgRegStep2Component
   public pageAccessMode:any;
   submitted: boolean = false;
   public newScheme:any = [];
+  public formId : string = 'Manage-organisation-registration-step-2';
 
   @ViewChildren('input') inputs!: QueryList<ElementRef>;
 
@@ -67,7 +69,8 @@ export class ManageOrgRegStep2Component
     public scrollHelper: ScrollHelper,
     private formBuilder: FormBuilder,
     private ActivatedRoute: ActivatedRoute,
-    private SharedDataService:SharedDataService
+    private SharedDataService:SharedDataService,
+    private dataLayerService: DataLayerService
   ) {
     super(uiStore, viewportScroller, scrollHelper);
     this.txtValue = '';
@@ -83,6 +86,7 @@ export class ManageOrgRegStep2Component
   }
 
   ngOnInit() {
+    this.dataLayerService.pushPageViewEvent();
     this.items$ = this.ciiService.getSchemes().pipe(share());
     this.items$.subscribe({
       next: (result) => {
@@ -102,12 +106,13 @@ export class ManageOrgRegStep2Component
     this.inputs.toArray()[inputIndex].nativeElement.focus();
   }
 
-  public onSubmit() {
+  public onSubmit(buttonText:string) {
     let schemeDetails = {
       scheme:this.scheme,
       schemeID:this.txtValue,
     }
     this.submitted = true;
+    this.dataLayerService.pushFormSubmitEvent(this.formId);
     this.validationObj.isDunlength = false;
       if (this.txtValue && this.txtValue.length > 0) {
         localStorage.setItem('schemeDetails', (JSON.stringify(schemeDetails)));
@@ -118,7 +123,9 @@ export class ManageOrgRegStep2Component
         );
       } else {
         this.scrollHelper.scrollToFirst('error-summary');
+        this.dataLayerService.pushFormErrorEvent(this.formId);
       }
+      this.dataLayerService.pushClickEvent(buttonText);
   }
 
   public onBackClick() {

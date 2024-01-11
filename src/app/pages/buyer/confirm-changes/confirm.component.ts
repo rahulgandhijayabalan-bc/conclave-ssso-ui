@@ -16,6 +16,7 @@ import { share } from 'rxjs/operators';
 import { WrapperOrganisationService } from 'src/app/services/wrapper/wrapper-org-service';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { ViewportScroller } from '@angular/common';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-buyer-confirm-changes',
@@ -34,6 +35,7 @@ export class BuyerConfirmChangesComponent extends BaseComponent {
   public org: any;
   public org$!: Observable<any>;
   public changes: any;
+  private id!: string;
 
   constructor(
     private cf: ChangeDetectorRef,
@@ -43,11 +45,13 @@ export class BuyerConfirmChangesComponent extends BaseComponent {
     private route: ActivatedRoute,
     protected uiStore: Store<UIState>,
     protected viewportScroller: ViewportScroller,
-    protected scrollHelper: ScrollHelper
+    protected scrollHelper: ScrollHelper,
+    private dataLayerService: DataLayerService
   ) {
     super(uiStore, viewportScroller, scrollHelper);
     this.route.params.subscribe((params) => {
       if (params.id) {
+        this.id = params.id;
         this.org$ = this.organisationService.getById(params.id).pipe(share());
         this.org$.subscribe({
           next: (data) => {
@@ -61,7 +65,15 @@ export class BuyerConfirmChangesComponent extends BaseComponent {
     });
   }
 
-  public onSubmitClick() {
+  ngOnInit() {
+    this.dataLayerService.pushPageViewEvent({id: this.id});
+  }
+
+  pushDataLayerEvent(buttonText:string) {
+    this.dataLayerService.pushClickEvent(buttonText);
+  }
+
+  public onSubmitClick(buttonText:string) {
     const model = {
       orgType: parseInt(this.changes.orgType),
       rolesToDelete: this.changes.toDelete,
@@ -82,14 +94,16 @@ export class BuyerConfirmChangesComponent extends BaseComponent {
         console.log(error);
         this.router.navigateByUrl(`buyer/error`);
       });
+      this.pushDataLayerEvent(buttonText);
   }
 
   public onCancelClick() {
     this.router.navigateByUrl('buyer-supplier/search');
   }
 
-  public onBackClick() {
+  public onBackClick(buttonText:string) {
     localStorage.removeItem(`mse_org_${this.org.ciiOrganisationId}`);
     this.router.navigateByUrl('buyer/confirm/' + this.org.ciiOrganisationId);
+    this.pushDataLayerEvent(buttonText);
   }
 }

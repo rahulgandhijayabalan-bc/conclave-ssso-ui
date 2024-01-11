@@ -12,6 +12,7 @@ import { ScrollHelper } from "src/app/services/helper/scroll-helper.services";
 import { TokenInfo } from "src/app/models/auth";
 import { HelperService } from "src/app/shared/helper.service";
 import { WrapperOrganisationService } from 'src/app/services/wrapper/wrapper-org-service';
+import { DataLayerService } from "src/app/shared/data-layer.service";
 
 
 @Component({
@@ -41,11 +42,12 @@ export class MfaSelectionComponent extends BaseComponent implements OnInit {
 
     constructor(private activatedRoute: ActivatedRoute, private router: Router, private authService: AuthService, private helperService: HelperService,
         private wrapperOrganisationService : WrapperOrganisationService, private tokenService : TokenService,
-        protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+        protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
         super(uiStore, viewportScroller, scrollHelper);
     }
 
      async ngOnInit() {
+        this.dataLayerService.pushPageViewEvent();
        // this.orgMfaRequired = JSON.parse(localStorage.getItem('org_mfa_required') || 'false');
        await this.GetOrganisationMfaSettings();
         this.selectedOption = this.helperService.getSelectedOption();
@@ -89,8 +91,9 @@ export class MfaSelectionComponent extends BaseComponent implements OnInit {
         });
 
     }
-    public onCancelClick() {
+    public onCancelClick(buttonText:string) {
         this.authService.logOutAndRedirect();
+        this.pushDataLayerEvent(buttonText);
     }
 
     public onContinueClick(event: string | null) {
@@ -105,8 +108,13 @@ export class MfaSelectionComponent extends BaseComponent implements OnInit {
         else if (event == "NOAUTH") {
             this.router.navigateByUrl('no-mfa-confirmation');
         }
-
+        this.pushDataLayerEvent('Continue');
     }
+
+    pushDataLayerEvent(buttonText: string) {
+		this.dataLayerService.pushClickEvent(buttonText)
+	}
+
     public async GetOrganisationMfaSettings() {
         this.ciiOrgId = this.tokenService.getCiiOrgId();
         await this.wrapperOrganisationService.getOrganisationMfaStatus(this.ciiOrgId).toPromise().then((data: any) => {
