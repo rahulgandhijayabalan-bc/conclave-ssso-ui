@@ -20,6 +20,7 @@ import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { environment } from 'src/environments/environment';
 import { OrganisationDto } from 'src/app/models/organisation';
 import { CiiAdditionalIdentifier, CiiOrgIdentifiersDto } from 'src/app/models/org';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
     selector: 'app-manage-organisation-profile',
@@ -66,7 +67,7 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
         private configWrapperService: WrapperConfigurationService, private router: Router, private contactHelper: ContactHelper,
         protected uiStore: Store<UIState>, private readonly tokenService: TokenService, private organisationGroupService: WrapperOrganisationGroupService,
         private orgContactService: WrapperOrganisationContactService, private wrapperOrgSiteService: WrapperOrganisationSiteService,
-        protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+        protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
         super(uiStore, viewportScroller, scrollHelper);
         this.contactData = [];
         this.siteData = [];
@@ -157,15 +158,17 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
             }).catch(e => {
             });
         }
+        this.dataLayerService.pushPageViewEvent();
     }
 
-    public onContactAddClick() {
+    public onContactAddClick(buttonText:string) {
         let data = {
             'isEdit': false,
             'contactId': 0,
             'contactAddAnother': this.contactAddAnother
         };
         this.router.navigateByUrl('manage-org/profile/contact-edit?data=' + JSON.stringify(data));
+        this.pushDataLayerEvent(buttonText);
     }
 
     public onContactEditClick(contactDetail: ContactGridInfo) {
@@ -176,12 +179,13 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
         this.router.navigateByUrl('manage-org/profile/contact-edit?data=' + JSON.stringify(data));
     }
 
-    public onSiteAddClick() {
+    public onSiteAddClick(buttonText:string) {
         let data = {
             'isEdit': false,
             'siteId': 0
         };
         this.router.navigateByUrl('manage-org/profile/site/edit?data=' + JSON.stringify(data));
+        this.pushDataLayerEvent(buttonText);
     }
 
     public onSiteEditClick(orgSite: SiteGridInfo) {
@@ -192,8 +196,9 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
         this.router.navigateByUrl('manage-org/profile/site/edit?data=' + JSON.stringify(data));
     }
 
-    public onRegistryAddClick() {
+    public onRegistryAddClick(buttonText:string) {
         this.router.navigateByUrl(`manage-org/profile/${this.ciiOrganisationId}/registry/search`);
+        this.pushDataLayerEvent(buttonText);
     }
 
     public onRegistryEditClick(row: any) {
@@ -239,7 +244,7 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
        }
     }
 
-    public onSaveChanges() {
+    public onSaveChanges(buttonText:string) {
         this.submitted = true;
         const ciiOrgId = this.tokenService.getCiiOrgId();
         var isMfaRequired = false;
@@ -276,15 +281,16 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
             this.performApiCalls(identityProviderSummary,ciiOrgId,isMfaRequired);
            
         }
-
+        this.pushDataLayerEvent(buttonText);
     }
 
     setFocus() {
         this.inputs.toArray().find(x => x.nativeElement.id = 'orgRoleControl_1')?.nativeElement.focus();
     }
 
-    public onCancel() {
+    public onCancel(buttonText:string) {
         this.router.navigateByUrl(`home`);
+        this.pushDataLayerEvent(buttonText);
     }
 
     public getSchemaName(schema: string): string {
@@ -292,11 +298,12 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
         return selecedScheme?.schemeName;
     }
 
-    public onContactAssignClick() {
+    public onContactAssignClick(buttonText:string) {
         let data = {
             'assigningOrgId': this.ciiOrganisationId
         };
         this.router.navigateByUrl('contact-assign/select?data=' + JSON.stringify(data));
+        this.pushDataLayerEvent(buttonText);
     }
   public  async  performApiCalls(identityProviderSummary:any,ciiOrgId:string,isMfaRequired:boolean) {
         try {
@@ -314,4 +321,8 @@ export class ManageOrganisationProfileComponent extends BaseComponent implements
         }
       }
 
+      pushDataLayerEvent(buttonText:string) {
+		this.dataLayerService.pushClickEvent(buttonText)
+	  }
+  
 }

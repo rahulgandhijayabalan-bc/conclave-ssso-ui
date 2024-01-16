@@ -10,6 +10,7 @@ import { ScrollHelper } from "src/app/services/helper/scroll-helper.services";
 import { WrapperOrganisationSiteService } from "src/app/services/wrapper/wrapper-org-site-service";
 import { OrganisationSite, OrganisationSiteInfoList, SiteGridInfo } from "src/app/models/site";
 import { SessionStorageKey } from "src/app/constants/constant";
+import { DataLayerService } from "src/app/shared/data-layer.service";
 
 @Component({
     selector: 'app-contact-assign-site-search-component',
@@ -32,7 +33,7 @@ export class ContactAssignSiteSearchComponent extends BaseComponent implements O
     public searchSumbited:boolean=false;
     constructor(private wrapperSiteService: WrapperOrganisationSiteService,
         protected uiStore: Store<UIState>, private router: Router, private activatedRoute: ActivatedRoute,
-        protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+        protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
         super(uiStore, viewportScroller, scrollHelper);
         this.organisationId = localStorage.getItem('cii_organisation_id') || '';
     }
@@ -40,6 +41,7 @@ export class ContactAssignSiteSearchComponent extends BaseComponent implements O
     ngOnInit() {
         this.getOrganisationSites();
         sessionStorage.removeItem(SessionStorageKey.ContactAssignUsername);
+        this.dataLayerService.pushPageViewEvent();
     }
 
     getOrganisationSites() {
@@ -78,7 +80,7 @@ export class ContactAssignSiteSearchComponent extends BaseComponent implements O
         this.selectedSiteId = dataRow?.siteId ?? '';
     }
 
-    onContinue() {
+    onContinue(buttonText:string) {
         if (this.selectedSiteId != 0) {
             sessionStorage.removeItem("assigning-contact-list");
             let data = {
@@ -87,6 +89,7 @@ export class ContactAssignSiteSearchComponent extends BaseComponent implements O
             };
             this.router.navigateByUrl('contact-assign?data=' + JSON.stringify(data));
         }
+        this.pushDataLayerEvent(buttonText);
     }
 
     onCancelClick() {
@@ -97,7 +100,12 @@ export class ContactAssignSiteSearchComponent extends BaseComponent implements O
         this.router.navigateByUrl('contact-assign/select?data=' + JSON.stringify(data));
     }
 
-    public onBack(){
+    public onBack(buttonText:string){
       window.history.back();
+      this.pushDataLayerEvent(buttonText);
     }
+
+    pushDataLayerEvent(buttonText:string) {
+        this.dataLayerService.pushClickEvent(buttonText);
+      }
 }

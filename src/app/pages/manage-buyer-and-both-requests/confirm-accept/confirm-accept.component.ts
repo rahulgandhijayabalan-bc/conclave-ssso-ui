@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ManualValidationStatus } from 'src/app/constants/enum';
 import { WrapperBuyerBothService } from 'src/app/services/wrapper/wrapper-buyer-both.service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-confirm-accept',
@@ -14,7 +15,7 @@ export class ConfirmAcceptComponent implements OnInit {
   public routeDetails:any;
 
   constructor(private route: ActivatedRoute, private router: Router, 
-    private wrapperBuyerAndBothService:WrapperBuyerBothService) {
+    private wrapperBuyerAndBothService:WrapperBuyerBothService, private dataLayerService: DataLayerService) {
     this.organisationId = localStorage.getItem('cii_organisation_id') || '';
   }
 
@@ -22,9 +23,10 @@ export class ConfirmAcceptComponent implements OnInit {
     this.route.queryParams.subscribe((para: any) => {
       this.routeDetails = JSON.parse(atob(para.data));
     });
+    this.dataLayerService.pushPageViewEvent();
   }
 
-  public confirm(): void {
+  public confirm(buttonText:string): void {
     this.wrapperBuyerAndBothService.manualValidation(this.routeDetails.organisationId, ManualValidationStatus.approve).subscribe({
       next: (response: any) => {
         this.router.navigateByUrl('buyer-and-both-success');
@@ -41,10 +43,16 @@ export class ConfirmAcceptComponent implements OnInit {
     this.router.navigateByUrl(
       'buyer-and-both-success?data=' + btoa(JSON.stringify(data))
     );
+    this.pushDataLayerEvent(buttonText);
   }
 
-  public Back(): void {
+  public Back(buttonText:string): void {
     window.history.back();
+    this.pushDataLayerEvent(buttonText);
+  }
+
+  pushDataLayerEvent(buttonText:string) {
+    this.dataLayerService.pushClickEvent(buttonText);
   }
 
 }

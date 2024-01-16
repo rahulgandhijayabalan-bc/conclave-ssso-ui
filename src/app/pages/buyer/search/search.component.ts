@@ -10,6 +10,7 @@ import { OrganisationService } from 'src/app/services/postgres/organisation.serv
 import { environment } from "src/environments/environment";
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { ViewportScroller } from '@angular/common';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-buyer-search',
@@ -38,7 +39,7 @@ export class BuyerSearchComponent extends BaseComponent implements OnInit {
   public ciiOrganisationId!: string;
   public searchSumbited:boolean=false;
   constructor(private cf: ChangeDetectorRef, private formBuilder: FormBuilder, private organisationService: OrganisationService,
-    private router: Router, protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+    private router: Router, protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
     super(uiStore, viewportScroller, scrollHelper);
     this.formGroup = this.formBuilder.group({
       search: [, Validators.compose([Validators.required])],
@@ -53,6 +54,7 @@ export class BuyerSearchComponent extends BaseComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.dataLayerService.pushPageViewEvent();
     await this.onSearch();
     this.data.forEach((x: any) => {
       x.legalName = x.legalName?.toUpperCase() || 'UNKNOWN';
@@ -76,12 +78,18 @@ export class BuyerSearchComponent extends BaseComponent implements OnInit {
     this.pageCount = this.data.pageCount;
   }
 
-  public onContinueClick() {
+  public onContinueClick(buttonText:string) {
     this.router.navigateByUrl(`buyer/details/${this.selectedOrgId}`);
+    this.pushDataLayerEvent(buttonText);
   }
 
-  public onCancelClick() {
+  public onCancelClick(buttonText:string) {
     this.router.navigateByUrl('home');
+    this.pushDataLayerEvent(buttonText);
+  }
+
+  pushDataLayerEvent(buttonText:string) {
+    this.dataLayerService.pushClickEvent(buttonText);
   }
 
   onSelectRow(dataRow: any) {

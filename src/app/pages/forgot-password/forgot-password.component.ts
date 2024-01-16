@@ -13,6 +13,7 @@ import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { SessionStorageKey } from 'src/app/constants/constant';
 import { PatternService } from 'src/app/shared/pattern.service';
 import { ActivatedRoute } from '@angular/router';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
     selector: 'app-forgot-password',
@@ -25,6 +26,7 @@ export class ForgotPasswordComponent extends BaseComponent implements OnInit {
     resetErrorString!: string;
     submitted!: boolean;
     public errorCode = '';
+    public formId : string = 'forgot_password'
     @ViewChildren('input') inputs!: QueryList<ElementRef>;
     constructor(private formBuilder: FormBuilder,
         private translateService: TranslateService,
@@ -33,7 +35,8 @@ export class ForgotPasswordComponent extends BaseComponent implements OnInit {
         private PatternService:PatternService,
         protected uiStore: Store<UIState>, protected viewportScroller:
             ViewportScroller, protected scrollHelper: ScrollHelper,
-            private route : ActivatedRoute
+            private route : ActivatedRoute,
+        private dataLayerService: DataLayerService
     ) {
         super(uiStore, viewportScroller, scrollHelper);
         this.resetForm = this.formBuilder.group({
@@ -53,6 +56,8 @@ export class ForgotPasswordComponent extends BaseComponent implements OnInit {
         this.translateService.get('RESET_PASSWORD_ERROR').subscribe((value) => {
             this.resetErrorString = value;
         });
+        this.dataLayerService.pushFormStartEvent(this.formId, this.resetForm);
+        this.dataLayerService.pushPageViewEvent();
     }
 
 
@@ -68,12 +73,13 @@ export class ForgotPasswordComponent extends BaseComponent implements OnInit {
     *
     * @memberof ForgotPasswordComponent
     */
-    onSubmit(form: FormGroup): void {
+    onSubmit(form: FormGroup,buttonText:string): void {
         this.submitted = true;
         if(this.PatternService.emailValidator(form.get('userName')?.value)){
             this.resetForm.controls['userName'].setErrors({ 'incorrect': true})
    }
         if (this.formValid(form)) {
+            this.dataLayerService.pushFormSubmitEvent(this.formId);
             this.authService.resetPassword(form.get('userName')?.value).toPromise()
             .then(() => {
                 sessionStorage.setItem(SessionStorageKey.ForgotPasswordUserName, form.get('userName')?.value);
@@ -83,8 +89,15 @@ export class ForgotPasswordComponent extends BaseComponent implements OnInit {
                     this.router.navigateByUrl(`forgot-password-error`);
                 }
         })
+        } else {
+            this.dataLayerService.pushFormErrorEvent(this.formId);
         }
+        this.pushDataLayerEvent(buttonText);
     }
+
+    pushDataLayerEvent(buttonText:string) {
+        this.dataLayerService.pushClickEvent(buttonText)
+      }
 
     setFocus(inputIndex: number) {
         this.inputs.toArray()[inputIndex].nativeElement.focus();
@@ -96,7 +109,8 @@ export class ForgotPasswordComponent extends BaseComponent implements OnInit {
         return form.valid;
     }
 
-    public onCancelClick() {
+    public onCancelClick(buttonText:string) {
         this.router.navigateByUrl('login');
+        this.pushDataLayerEvent(buttonText);
     }
 }

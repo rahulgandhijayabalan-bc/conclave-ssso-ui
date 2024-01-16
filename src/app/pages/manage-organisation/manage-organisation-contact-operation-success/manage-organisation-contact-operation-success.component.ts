@@ -11,6 +11,7 @@ import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
 import { Title } from '@angular/platform-browser';
 import { WrapperOrganisationSiteService } from 'src/app/services/wrapper/wrapper-org-site-service';
 import { OrganisationSiteResponse } from 'src/app/models/site';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
     selector: 'app-manage-organisation-contact-operation-success',
@@ -33,7 +34,7 @@ export class ManageOrganisationContactOperationSuccessComponent extends BaseComp
     siteCreate: any;
    
     constructor(private activatedRoute: ActivatedRoute, public router: Router, private titleService: Title,private orgSiteService: WrapperOrganisationSiteService,
-        protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+        protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
         super(uiStore, viewportScroller, scrollHelper);
         this.operation = parseInt(this.activatedRoute.snapshot.paramMap.get('operation') || '0');
         let queryParams = this.activatedRoute.snapshot.queryParams;
@@ -46,6 +47,7 @@ export class ManageOrganisationContactOperationSuccessComponent extends BaseComp
     }
 
     ngOnInit() {
+        this.dataLayerService.pushPageViewEvent();
         if(this.siteCreate){
         this.getSiteDetails()
         }

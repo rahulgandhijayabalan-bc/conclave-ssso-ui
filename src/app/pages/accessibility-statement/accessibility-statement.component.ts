@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-accessibility-statement',
@@ -17,16 +18,18 @@ public representingTag={
 public userName =  '';
 public isOrgAdmin: boolean = false;
 
-  constructor(private router: Router) { 
+  constructor(private router: Router, private dataLayerService: DataLayerService) { 
     this.isOrgAdmin = JSON.parse(localStorage.getItem('isOrgAdmin') || 'false');
     this.userName = localStorage.getItem('user_name') || '';
   }
 
   ngOnInit(): void {
+    this.dataLayerService.pushPageViewEvent();
   }
 
-  public print():void{
+  public print(buttonText:string):void{
     window.print()
+    this.dataLayerService.pushClickEvent(buttonText);
   }
 
 }

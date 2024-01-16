@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-data-migration-summary',
@@ -7,9 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DataMigrationSummaryComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router, private dataLayerService: DataLayerService) { }
 
   ngOnInit(): void {
+    this.dataLayerService.pushPageViewEvent();
   }
 
 }

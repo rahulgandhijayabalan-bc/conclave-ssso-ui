@@ -9,6 +9,7 @@ import { BaseComponent } from 'src/app/components/base/base.component';
 import { Data } from 'src/app/models/data';
 import { dataService } from 'src/app/services/data/data.service';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 import { UIState } from 'src/app/store/ui.states';
 import { environment } from 'src/environments/environment';
 
@@ -27,11 +28,13 @@ import { environment } from 'src/environments/environment';
 })
 export class ManageOrgRegErrorUsernameExistsComponent extends BaseComponent implements OnInit {
   public isCustomMfaEnabled=environment.appSetting.customMfaEnabled;
-  constructor(private dataService: dataService, private router: Router, protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+  constructor(private dataService: dataService, private router: Router, protected uiStore: Store<UIState>, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
     super(uiStore,viewportScroller,scrollHelper);
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.dataLayerService.pushPageViewEvent();
+  }
 
   goBack(){
     window.history.back();

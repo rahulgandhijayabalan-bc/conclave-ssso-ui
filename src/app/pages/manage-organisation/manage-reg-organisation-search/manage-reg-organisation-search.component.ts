@@ -33,6 +33,7 @@ export class ManageOrgRegSearchComponent extends BaseComponent implements OnInit
     @ViewChild(MatAutocompleteTrigger) autocomplete!: MatAutocompleteTrigger;
     panelShowTimeout: any;
     searchOrgName: string = '';
+    public formId : string = 'Enter_detail _create_account';
 
     constructor(private organisationService: OrganisationService,private PatternService:PatternService, private formBuilder: FormBuilder, private router: Router, protected uiStore: Store<UIState>,
         protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper,private dataLayerService:DataLayerService) {
@@ -60,6 +61,8 @@ export class ManageOrgRegSearchComponent extends BaseComponent implements OnInit
     }
 
     ngOnInit() {
+        this.dataLayerService.pushPageViewEvent();
+        this.dataLayerService.pushFormStartEvent(this.formId, this.formGroup);
     }
 
     async onSearchTextChange(value: any) {
@@ -87,11 +90,12 @@ export class ManageOrgRegSearchComponent extends BaseComponent implements OnInit
         }
     }
 
-    showMoreClicked() {
+    showMoreClicked(buttonText:string) {
         this.showMoreOptionsVisible = true;
         this.panelShowTimeout = setTimeout(() => {
             this.autocomplete.openPanel();
         }, 30);
+        this.pushDataLayerEvent(buttonText);
     }
 
 
@@ -129,12 +133,13 @@ export class ManageOrgRegSearchComponent extends BaseComponent implements OnInit
 
 
     async onSubmit(form: FormGroup) {
-        this.pushDataLayer()
         this.submitted = true;
         if(this.PatternService.emailValidator(form.get('email')?.value)){
-            this.formGroup.controls['email'].setErrors({ 'incorrect': true})
+            this.formGroup.controls['email'].setErrors({ 'incorrect': true});
+            this.dataLayerService.pushFormErrorEvent(this.formId);
         }
         if (this.formValid(form)) {
+            this.dataLayerService.pushFormSubmitEvent(this.formId);
             let organisationRegisterDto: OrganisationRegBasicInfo = {
                 adminEmail: form.get('email')?.value,
                 adminUserFirstName: form.get('firstName')?.value,
@@ -162,15 +167,10 @@ export class ManageOrgRegSearchComponent extends BaseComponent implements OnInit
                 //Multiple Orgs exists
                 this.router.navigateByUrl(`manage-org/register/initial-search-status/duplicate`);
             }
+        } else {
+            this.dataLayerService.pushFormErrorEvent(this.formId);
         }
-    }
-
-    pushDataLayer(){
-        console.log("data layer pushed")
-        this.dataLayerService.pushEvent({
-            'event': 'form_start',
-            'form_id': 'Enter_detail _create_account'
-          });
+        this.pushDataLayerEvent('Continue');
     }
 
     goBack() {
@@ -182,4 +182,8 @@ export class ManageOrgRegSearchComponent extends BaseComponent implements OnInit
             clearTimeout(this.panelShowTimeout);
         }
     }
+
+    pushDataLayerEvent(buttonText:string) {
+        this.dataLayerService.pushClickEvent(buttonText);
+        }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WrapperUserDelegatedService } from 'src/app/services/wrapper/wrapper-user-delegated.service';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-delegated-remove-confirm',
@@ -10,7 +11,7 @@ import { WrapperUserDelegatedService } from 'src/app/services/wrapper/wrapper-us
 export class DelegatedRemoveConfirmComponent implements OnInit {
   public organisationId: string;
   public RouteData:any = {};
-  constructor(public router: Router, private route: ActivatedRoute, public DelegatedService: WrapperUserDelegatedService) {
+  constructor(public router: Router, private route: ActivatedRoute, public DelegatedService: WrapperUserDelegatedService, private dataLayerService: DataLayerService) {
     this.organisationId = localStorage.getItem('cii_organisation_id') || '';
   }
 
@@ -19,9 +20,10 @@ export class DelegatedRemoveConfirmComponent implements OnInit {
       this.RouteData = JSON.parse(atob(para.data));
       this.RouteData.userName = decodeURIComponent(unescape(this.RouteData.userName));
     });
+    this.dataLayerService.pushPageViewEvent();
   }
 
-  public ConfirmRemoveUser(){
+  public ConfirmRemoveUser(buttonText:string){
     let data ={
       status:'delete',
       userName:this.RouteData.userName
@@ -35,10 +37,11 @@ export class DelegatedRemoveConfirmComponent implements OnInit {
       this.router.navigateByUrl('delegated-error')
       }
     });
+    this.pushDataLayerEvent(buttonText);
   }
 
 
-  public ConfirmResentLink(){
+  public ConfirmResentLink(buttonText:string){
     let data ={
       status:'resent',
       userName:this.RouteData.userName
@@ -52,9 +55,15 @@ export class DelegatedRemoveConfirmComponent implements OnInit {
       this.router.navigateByUrl('delegated-error')
       }
     });
+    this.pushDataLayerEvent(buttonText);
   }
 
-  public Cancel():void{
+  public Cancel(buttonText:string):void{
     window.history.back();
+    this.pushDataLayerEvent(buttonText);
+  }
+
+  pushDataLayerEvent(buttonText:string) {
+    this.dataLayerService.pushClickEvent(buttonText);
   }
 }

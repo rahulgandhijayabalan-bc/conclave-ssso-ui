@@ -8,10 +8,11 @@ import { UIState } from 'src/app/store/ui.states';
 import { OrganisationService } from 'src/app/services/postgres/organisation.service';
 import { ViewportScroller } from '@angular/common';
 import { ScrollHelper } from 'src/app/services/helper/scroll-helper.services';
-import { CiiOrganisationDto, OrganisationRegisterDto } from 'src/app/models/organisation';
+import { CiiOrganisationDto, OrganisationRegBasicInfo, OrganisationRegisterDto } from 'src/app/models/organisation';
 import { UserTitleEnum } from 'src/app/constants/enum';
 import { PatternService } from 'src/app/shared/pattern.service';
 import { environment } from 'src/environments/environment';
+import { DataLayerService } from 'src/app/shared/data-layer.service';
 
 @Component({
   selector: 'app-manage-organisation-registration-add-user',
@@ -28,13 +29,14 @@ export class ManageOrgRegAddUserComponent extends BaseComponent implements OnIni
   public buyerFlow: any;
   legalName: string = '';
   public isCustomMfaEnabled=environment.appSetting.customMfaEnabled;
+  public formId : string = 'Additional_registries Create_administrator_account';
 
   @ViewChildren('input') inputs!: QueryList<ElementRef>;
 
   constructor(private formBuilder: FormBuilder, private organisationService: OrganisationService,
     private PatternService: PatternService,
     private router: Router, private route: ActivatedRoute, protected uiStore: Store<UIState>,
-    protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private ActivatedRoute: ActivatedRoute) {
+    protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private ActivatedRoute: ActivatedRoute, private dataLayerService: DataLayerService) {
     super(uiStore, viewportScroller, scrollHelper);
 
     this.formGroup = this.formBuilder.group({
@@ -62,6 +64,8 @@ export class ManageOrgRegAddUserComponent extends BaseComponent implements OnIni
       this.formGroup.controls['lastName'].setValue(orgreginfo.adminUserLastName);
       this.formGroup.controls['email'].setValue(orgreginfo.adminEmail);
     }
+    this.dataLayerService.pushPageViewEvent();
+    this.dataLayerService.pushFormStartEvent(this.formId, this.formGroup);
   }
 
 
@@ -77,6 +81,10 @@ export class ManageOrgRegAddUserComponent extends BaseComponent implements OnIni
       this.formGroup.controls['email'].setErrors({ 'incorrect': true })
     }
     if (this.formValid(form)) {
+      this.dataLayerService.pushEvent({
+        event: "sign_up",
+        method: "register"
+      });
       const regType = localStorage.getItem("manage-org_reg_type") || "";
       let orgreginfo = JSON.parse(sessionStorage.getItem('orgreginfo') ?? '');
       let organisationRegisterDto: OrganisationRegisterDto = {
@@ -90,6 +98,19 @@ export class ManageOrgRegAddUserComponent extends BaseComponent implements OnIni
         adminUserTitle: "",
         isMfaRequired:orgreginfo.isMfaRequired
       };
+
+      this.dataLayerService.pushFormSubmitEvent(this.formId);
+
+      let updatedOrgRegInfo: OrganisationRegBasicInfo = {
+        adminEmail: form.get('email')?.value,
+        adminUserFirstName: form.get('firstName')?.value,
+        adminUserLastName: form.get('lastName')?.value,
+        orgName: '',
+        ciiOrgId: '',
+        isMfaRequired:false
+    };
+    sessionStorage.setItem('orgreginfo', JSON.stringify(updatedOrgRegInfo));
+
       this.organisationService.registerOrganisation(organisationRegisterDto)
         .subscribe({
           next: () => {
@@ -113,7 +134,10 @@ export class ManageOrgRegAddUserComponent extends BaseComponent implements OnIni
             }
           }
         });
+    } else {
+      this.dataLayerService.pushFormErrorEvent(this.formId);
     }
+    this.dataLayerService.pushClickEvent('Continue');
   }
 
   setFocus(inputIndex: number) {
@@ -158,5 +182,4 @@ export class ManageOrgRegAddUserComponent extends BaseComponent implements OnIni
   public goBack() {
     window.history.back()
   }
-
 }

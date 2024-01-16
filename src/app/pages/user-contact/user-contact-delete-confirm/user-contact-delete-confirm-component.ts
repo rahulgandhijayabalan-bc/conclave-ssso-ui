@@ -11,6 +11,7 @@ import { WrapperUserContactService } from "src/app/services/wrapper/wrapper-user
 import { ScrollHelper } from "src/app/services/helper/scroll-helper.services";
 import { ViewportScroller } from "@angular/common";
 import { SessionStorageKey } from "src/app/constants/constant";
+import { DataLayerService } from "src/app/shared/data-layer.service";
 
 @Component({
     selector: 'app-user-contact-delete-confirm',
@@ -28,7 +29,7 @@ export class UserContactDeleteConfirmComponent extends BaseComponent implements 
     contactId: number = 0;
     isOrgAdmin: boolean = false;
     constructor(protected uiStore: Store<UIState>, public router: Router, private activatedRoute: ActivatedRoute,
-        private contactService: WrapperUserContactService, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper) {
+        private contactService: WrapperUserContactService, protected viewportScroller: ViewportScroller, protected scrollHelper: ScrollHelper, private dataLayerService: DataLayerService) {
         super(uiStore,viewportScroller,scrollHelper);
         let queryParams = this.activatedRoute.snapshot.queryParams;
         if (queryParams.data) {
@@ -40,10 +41,11 @@ export class UserContactDeleteConfirmComponent extends BaseComponent implements 
     }
 
     ngOnInit() {
+        this.dataLayerService.pushPageViewEvent();
         this.isOrgAdmin = JSON.parse(localStorage.getItem('isOrgAdmin') || 'false');
     }
 
-    onDeleteConfirmClick() {
+    onDeleteConfirmClick(buttonText:string) {
         this.contactService.deleteUserContact(this.userName, this.contactId).subscribe({
             next: () => { 
                 this.router.navigateByUrl(`operation-success/${OperationEnum.MyAccountContactDelete}`);             
@@ -52,13 +54,20 @@ export class UserContactDeleteConfirmComponent extends BaseComponent implements 
                 console.log(error);
             }
         });
+        this.pushDataLayerEvent(buttonText);
     }
 
-    onCancelClick(){
+    onCancelClick(buttonText:string){
         let data = {
             'isEdit':true,
             'contactId': this.contactId
         };
         this.router.navigateByUrl('user-contact-edit?data=' + JSON.stringify(data));
+        this.pushDataLayerEvent(buttonText);
     }
+
+    pushDataLayerEvent(buttonText: string) {
+		this.dataLayerService.pushClickEvent(buttonText)
+	  }
 }
+
