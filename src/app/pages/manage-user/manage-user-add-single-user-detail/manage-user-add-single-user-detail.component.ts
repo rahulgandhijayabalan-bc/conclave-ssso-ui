@@ -180,8 +180,14 @@ export class ManageUserAddSingleUserDetailComponent
       this.subscription = this.sharedDataService.userEditDetails.subscribe((data) => {
         this.routeData = JSON.parse(atob(queryParams.data));
         this.isEdit = this.routeData['isEdit'];
+        let  datas = {
+          'rowData':this.routeData['name']
+        };
+        this.sharedDataService.storeUserDetails(JSON.stringify(datas));
+        sessionStorage.setItem(SessionStorageKey.ManageUserUserName,this.routeData['name']);
+        localStorage.setItem('ManageUserUserName',this.routeData['name']);
         this.editingUserName = localStorage.getItem('ManageUserUserName')??'';
-        this.editingUserName = data.rowData;
+        this.editingUserName = this.routeData['name'];
       })
     }
     this.orgGroups = [];
@@ -227,6 +233,14 @@ export class ManageUserAddSingleUserDetailComponent
   async ngOnInit() {
     this.loadingIndicatorService.isLoading.next(true);
     this.loadingIndicatorService.isCustomLoading.next(true);
+
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params['isNewTab'] === 'true') {
+        const urlTree = this.router.parseUrl(this.router.url);
+        delete urlTree.queryParams['isNewTab'];
+        this.router.navigateByUrl(urlTree.toString(), { replaceUrl: true });
+      }
+    });
 
     this.dataLayerService.pushPageViewEvent();
     this.titleService.setTitle(
@@ -570,6 +584,7 @@ private GetAssignedGroups(isGroupOfUser:any,group:any){
     } else {
       this.scrollView();
       this.dataLayerService.pushFormErrorEvent(this.formId);
+
     }
   }
 

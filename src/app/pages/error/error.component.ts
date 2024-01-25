@@ -50,6 +50,7 @@ export class ErrorComponent extends BaseComponent implements OnInit {
   public errorCode = '';
   expiredLinkErrorCodeValue: string = 'Access expired.';
   public formId : string = 'error';
+  public isRegUser = false;
 
   @ViewChildren('input') inputs!: QueryList<ElementRef>;
   userName: string;
@@ -87,6 +88,15 @@ export class ErrorComponent extends BaseComponent implements OnInit {
   }
   ngOnInit(): void {
     console.log("errorCode",this.errorCode)
+    var fragment=this.route.snapshot.fragment;
+    if(fragment)
+    {
+      var regUser=this.route.snapshot.fragment?.indexOf('&is-reg-user')
+      if(regUser!=-1 )
+      {
+        this.isRegUser=true;
+      }
+    }
     this.RollbarErrorService.RollbarDebug('Error Page:'.concat(this.errorCode));
     this.dataLayerService.pushPageViewEvent();
     this.dataLayerService.pushFormStartEvent(this.formId, this.resendForm);
@@ -134,7 +144,7 @@ export class ErrorComponent extends BaseComponent implements OnInit {
       this.dataLayerService.pushFormSubmitEvent(this.formId);
       console.log(form.get('userName')?.value);
       this.userService
-        .resendUserActivationEmail(form.get('userName')?.value, true)
+        .resendUserActivationEmail(form.get('userName')?.value, true, this.isRegUser)
         .toPromise()
         .then(() => {
           console.log('scuuccess');
