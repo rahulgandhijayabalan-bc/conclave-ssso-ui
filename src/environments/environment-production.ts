@@ -102,6 +102,6 @@ export const environment = {
     hideSimplifyRole: false,
     blockedScheme: ["GB-PPG"],
     customMfaEnabled: true,
-    isMaintenance: false,
+    isMaintenance: true,
    },
 };
