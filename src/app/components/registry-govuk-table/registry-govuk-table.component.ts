@@ -29,6 +29,7 @@ export class RegistryGovukTableComponent implements OnInit, OnChanges {
   public pponSchema: string = 'GB-PPG';
   schemeData: any[] = [];
   ciiOrganisationId: string;
+  public includeHiddenIdentifiers:boolean=false;
 
   public registries: CiiOrgIdentifiersDto;
   public additionalIdentifiers: CiiAdditionalIdentifier[];
@@ -47,15 +48,17 @@ export class RegistryGovukTableComponent implements OnInit, OnChanges {
     if (this.pageName === 'MO') {
       ciiOrgId = this.tokenService.getCiiOrgId();
     } else if (this.pageName === 'MSE' || 'MBSR') {
-      ciiOrgId = this.orgId
+      ciiOrgId = this.orgId;
+      this.includeHiddenIdentifiers=true
     }
     this.schemeData = await this.ciiService.getSchemes().toPromise() as any[];
-    await this.ciiService.getOrgDetails(ciiOrgId).toPromise().then((data: any) => {
+    await this.ciiService.getOrgDetails(ciiOrgId,this.includeHiddenIdentifiers).toPromise().then((data: any) => {
       this.registries = data;
       data.identifier.primary = true
       this.additionalIdentifiers.push(data.identifier)
       data.additionalIdentifiers.forEach((Identifier: any) => {
-        if (Identifier.scheme != this.pponSchema) {
+        //PPON Schema Identifier should not be displayed in Manage Organisation(Bug-7218)
+        if (this.pageName != 'MO' || Identifier.scheme != this.pponSchema) {
           Identifier.primary = false
           this.additionalIdentifiers.push(Identifier)
         }
