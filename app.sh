@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+#adding for testing "AKIAIOSFODNN7EXAMPLE"
 if [ "$TRAVIS_BRANCH" = "uat" ]
 then
     CF_SPACE="uat"
