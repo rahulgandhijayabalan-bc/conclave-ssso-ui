@@ -19,4 +19,4 @@ jobs:
 
     - name: Run TruffleHog Docker
       run: |
-        docker run --rm -v $(pwd):/src -w /src trufflesecurity/trufflehog:latest file:///src
+        docker run --rm -v $(pwd):/src -w /src trufflesecurity/trufflehog:latest filesystem --directory /src
