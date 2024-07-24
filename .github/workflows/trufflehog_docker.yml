@@ -19,10 +19,13 @@ jobs:
 
     - name: Run TruffleHog Docker
       run: |
-        docker run --rm -v $(pwd):/src -w /src trufflesecurity/trufflehog:latest filesystem /src > trufflehog-results.json
+        docker run --rm -v $(pwd):/src -w /src trufflesecurity/trufflehog:latest filesystem /src --json > trufflehog-results.json
 
     - name: Upload TruffleHog results
       uses: actions/upload-artifact@v2
       with:
         name: trufflehog-results
         path: trufflehog-results.json
+
+    - name: Display TruffleHog Results
+      run: cat trufflehog-results.json
