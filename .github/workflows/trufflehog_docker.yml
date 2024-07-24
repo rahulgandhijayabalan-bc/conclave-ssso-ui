@@ -1,0 +1,22 @@
+name: TruffleHog Scan
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  trufflehog-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run TruffleHog Docker
+      run: |
+        docker run --rm -v $(pwd):/src -w /src trufflesecurity/trufflehog:latest file:///src
